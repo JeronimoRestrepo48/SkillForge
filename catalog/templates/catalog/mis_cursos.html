@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Cursos - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Mis Cursos</h1>
+        <a href="{% url 'catalog:curso_create' %}" class="btn btn-skillforge">
+            <i class="bi bi-plus-lg"></i> Crear curso
+        </a>
+    </div>
+
+    {% if cursos %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Estado</th>
+                    <th>Precio</th>
+                    <th>Cupos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curso in cursos %}
+                <tr>
+                    <td>{{ curso.titulo }}</td>
+                    <td>{{ curso.categoria.nombre }}</td>
+                    <td><span class="badge {% if curso.estado == 'PUBLICADO' %}bg-success{% else %}bg-secondary{% endif %}">{{ curso.get_estado_display }}</span></td>
+                    <td>{{ curso.calcular_precio_final }} COP</td>
+                    <td>{{ curso.cupos_disponibles }}/{{ curso.cupos_totales }}</td>
+                    <td>
+                        <a href="{% url 'catalog:curso_detail' curso.pk %}" class="btn btn-sm btn-outline-primary">Ver</a>
+                        <a href="{% url 'catalog:curso_update' curso.pk %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                        <a href="{% url 'catalog:curso_delete' curso.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-journal-plus fs-1"></i>
+        <p class="mt-2">Aún no has creado cursos.</p>
+        <a href="{% url 'catalog:curso_create' %}" class="btn btn-skillforge">Crear tu primer curso</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

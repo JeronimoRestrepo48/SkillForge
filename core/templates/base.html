@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SkillForge - Forja tu Futuro Profesional{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --skillforge-primary: #0d6efd;
+            --skillforge-dark: #1a1a2e;
+            --skillforge-accent: #e94560;
+        }
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1; }
+        .navbar-brand { font-weight: 700; color: var(--skillforge-dark) !important; }
+        .btn-skillforge { background: var(--skillforge-primary); color: white; }
+        .btn-skillforge:hover { background: #0b5ed7; color: white; }
+        .card { transition: transform 0.2s; border: none; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); }
+        .curso-card .card-img-top { height: 180px; object-fit: cover; }
+        footer { background: var(--skillforge-dark); color: #fff; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:landing' %}">
+                <i class="bi bi-fire text-danger"></i> SkillForge
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Abrir menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:landing' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'catalog:curso_list' %}">Cursos</a>
+                    </li>
+                    {% if user.is_authenticated and user.es_instructor %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'catalog:mis_cursos' %}">Mis Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'catalog:curso_create' %}">Crear Curso</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ user.get_full_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text text-muted">{{ user.get_tipo_display }}</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                        <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start">Cerrar sesión</button>
+                        </form>
+                    </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-skillforge btn-sm ms-2" href="{% url 'users:register' %}">Registrarse</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="container mt-2">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar mensaje"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main class="py-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">&copy; {% now "Y" %} SkillForge - Forja tu Futuro Profesional</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

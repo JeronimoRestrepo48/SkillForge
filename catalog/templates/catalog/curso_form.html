@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ object|yesno:"Editar,Crear" }} curso - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:mis_cursos' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item active">{{ object|yesno:"Editar,Crear" }}</li>
+        </ol>
+    </nav>
+
+    <h2 class="mb-4">{{ object|yesno:"Editar curso,Nuevo curso" }}</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-skillforge">Guardar</button>
+                <a href="{% url 'catalog:mis_cursos' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

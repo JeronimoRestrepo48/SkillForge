@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ curso.titulo }} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:curso_list' %}">Cursos</a></li>
+            <li class="breadcrumb-item active">{{ curso.titulo }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% if curso.imagen %}
+            <img src="{{ curso.imagen.url }}" class="img-fluid rounded mb-3" alt="{{ curso.titulo }}">
+            {% else %}
+            <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 300px;">
+                <i class="bi bi-journal-bookmark fs-1 text-muted"></i>
+            </div>
+            {% endif %}
+
+            <h1>{{ curso.titulo }}</h1>
+            <p class="text-muted">
+                por {{ curso.instructor.get_full_name|default:curso.instructor.username }}
+            </p>
+            <div class="mb-3">
+                <span class="badge bg-secondary me-2">{{ curso.get_nivel_dificultad_display }}</span>
+                <span class="badge bg-info me-2">{{ curso.categoria.nombre }}</span>
+                <span class="badge bg-light text-dark">{{ curso.duracion_horas }} horas</span>
+            </div>
+            <div class="border-top pt-3">
+                <h5>Descripción</h5>
+                <p>{{ curso.descripcion }}</p>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="text-primary">{{ precio_final }} COP</h4>
+                    {% if curso.precio_descuento %}
+                    <p class="text-muted text-decoration-line-through small">{{ curso.precio }} COP</p>
+                    {% endif %}
+                    {% if disponible %}
+                    <p class="text-success small"><i class="bi bi-check-circle"></i> {{ curso.cupos_disponibles }} cupos disponibles</p>
+                    <p class="text-muted small">Carrito y compra disponibles en próximos sprints.</p>
+                    {% else %}
+                    <p class="text-danger small">Sin cupos disponibles</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

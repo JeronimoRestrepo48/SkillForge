@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <section class="py-5 text-center">
+        <h1 class="display-4 fw-bold">Forja tu Futuro Profesional</h1>
+        <p class="lead text-muted">Aprende con expertos. Cursos online de programación, diseño, marketing y más.</p>
+        <a href="{% url 'catalog:curso_list' %}" class="btn btn-skillforge btn-lg">Explorar Cursos</a>
+    </section>
+
+    {% if categorias %}
+    <section class="py-4">
+        <h2 class="h4 mb-3">Categorías</h2>
+        <div class="row g-3">
+            {% for cat in categorias %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="{% url 'catalog:curso_list' %}?categoria={{ cat.id }}" class="text-decoration-none">
+                    <div class="card h-100 text-center p-3">
+                        <i class="bi bi-folder2-open fs-2 text-primary"></i>
+                        <div class="card-body p-0 mt-2">
+                            <span class="card-title small">{{ cat.nombre }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if cursos_destacados %}
+    <section class="py-4">
+        <h2 class="h4 mb-3">Cursos Destacados</h2>
+        <div class="row g-4">
+            {% for curso in cursos_destacados %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 curso-card">
+                    {% if curso.imagen %}
+                    <img src="{{ curso.imagen.url }}" class="card-img-top" alt="{{ curso.titulo }}">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                        <i class="bi bi-journal-bookmark fs-1 text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">{{ curso.get_nivel_dificultad_display }}</span>
+                        <h5 class="card-title">{{ curso.titulo }}</h5>
+                        <p class="card-text text-muted small">{{ curso.descripcion|truncatewords:15 }}</p>
+                        <p class="fw-bold text-primary">{{ curso.calcular_precio_final }} COP</p>
+                        <a href="{% url 'catalog:curso_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">Ver curso</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'catalog:curso_list' %}" class="btn btn-skillforge">Ver todos los cursos</a>
+        </div>
+    </section>
+    {% else %}
+    <section class="py-5 text-center text-muted">
+        <i class="bi bi-journal-plus fs-1"></i>
+        <p class="mt-2">Aún no hay cursos publicados. ¡Regístrate como instructor y crea el primero!</p>
+        <a href="{% url 'users:register' %}" class="btn btn-skillforge">Registrarse</a>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
