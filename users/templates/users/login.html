@@ -4,19 +4,21 @@
 {% block title %}Iniciar sesión - SkillForge{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-body p-4">
-                    <h2 class="card-title mb-4">Iniciar sesión</h2>
+<div class="container auth-page-wrap">
+    <div class="row justify-content-center w-100">
+        <div class="col-md-6 col-lg-5">
+            <div class="card auth-card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-2">Iniciar sesión</h2>
+                    <p class="auth-subtitle mb-4">Accede a tu cuenta de SkillForge</p>
                     <form method="post" novalidate>
                         {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}">
                         {{ form|crispy }}
                         <button type="submit" class="btn btn-skillforge w-100 mt-3">Entrar</button>
                     </form>
-                    <p class="mt-3 text-center text-muted small">
-                        ¿No tienes cuenta? <a href="{% url 'users:register' %}">Registrarse</a>
+                    <p class="mt-4 text-center text-muted small">
+                        ¿No tienes cuenta? <a href="{% url 'core:register' %}">Registrarse</a>
                     </p>
                 </div>
             </div>

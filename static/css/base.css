@@ -1,0 +1,88 @@
+/**
+ * SkillForge - Estilos base
+ * Paleta: Forja y fuego (amber, naranja, coral sobre metal oscuro)
+ */
+:root {
+    /* Brand - fuego y forja */
+    --sf-flame: #f59e0b;
+    --sf-flame-light: #fbbf24;
+    --sf-orange: #ea580c;
+    --sf-coral: #f43f5e;
+    --sf-coral-hover: #e11d48;
+    /* Metal oscuro */
+    --sf-dark: #0f172a;
+    --sf-dark-soft: #1e293b;
+    --sf-dark-muted: #334155;
+    /* Neutros cálidos */
+    --sf-bg: #fffbf7;
+    --sf-bg-card: #ffffff;
+    --sf-muted: #64748b;
+    /* Gradientes de marca */
+    --sf-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 45%, #f43f5e 100%);
+    --sf-gradient-soft: linear-gradient(180deg, #fffbf7 0%, #fff7ed 30%, #fffbeb 100%);
+    --sf-nav-bg: linear-gradient(105deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    --sf-gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #431407 70%, #7c2d12 100%);
+    /* Sombras y bordes */
+    --sf-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    --sf-shadow-hover: 0 12px 28px -8px rgba(245, 158, 11, 0.25), 0 4px 12px rgba(15, 23, 42, 0.12);
+    --sf-shadow-glow: 0 0 30px rgba(245, 158, 11, 0.2);
+    --sf-border: rgba(245, 158, 11, 0.2);
+    /* Compatibilidad con nombres antiguos */
+    --skillforge-primary: var(--sf-flame);
+    --skillforge-primary-hover: var(--sf-orange);
+    --skillforge-primary-light: #fef3c7;
+    --skillforge-dark: var(--sf-dark);
+    --skillforge-dark-soft: var(--sf-dark-soft);
+    --skillforge-accent: var(--sf-coral);
+    --skillforge-accent-hover: var(--sf-coral-hover);
+    --skillforge-success: #10b981;
+    --skillforge-warning: var(--sf-flame);
+    --skillforge-card-shadow: var(--sf-shadow);
+    --skillforge-card-shadow-hover: var(--sf-shadow-hover);
+    --skillforge-gradient: var(--sf-gradient);
+    --skillforge-gradient-soft: var(--sf-gradient-soft);
+    --skillforge-nav-gradient: var(--sf-nav-bg);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--sf-gradient-soft);
+    background-attachment: fixed;
+    color: var(--sf-dark);
+}
+
+main {
+    flex: 1;
+}
+
+/* Tipografía con toque premium */
+h1, h2, h3, .fw-bold {
+    letter-spacing: -0.02em;
+}
+
+/* Texto con gradiente de marca */
+.text-gradient-sf {
+    background: var(--sf-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* Focus visible para accesibilidad */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--sf-flame);
+    outline-offset: 2px;
+}

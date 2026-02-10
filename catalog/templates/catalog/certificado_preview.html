@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load core_extras %}
+
+{% block title %}Certificado - {{ curso.titulo|sin_certificacion }} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_certificates' %}">Mis certificados</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ curso.titulo|sin_certificacion }}</li>
+        </ol>
+    </nav>
+
+    <div class="certificado-preview-card mx-auto my-4">
+        <div class="card shadow-lg border-0 overflow-hidden">
+            <div class="card-body certificado-body p-5 text-center">
+                <p class="text-muted small mb-0">SkillForge</p>
+                <h2 class="h4 mb-2">Certificado de finalización</h2>
+                <p class="lead mb-1">Se certifica que</p>
+                <p class="h5 fw-bold text-primary mb-3">{{ certificado.user.get_full_name|default:certificado.user.username }}</p>
+                <p class="mb-2">ha completado el curso</p>
+                <p class="h5 mb-4">{{ curso.titulo|sin_certificacion }}</p>
+                <p class="small text-muted mb-1">Nº {{ certificado.numero_certificado }}</p>
+                <p class="small text-muted mb-0">Código de verificación: <strong>{{ certificado.codigo_verificacion }}</strong></p>
+                <p class="small text-muted mt-2">{{ certificado.fecha_emision|date:"d \d\e F \d\e Y" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'catalog:certificate_pdf' certificado.curso_id %}" class="btn btn-primary">Descargar PDF</a>
+        <a href="{% url 'catalog:certificate_verify' certificado.codigo_verificacion %}" class="btn btn-outline-secondary" target="_blank">Verificar este certificado</a>
+        <a href="{% url 'catalog:my_certificates' %}" class="btn btn-skillforge ms-2">Volver a mis certificados</a>
+    </div>
+</div>
+{% endblock %}

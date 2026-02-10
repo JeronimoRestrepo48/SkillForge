@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Examen: {{ certificacion.nombre }} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:certificaciones_industria' %}">Certificaciones</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:certificacion_industria_detail' certificacion.slug %}">{{ certificacion.nombre }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Examen</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-3">{{ examen.titulo }}</h1>
+    {% if examen.instrucciones %}
+    <div class="alert alert-light border mb-4">{{ examen.instrucciones }}</div>
+    {% endif %}
+
+    {% if respuestas %}
+    {# Resultado del examen #}
+    <div class="card mb-4 {% if aprobado %}border-success{% else %}border-warning{% endif %}">
+        <div class="card-body text-center">
+            <p class="display-6 mb-1">{% if aprobado %}Aprobado{% else %}No aprobado{% endif %}</p>
+            <p class="mb-0">Obtuviste <strong>{{ correctas }}</strong> de <strong>{{ total }}</strong> correctas ({{ porcentaje }}%). Mínimo para aprobar: {{ puntaje_minimo }}%.</p>
+            {% if aprobado and diploma %}
+            <p class="mt-3 mb-0">Tu diploma certifica la avalación de conocimientos por la industria.</p>
+            <a href="{% url 'catalog:diploma_certificacion_pdf' certificacion.slug %}" class="btn btn-skillforge mt-3">
+                <i class="bi bi-download me-2"></i> Descargar diploma (PDF)
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="mb-4">
+        <a href="{% url 'catalog:certificacion_industria_detail' certificacion.slug %}" class="btn btn-outline-secondary">Volver al material</a>
+        <a href="{% url 'catalog:examen_certificacion' certificacion.slug %}" class="btn btn-skillforge ms-2">Reintentar examen</a>
+    </div>
+    {% else %}
+    {# Formulario del examen #}
+    <form method="post" action="{% url 'catalog:examen_certificacion' certificacion.slug %}">
+        {% csrf_token %}
+        {% for pregunta in preguntas %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="fw-bold mb-3">{{ forloop.counter }}. {{ pregunta.enunciado }}</p>
+                <div class="ms-3">
+                    {% for opcion in pregunta.opciones.all %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="pregunta_{{ pregunta.id }}" value="{{ opcion.id }}" id="opcion_{{ opcion.id }}" required>
+                        <label class="form-check-label" for="opcion_{{ opcion.id }}">{{ opcion.texto }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="mb-4">
+            <button type="submit" class="btn btn-skillforge btn-lg">Enviar respuestas</button>
+            <a href="{% url 'catalog:certificacion_industria_detail' certificacion.slug %}" class="btn btn-outline-secondary ms-2">Volver al material</a>
+        </div>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

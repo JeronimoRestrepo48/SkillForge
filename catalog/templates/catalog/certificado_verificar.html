@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Verificar certificado - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h1 class="h2 mb-4 text-center">Verificar certificado</h1>
+
+            {% if certificado %}
+            <div class="card shadow border-success">
+                <div class="card-header bg-success text-white">
+                    <i class="bi bi-patch-check-fill"></i> Certificado válido
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><strong>Estudiante:</strong> {{ certificado.user.get_full_name|default:certificado.user.username }}</p>
+                    <p class="mb-1"><strong>Curso:</strong> {{ certificado.curso.titulo }}</p>
+                    <p class="mb-1"><strong>Número:</strong> {{ certificado.numero_certificado }}</p>
+                    <p class="mb-0"><strong>Fecha de emisión:</strong> {{ certificado.fecha_emision|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+            {% else %}
+            <div class="card shadow border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Código no encontrado
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">No existe un certificado con el código <strong>{{ codigo }}</strong>. Verifica que el código sea correcto.</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{% url 'core:home' %}" class="btn btn-skillforge">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

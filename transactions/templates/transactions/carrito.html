@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load core_extras %}
+
+{% block title %}Carrito - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Carrito</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">Tu carrito</h1>
+
+    {% if items %}
+    <div class="row">
+        <div class="col-lg-8">
+            <ul class="list-group list-group-flush">
+                {% for item in items %}
+                {% include 'components/curso_card_mini.html' with item=item %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            {% include 'components/card_carrito.html' with cantidad_items=cantidad_items total=total %}
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x display-4 text-muted"></i>
+        <p class="lead mt-3">Tu carrito está vacío</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">Explorar cursos</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

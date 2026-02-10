@@ -4,62 +4,47 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="h2 mb-4">Catálogo de Cursos</h1>
+    <div class="section-card">
+        <h1 class="section-title h4">Catálogo de Cursos</h1>
 
-    {% if categorias %}
-    <div class="mb-4">
-        <a href="{% url 'catalog:curso_list' %}" class="btn btn-outline-secondary btn-sm me-2">Todos</a>
-        {% for cat in categorias %}
-        <a href="{% url 'catalog:curso_list' %}?categoria={{ cat.id }}" class="btn btn-outline-secondary btn-sm me-2">{{ cat.nombre }}</a>
-        {% endfor %}
-    </div>
-    {% endif %}
+        {% if categorias %}
+        <div class="mb-4">
+            <a href="{% url 'catalog:course_list' %}" class="btn btn-outline-primary btn-sm me-2 mb-2">Todos</a>
+            {% for cat in categorias %}
+            <a href="{% url 'catalog:course_list' %}?categoria={{ cat.id }}" class="btn btn-outline-primary btn-sm me-2 mb-2">{{ cat.nombre }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-    {% if cursos %}
-    <div class="row g-4">
+        {% if cursos %}
+        <div class="row g-4">
         {% for curso in cursos %}
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 curso-card">
-                {% if curso.imagen %}
-                <img src="{{ curso.imagen.url }}" class="card-img-top" alt="{{ curso.titulo }}">
-                {% else %}
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
-                    <i class="bi bi-journal-bookmark fs-1 text-muted"></i>
-                </div>
-                {% endif %}
-                <div class="card-body">
-                    <span class="badge bg-secondary mb-2">{{ curso.get_nivel_dificultad_display }}</span>
-                    <span class="badge bg-info mb-2">{{ curso.categoria.nombre }}</span>
-                    <h5 class="card-title">{{ curso.titulo }}</h5>
-                    <p class="card-text text-muted small">{{ curso.descripcion|truncatewords:15 }}</p>
-                    <p class="text-muted small mb-1">{{ curso.instructor.get_full_name|default:curso.instructor.username }}</p>
-                    <p class="fw-bold text-primary">{{ curso.calcular_precio_final }} COP</p>
-                    <a href="{% url 'catalog:curso_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">Ver detalle</a>
-                </div>
-            </div>
+            {% include 'components/card_curso.html' with curso=curso show_categoria=1 show_instructor=1 link_text="Ver detalle" %}
         </div>
         {% endfor %}
     </div>
 
-    {% if page_obj.has_other_pages %}
-    <nav class="mt-4">
-        <ul class="pagination justify-content-center">
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
             {% endif %}
             <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
-            {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
 
-    {% else %}
-    <div class="text-center py-5 text-muted">
-        <i class="bi bi-search fs-1"></i>
-        <p class="mt-2">No hay cursos publicados en esta categoría.</p>
+        {% else %}
+        <div class="empty-state text-center">
+            <i class="bi bi-search display-4"></i>
+            <p class="lead mt-3 text-body">No hay cursos publicados en esta categoría.</p>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endblock %}

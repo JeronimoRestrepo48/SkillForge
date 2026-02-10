@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Certificados - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Certificaciones</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">Certificaciones</h1>
+    <p class="lead text-muted mb-4">
+        Aquí aparecen tus <strong>certificados de completitud de curso</strong> (PDF al terminar un curso) y tus <strong>diplomas de certificaciones de industria</strong> (avalación de conocimientos tras aprobar el examen).
+    </p>
+
+    <h2 class="h5 mb-3">Certificados de completitud de curso</h2>
+    <p class="small text-muted mb-3">Se generan al completar el 100% del curso. Puedes descargarlos en PDF.</p>
+    {% if certificados %}
+    <div class="row g-4 mb-5">
+        {% for cert in certificados %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <div class="card-body certificado-card-preview border-top border-primary border-3">
+                    <p class="text-muted small mb-1">{{ cert.curso.categoria.nombre }}</p>
+                    <h5 class="card-title">{{ cert.curso.titulo }}</h5>
+                    <p class="small mb-1"><strong>Nº</strong> {{ cert.numero_certificado }}</p>
+                    <p class="small text-muted mb-2">{{ cert.fecha_emision|date:"d/m/Y" }}</p>
+                    <a href="{% url 'catalog:certificate_preview' cert.curso_id %}" class="btn btn-outline-primary btn-sm me-1">Ver</a>
+                    <a href="{% url 'catalog:certificate_pdf' cert.curso_id %}" class="btn btn-skillforge btn-sm me-1">Descargar PDF</a>
+                    <a href="{% url 'catalog:certificate_verify' cert.codigo_verificacion %}" class="btn btn-outline-secondary btn-sm" target="_blank">Verificar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-light border mb-5">
+        Aún no tienes certificados de completitud. Completa un curso al 100% para obtener tu certificado en PDF.
+        <a href="{% url 'catalog:my_courses' %}">Ir a mis cursos</a>
+    </div>
+    {% endif %}
+
+    <h2 class="h5 mb-3">Diplomas de certificaciones de industria</h2>
+    <p class="small text-muted mb-3">Avalación de conocimientos tras aprobar el examen certificado (no solo completitud de curso).</p>
+    {% if diplomas %}
+    <div class="row g-4">
+        {% for d in diplomas %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <div class="card-body border-top border-success border-3">
+                    <p class="text-muted small mb-1">Certificación de industria</p>
+                    <h5 class="card-title">{{ d.certificacion.nombre }}</h5>
+                    <p class="small mb-1"><strong>Puntaje:</strong> {{ d.puntaje }}%</p>
+                    <p class="small text-muted mb-2">{{ d.fecha_examen|date:"d/m/Y" }}</p>
+                    <a href="{% url 'catalog:diploma_certificacion_pdf' d.certificacion.slug %}" class="btn btn-skillforge btn-sm">Descargar diploma (PDF)</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-light border">
+        Aún no tienes diplomas de industria. <a href="{% url 'catalog:certificaciones_industria' %}">Explorar certificaciones</a>, compra el acceso y aprueba el examen para obtener tu diploma.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,293 @@
+/**
+ * SkillForge - Componentes
+ * Navbar, botones, cards: paleta fuego/forja
+ */
+
+/* ----- Navbar ----- */
+.navbar-skillforge {
+    background: var(--sf-nav-bg) !important;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.35);
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    border-bottom: none;
+    position: relative;
+}
+
+.navbar-skillforge::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--sf-gradient);
+    opacity: 0.9;
+}
+
+.navbar-skillforge .container {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.navbar-skillforge .navbar-brand {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #fff !important;
+    letter-spacing: -0.03em;
+    transition: transform 0.2s;
+}
+
+.navbar-skillforge .navbar-brand:hover {
+    transform: scale(1.02);
+}
+
+.navbar-skillforge .navbar-brand i {
+    color: var(--sf-flame-light);
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+    margin-right: 2px;
+}
+
+.navbar-skillforge .navbar-nav .nav-link {
+    font-size: 1.05rem;
+    padding: 0.6rem 0.9rem !important;
+}
+
+.navbar-skillforge .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: color 0.2s, background 0.2s;
+}
+
+.navbar-skillforge .nav-link:hover {
+    color: var(--sf-flame-light) !important;
+    background: rgba(245, 158, 11, 0.12);
+}
+
+.navbar-skillforge .navbar-toggler {
+    border-color: rgba(251, 191, 36, 0.4);
+    color: #fff;
+}
+
+.navbar-skillforge .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.navbar-skillforge .btn-skillforge {
+    background: var(--sf-gradient);
+    border: none;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+}
+
+.navbar-skillforge .btn-skillforge:hover {
+    background: linear-gradient(135deg, #d97706 0%, #c2410c 50%, #e11d48 100%);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+
+.navbar-skillforge .dropdown-menu {
+    border: 1px solid var(--sf-border);
+    box-shadow: var(--sf-shadow-hover);
+    border-radius: 0.75rem;
+}
+
+.navbar-skillforge .badge.bg-danger {
+    background: var(--sf-coral) !important;
+}
+
+/* ----- Botones ----- */
+.btn-skillforge {
+    background: var(--sf-gradient);
+    color: #fff !important;
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-skillforge:hover {
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+}
+
+.btn-outline-primary {
+    border-width: 2px;
+    border-color: var(--sf-flame);
+    color: var(--sf-orange);
+    font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+    background: var(--skillforge-primary-light);
+    border-color: var(--sf-orange);
+    color: var(--sf-dark);
+}
+
+/* ----- Cards ----- */
+.card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid var(--sf-border);
+    border-radius: 1rem;
+    box-shadow: var(--sf-shadow);
+    overflow: hidden;
+    background: var(--sf-bg-card);
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--sf-shadow-hover);
+    border-color: rgba(245, 158, 11, 0.35);
+}
+
+.curso-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.curso-card .card-body {
+    border-top: 3px solid transparent;
+    border-image: var(--sf-gradient) 1;
+}
+
+.card-img-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+}
+
+.card-img-placeholder i {
+    color: var(--sf-flame);
+    opacity: 0.7;
+}
+
+.curso-card .badge.bg-secondary {
+    background: var(--sf-dark-soft) !important;
+}
+
+.curso-card .badge.bg-info {
+    background: var(--sf-gradient) !important;
+    border: none;
+}
+
+.curso-card .fw-bold.text-primary {
+    color: var(--sf-orange) !important;
+    font-size: 1.15rem;
+}
+
+/* Card categoría */
+.card-categoria {
+    background: var(--sf-bg-card);
+    border: 2px solid var(--sf-border);
+    transition: all 0.25s ease;
+}
+
+.card-categoria:hover {
+    border-color: var(--sf-flame);
+    background: var(--skillforge-primary-light);
+    transform: scale(1.03);
+    box-shadow: var(--sf-shadow-hover);
+}
+
+.card-categoria i {
+    background: var(--sf-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card-categoria .card-title {
+    color: var(--sf-dark);
+    font-weight: 600;
+}
+
+/* ----- Footer ----- */
+footer.skillforge-footer {
+    background: var(--sf-nav-bg);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 1.75rem 0 !important;
+    box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.2);
+    border-top: 1px solid rgba(245, 158, 11, 0.12);
+}
+
+.skillforge-footer p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.skillforge-footer a {
+    color: var(--sf-flame-light);
+}
+
+/* ----- Alertas ----- */
+.alert {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: var(--sf-shadow);
+}
+
+.alert-success { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; }
+.alert-danger { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
+.alert-warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
+.alert-info { background: linear-gradient(135deg, #ffedd5, #fed7aa); color: #9a3412; }
+
+/* ----- Breadcrumbs ----- */
+.breadcrumb {
+    background: transparent;
+}
+
+.breadcrumb-item a {
+    color: var(--sf-orange);
+    font-weight: 500;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--sf-coral);
+}
+
+.breadcrumb-item.active {
+    color: var(--sf-dark-muted);
+}
+
+/* ----- Tabs (curso detail) ----- */
+.nav-tabs .nav-link {
+    color: var(--sf-dark-muted);
+    font-weight: 500;
+    border: none;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--sf-orange);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--sf-orange);
+    background: transparent;
+    border-bottom-color: var(--sf-flame);
+}
+
+/* ----- Paginación ----- */
+.pagination .page-link {
+    color: var(--sf-orange);
+    font-weight: 500;
+    border-color: var(--sf-border);
+}
+
+.pagination .page-link:hover {
+    background: var(--skillforge-primary-light);
+    border-color: var(--sf-flame);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--sf-gradient);
+    border-color: transparent;
+}
+
+/* ----- Badge estrella (rating) ----- */
+.badge.bg-warning.text-dark {
+    background: var(--sf-gradient) !important;
+    color: #fff !important;
+}

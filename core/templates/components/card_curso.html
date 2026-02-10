@@ -1,0 +1,21 @@
+{% load static %}{% load core_extras %}
+<div class="card h-100 curso-card">
+    {% if curso.imagen %}
+    <img src="{{ curso.imagen.url }}" class="card-img-top" alt="{{ curso.titulo|sin_certificacion }}" style="object-fit: cover; height: 225px;">
+    {% else %}
+    <img src="{{ curso|course_theme_image:'400x225' }}" class="card-img-top" alt="{{ curso.titulo|sin_certificacion }}" loading="lazy" style="object-fit: cover; height: 225px;">
+    {% endif %}
+    <div class="card-body">
+        <span class="badge bg-secondary mb-2">{{ curso.get_nivel_dificultad_display }}</span>
+        {% if show_categoria %}
+        <span class="badge bg-info mb-2">{{ curso.categoria.nombre }}</span>
+        {% endif %}
+        <h5 class="card-title">{{ curso.titulo|sin_certificacion }}</h5>
+        <p class="card-text text-muted small">{{ curso.descripcion|sin_certificacion|truncatewords:15 }}</p>
+        {% if show_instructor %}
+        <p class="text-muted small mb-1">{{ curso.instructor.get_full_name|default:curso.instructor.username }}</p>
+        {% endif %}
+        <p class="fw-bold text-primary">{{ curso.calcular_precio_final }} COP</p>
+        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">{{ link_text|default:"Ver curso" }}</a>
+    </div>
+</div>

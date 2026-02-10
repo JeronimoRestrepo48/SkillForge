@@ -25,7 +25,7 @@ cp .env.example .env
 # Aplicar migraciones
 python manage.py migrate
 
-# Crear datos iniciales (categorías, usuario admin e instructor de prueba)
+# Crear datos iniciales (categorías, cursos y usuarios por defecto para los 3 roles)
 python manage.py crear_datos_iniciales
 ```
 
@@ -35,16 +35,19 @@ python manage.py crear_datos_iniciales
 python manage.py runserver
 ```
 
-Abrir http://127.0.0.1:8000
+Abrir http://127.0.0.1:8000 (la ruta `/` es el login; hace falta autenticarse para acceder al resto).
 
-## Usuarios de prueba
+## Credenciales por defecto (3 paneles)
 
-Tras ejecutar `crear_datos_iniciales`:
+Tras ejecutar `python manage.py crear_datos_iniciales` puedes acceder con:
 
-| Usuario     | Contraseña   | Rol           |
-|-------------|--------------|---------------|
-| admin       | admin123     | Administrador |
-| instructor1 | instructor123| Instructor    |
+| Usuario     | Contraseña    | Rol            | Acceso |
+|-------------|---------------|----------------|--------|
+| **estudiante** | estudiante123 | Estudiante     | Home, Cursos, Mis cursos, Certificaciones, Carrito |
+| **instructor** | instructor123 | Instructor     | Home, Gestionar cursos, Crear curso |
+| **admin**      | admin123      | Administrador  | Home, Panel de administración (`/panel/`) |
+
+Además, el comando crea instructores `instructor1`, `instructor2`, `instructor3` (contraseñas: `instructor1123`, `instructor2123`, `instructor3123`) con cursos de ejemplo asignados.
 
 ## Estructura del proyecto
 

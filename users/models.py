@@ -117,3 +117,28 @@ class Instructor(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+
+class UserProfile(models.Model):
+    """
+    Perfil extendido para preferencias y datos de cuenta (todos los usuarios).
+    """
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        primary_key=True
+    )
+    bio = models.TextField(blank=True)
+    preferencias = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text='Ej: {"categorias_favoritas": [], "notificaciones_email": true}'
+    )
+
+    class Meta:
+        verbose_name = 'Perfil de usuario'
+        verbose_name_plural = 'Perfiles de usuario'
+
+    def __str__(self):
+        return f'Perfil de {self.user}'

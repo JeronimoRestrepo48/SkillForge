@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load core_extras %}
+
+{% block title %}Mis Cursos Inscritos - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mis cursos</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">Mis cursos inscritos</h1>
+
+    {% if inscripciones %}
+    <div class="row g-4">
+        {% for ins in inscripciones %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 curso-card">
+                {% if ins.curso.imagen %}
+                <img src="{{ ins.curso.imagen.url }}" class="card-img-top" alt="{{ ins.curso.titulo|sin_certificacion }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                    <i class="bi bi-journal-bookmark fs-1 text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <span class="badge bg-info mb-2">{{ ins.curso.categoria.nombre }}</span>
+                    <h5 class="card-title">{{ ins.curso.titulo|sin_certificacion }}</h5>
+                    <p class="card-text text-muted small">{{ ins.curso.descripcion|sin_certificacion|truncatewords:12 }}</p>
+                    <a href="{% url 'catalog:course_learn' ins.curso.pk %}" class="btn btn-skillforge btn-sm w-100">Continuar aprendiendo</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-journal-check display-4"></i>
+        <p class="lead mt-3">Aún no estás inscrito en ningún curso</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">Explorar cursos</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

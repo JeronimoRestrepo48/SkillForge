@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar módulo - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:module_list' modulo.curso_id %}">{{ modulo.curso.titulo }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Eliminar módulo</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">Eliminar módulo</h1>
+    <p>¿Estás seguro de que deseas eliminar el módulo <strong>{{ modulo.titulo }}</strong>? Se eliminarán también todas sus lecciones.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'catalog:module_list' modulo.curso_id %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

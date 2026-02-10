@@ -1,0 +1,158 @@
+/**
+ * SkillForge - Páginas
+ * Hero, secciones, auth, empty states
+ */
+
+/* ----- Hero landing ----- */
+.hero-skillforge {
+    background: var(--sf-gradient-hero);
+    color: #fff;
+    border-radius: 1.25rem;
+    padding: 3.5rem 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--sf-shadow-hover), 0 0 60px rgba(245, 158, 11, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-skillforge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse 80% 50% at 70% 50%, rgba(245, 158, 11, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.hero-skillforge h1 {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.hero-skillforge .lead {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.15rem;
+    position: relative;
+}
+
+.hero-skillforge .btn-skillforge {
+    background: var(--sf-gradient);
+    color: #fff !important;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5);
+    position: relative;
+}
+
+.hero-skillforge .btn-skillforge:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #f43f5e 100%);
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(245, 158, 11, 0.5);
+}
+
+/* ----- Títulos de sección ----- */
+.section-title {
+    color: var(--sf-dark);
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid transparent;
+    border-image: var(--sf-gradient) 1;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+/* ----- Section card ----- */
+.section-card {
+    background: var(--sf-bg-card);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    box-shadow: var(--sf-shadow);
+    border: 1px solid var(--sf-border);
+}
+
+/* ----- Empty state ----- */
+.empty-state {
+    background: var(--sf-bg-card);
+    border-radius: 1.25rem;
+    padding: 3.5rem 2rem;
+    border: 2px dashed rgba(245, 158, 11, 0.4);
+}
+
+.empty-state i {
+    color: var(--sf-flame);
+    opacity: 0.8;
+}
+
+.empty-state .btn-skillforge {
+    margin-top: 0.5rem;
+}
+
+/* ----- Contenido de lección ----- */
+.curso-leccion-contenido {
+    white-space: pre-wrap;
+}
+
+/* ----- Auth (login / registro) ----- */
+.auth-page-wrap {
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+    padding: 2.5rem 0;
+}
+
+.auth-card {
+    background: var(--sf-bg-card);
+    border-radius: 1.25rem;
+    box-shadow: var(--sf-shadow-hover);
+    border: 1px solid var(--sf-border);
+    overflow: hidden;
+}
+
+.auth-card .card-body {
+    padding: 2.5rem;
+}
+
+.auth-card .card-title {
+    color: var(--sf-dark);
+    font-weight: 700;
+}
+
+.auth-card .form-control:focus {
+    border-color: var(--sf-flame);
+    box-shadow: 0 0 0 0.2rem rgba(245, 158, 11, 0.2);
+}
+
+.auth-page-wrap .auth-subtitle {
+    color: var(--sf-dark-muted);
+    font-size: 1rem;
+}
+
+/* ----- Certificado preview ----- */
+.certificado-body {
+    background: linear-gradient(180deg, #fffbf7 0%, #fff7ed 100%);
+    border-left: 4px solid var(--sf-flame);
+}
+
+.certificado-preview-card .card {
+    border: 2px solid var(--sf-border);
+}
+
+/* ----- Panel admin cards ----- */
+.card.border-primary { border-color: rgba(245, 158, 11, 0.5) !important; }
+.card.border-info { border-color: rgba(234, 88, 12, 0.5) !important; }
+.card.border-success { border-color: rgba(244, 63, 94, 0.4) !important; }
+
+.card-title.text-primary { color: var(--sf-flame) !important; }
+.card-title.text-info { color: var(--sf-orange) !important; }
+.card-title.text-success { color: var(--sf-coral) !important; }
+
+.btn-outline-primary { border-color: var(--sf-flame); color: var(--sf-orange); }
+.btn-outline-info { border-color: var(--sf-orange); color: var(--sf-orange); }
+.btn-outline-success { border-color: var(--sf-coral); color: var(--sf-coral); }
+
+/* Card CTA (precio / acción en detalle de curso) */
+.card-cta {
+    border-top: 3px solid transparent;
+    border-image: var(--sf-gradient) 1;
+}

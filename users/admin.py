@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Estudiante, Instructor
+from .models import User, Estudiante, Instructor, UserProfile
 
 
 @admin.register(User)
@@ -23,3 +23,13 @@ class EstudianteAdmin(admin.ModelAdmin):
 @admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
     list_display = ['user', 'especialidad', 'calificacion_promedio', 'cursos_publicados']
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'bio_short']
+    search_fields = ['user__username', 'bio']
+
+    def bio_short(self, obj):
+        return (obj.bio[:50] + '...') if obj.bio and len(obj.bio) > 50 else (obj.bio or '')
+    bio_short.short_description = 'Bio'

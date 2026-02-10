@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if leccion %}Editar lección{% else %}Nueva lección{% endif %} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:module_list' curso.pk %}">{{ curso.titulo }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:lesson_list' curso.pk modulo.pk %}">{{ modulo.titulo }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% if leccion %}Editar lección{% else %}Nueva lección{% endif %}</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">{% if leccion %}Editar lección{% else %}Nueva lección{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-skillforge">Guardar</button>
+        <a href="{% url 'catalog:lesson_list' curso.pk modulo.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

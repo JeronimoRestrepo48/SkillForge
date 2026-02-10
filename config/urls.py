@@ -1,16 +1,24 @@
 """
 URL configuration for SkillForge project.
+All endpoints in English. Root (/) = login; all other routes require authentication.
 """
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from users.api import MeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('usuarios/', include('users.urls')),
-    path('cursos/', include('catalog.urls')),
+    path('courses/', include('catalog.urls')),
+    path('cart/', include('transactions.urls')),
+    path('my-account/', include('users.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/me/', MeView.as_view(), name='api_me'),
 ]
 
 if settings.DEBUG:

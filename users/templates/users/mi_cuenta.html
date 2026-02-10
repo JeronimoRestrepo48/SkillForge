@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My account - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My account</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">My account</h1>
+
+    <ul class="nav nav-tabs mb-4" id="miCuentaTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#perfil" type="button" role="tab">Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="cursos-tab" data-bs-toggle="tab" data-bs-target="#cursos" type="button" role="tab">My courses</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="certificaciones-tab" data-bs-toggle="tab" data-bs-target="#certificaciones" type="button" role="tab">Certifications</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="carrito-tab" data-bs-toggle="tab" data-bs-target="#carrito" type="button" role="tab">Cart</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="miCuentaTabsContent">
+        <div class="tab-pane fade show active" id="perfil" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Datos personales</h5>
+                    <p class="text-muted small">Edita tu nombre, email y biografía.</p>
+                    <a href="{% url 'users:profile_edit' %}" class="btn btn-skillforge">Editar perfil</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="cursos" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mis cursos</h5>
+                    <p class="text-muted small">Cursos en los que estás inscrito.</p>
+                    {% if inscripciones %}
+                    <ul class="list-group list-group-flush">
+                        {% for ins in inscripciones %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <a href="{% url 'catalog:course_learn' ins.curso_id %}">{{ ins.curso.titulo }}</a>
+                            <span class="badge bg-{% if ins.estado == 'COMPLETADA' %}success{% else %}primary{% endif %}">{{ ins.get_estado_display }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'catalog:my_courses' %}" class="btn btn-outline-primary btn-sm mt-3">Ver todos</a>
+                    {% else %}
+                    <p class="text-muted mb-0">Aún no estás inscrito en ningún curso.</p>
+                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-sm mt-2">Explorar cursos</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="certificaciones" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Certificaciones</h5>
+                    <p class="text-muted small">Certificados obtenidos al completar cursos.</p>
+                    {% if certificados %}
+                    <ul class="list-group list-group-flush">
+                        {% for cert in certificados %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>{{ cert.curso.titulo }}</span>
+                            <div>
+                                <a href="{% url 'catalog:certificate_preview' cert.curso_id %}" class="btn btn-outline-primary btn-sm">Ver</a>
+                                <a href="{% url 'catalog:certificate_verify' cert.codigo_verificacion %}" class="btn btn-outline-secondary btn-sm" target="_blank">Verificar</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'catalog:my_certificates' %}" class="btn btn-outline-primary btn-sm mt-3">Ver todos</a>
+                    {% else %}
+                    <p class="text-muted mb-0">Aún no tienes certificados. Completa un curso al 100% para obtener uno.</p>
+                    <a href="{% url 'catalog:my_courses' %}" class="btn btn-skillforge btn-sm mt-2">Ir a mis cursos</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="carrito" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Carrito de compras</h5>
+                    <p class="text-muted small">Cursos que tienes en el carrito.</p>
+                    {% if carrito_items %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in carrito_items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>{{ item.curso.titulo }}</span>
+                            <span>{{ item.curso.calcular_precio_final }} COP</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'transactions:cart' %}" class="btn btn-skillforge mt-3">Ir al carrito</a>
+                    {% else %}
+                    <p class="text-muted mb-0">Tu carrito está vacío.</p>
+                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-sm mt-2">Explorar cursos</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

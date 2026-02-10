@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if modulo %}Editar módulo{% else %}Nuevo módulo{% endif %} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:module_list' curso.pk %}">{{ curso.titulo }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% if modulo %}Editar módulo{% else %}Nuevo módulo{% endif %}</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">{% if modulo %}Editar módulo{% else %}Nuevo módulo{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-skillforge">Guardar</button>
+        <a href="{% url 'catalog:module_list' curso.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

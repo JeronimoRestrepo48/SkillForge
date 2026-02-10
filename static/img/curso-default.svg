@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff7ed"/>
+      <stop offset="100%" style="stop-color:#fed7aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="200" fill="url(#bg)"/>
+  <g fill="#f59e0b" opacity="0.6">
+    <path d="M160 70 L200 50 L240 70 L240 110 L200 130 L160 110 Z"/>
+    <circle cx="200" cy="90" r="18" fill="none" stroke="#ea580c" stroke-width="4"/>
+    <path d="M195 90 L198 93 L205 86" fill="none" stroke="#ea580c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="200" y="165" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#92400e">SkillForge - Curso</text>
+</svg>

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis pedidos - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mis pedidos</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4">Mis pedidos</h1>
+
+    {% if ordenes %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Orden</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th class="text-end">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for orden in ordenes %}
+                <tr>
+                    <td><strong>{{ orden.numero_orden }}</strong></td>
+                    <td>{{ orden.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if orden.estado == 'CONFIRMADA' %}
+                        <span class="badge bg-success">{{ orden.get_estado_display }}</span>
+                        {% elif orden.estado == 'CANCELADA' %}
+                        <span class="badge bg-secondary">{{ orden.get_estado_display }}</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">{{ orden.get_estado_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">{{ orden.total }} COP</td>
+                    <td class="text-end">
+                        <a href="{% url 'transactions:order_confirmed' orden.numero_orden %}" class="btn btn-outline-primary btn-sm">Ver detalle</a>
+                        <a href="{% url 'transactions:order_invoice' orden.numero_orden %}" class="btn btn-outline-secondary btn-sm">Factura</a>
+                        {% if orden.estado == 'CONFIRMADA' %}
+                        <form method="post" action="{% url 'transactions:order_cancel' orden.numero_orden %}" class="d-inline" onsubmit="return confirm('¿Cancelar esta orden? Se devolverán los cupos y perderás acceso a los cursos de esta compra.');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Aún no tienes pedidos. <a href="{% url 'catalog:course_list' %}">Explorar cursos</a> o <a href="{% url 'transactions:cart' %}">ver carrito</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

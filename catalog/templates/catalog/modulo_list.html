@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Módulos - {{ curso.titulo }} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:course_detail' curso.pk %}">{{ curso.titulo }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contenido</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Contenido: {{ curso.titulo }}</h1>
+        <div>
+            <a href="{% url 'catalog:module_create' curso.pk %}" class="btn btn-skillforge">
+                <i class="bi bi-plus-lg"></i> Nuevo módulo
+            </a>
+            <a href="{% url 'catalog:my_teaching' %}" class="btn btn-outline-secondary ms-2">Volver a mis cursos</a>
+        </div>
+    </div>
+
+    {% if modulos %}
+    <div class="list-group">
+        {% for modulo in modulos %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">{{ modulo.titulo }}</h5>
+                <p class="text-muted small mb-0">
+                    Orden {{ modulo.orden }}
+                    {% if modulo.duracion_minutos %}&middot; {{ modulo.duracion_minutos }} min{% endif %}
+                    &middot; {{ modulo.lecciones.count }} lección{{ modulo.lecciones.count|pluralize:"es" }}
+                </p>
+            </div>
+            <div class="btn-group">
+                <a href="{% url 'catalog:lesson_list' curso.pk modulo.pk %}" class="btn btn-sm btn-outline-primary">Ver lecciones</a>
+                <a href="{% url 'catalog:module_update' curso.pk modulo.pk %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                <a href="{% url 'catalog:module_delete' curso.pk modulo.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Aún no hay módulos. <a href="{% url 'catalog:module_create' curso.pk %}">Crear el primer módulo</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
