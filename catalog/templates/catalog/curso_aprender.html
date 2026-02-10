@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load core_extras %}
 
-{% block title %}Aprender: {{ curso.titulo|sin_certificacion }} - SkillForge{% endblock %}
+{% block title %}Learn: {{ curso.titulo|sin_certificacion }} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'catalog:my_courses' %}">Mis cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_courses' %}">My courses</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ curso.titulo|sin_certificacion }}</li>
         </ol>
     </nav>
@@ -15,22 +15,22 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="h2 mb-1">{{ curso.titulo|sin_certificacion }}</h1>
-            <p class="text-muted mb-0">por {{ curso.instructor.get_full_name|default:curso.instructor.username }}</p>
+            <p class="text-muted mb-0">by {{ curso.instructor.get_full_name|default:curso.instructor.username }}</p>
         </div>
         <div class="text-end">
             <div class="progress mb-1 progress-curso">
-            <div class="progress-bar" role="progressbar" style="width: {{ progreso.porcentaje }}%;" aria-valuenow="{{ progreso.porcentaje }}" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del curso"></div>
+                <div class="progress-bar" role="progressbar" style="width: 0%;" data-progress="{{ progreso.porcentaje|default:0|floatformat:0 }}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Course progress"></div>
             </div>
-            <small class="text-muted">{{ progreso.completadas }}/{{ progreso.total }} lecciones</small>
+            <small class="text-muted">{{ progreso.completadas }}/{{ progreso.total }} lessons</small>
         </div>
     </div>
 
     <p class="text-muted mb-4">
-        Aquí tienes el <strong>material de trabajo</strong>, las lecciones (texto, vídeo, <strong>tests</strong> y prácticas) organizadas por módulos. Marca cada lección como completada cuando la termines. Al completar el 100% obtendrás tu <strong>certificado de completitud</strong> en PDF en la pestaña Certificaciones.
+        Here is the <strong>learning material</strong>: lessons (text, video, <strong>quizzes</strong> and practice) organized by modules. Mark each lesson as complete when you finish it. At 100% you will get your <strong>completion certificate</strong> as PDF in the Certifications tab.
     </p>
 
     {% if modulos %}
-    <h2 class="h5 mb-3">Contenido del curso</h2>
+    <h2 class="h5 mb-3">Course content</h2>
     <div class="accordion" id="modulosAccordion">
         {% for modulo in modulos %}
         {% with modulo_id="modulo-"|add:modulo.pk %}
@@ -41,7 +41,7 @@
                 {% else %}
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ modulo_id }}" aria-expanded="false">
                 {% endif %}
-                    <strong>Módulo {{ forloop.counter }}:</strong> {{ modulo.titulo }}
+                    <strong>Module {{ forloop.counter }}:</strong> {{ modulo.titulo }}
                     {% if modulo.duracion_minutos %}<span class="text-muted ms-2 small">({{ modulo.duracion_minutos }} min)</span>{% endif %}
                 </button>
             </h2>
@@ -49,34 +49,55 @@
                 <div class="accordion-body p-0">
                     <ul class="list-group list-group-flush">
                         {% for leccion in modulo.lecciones.all %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                {% if leccion.pk in lecciones_completadas %}
-                                <i class="bi bi-check-circle-fill text-success me-2" aria-label="Completada"></i>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center flex-grow-1">
+                                    {% if leccion.pk in lecciones_completadas %}
+                                    <i class="bi bi-check-circle-fill text-success me-2" aria-label="Completed"></i>
                                 {% else %}
-                                <i class="bi bi-circle me-2 text-muted" aria-label="Pendiente"></i>
-                                {% endif %}
-                                <div>
-                                    <span class="badge bg-secondary me-2">{{ leccion.get_tipo_display }}</span>
-                                    {{ leccion.titulo }}
-                                    {% if leccion.duracion_minutos %}<span class="text-muted small">({{ leccion.duracion_minutos }} min)</span>{% endif %}
+                                <i class="bi bi-circle me-2 text-muted" aria-label="Pending"></i>
+                                    {% endif %}
+                                    <div>
+                                        <span class="badge bg-secondary me-2">{{ leccion.get_tipo_display }}</span>
+                                        <a href="{% url 'catalog:lesson_detail' curso.pk leccion.pk %}" class="text-decoration-none">{{ leccion.titulo }}</a>
+                                        {% if leccion.duracion_minutos %}<span class="text-muted small">({{ leccion.duracion_minutos }} min)</span>{% endif %}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{% url 'catalog:lesson_detail' curso.pk leccion.pk %}" class="btn btn-outline-primary btn-sm">View lesson</a>
+                                    {% if leccion.pk in lecciones_completadas %}
+                                    <span class="badge bg-success">Completed</span>
+                                    {% else %}
+                                    <form method="post" action="{% url 'catalog:lesson_complete' curso.pk leccion.pk %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-success btn-sm">Mark complete</button>
+                                    </form>
+                                    {% endif %}
                                 </div>
                             </div>
-                            {% if leccion.pk in lecciones_completadas %}
-                            <span class="badge bg-success">Completada</span>
-                            {% else %}
-                            <form method="post" action="{% url 'catalog:lesson_complete' curso.pk leccion.pk %}" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-success btn-sm">Marcar completada</button>
-                            </form>
+                            {% if leccion.contenido %}
+                            <div class="mt-2 pt-2 border-top bg-light rounded p-2 small">
+                                <div class="text-muted mb-1">Content:</div>
+                                {% if leccion.tipo == 'VIDEO' and leccion.contenido %}
+                                    {% with embed=leccion.contenido|video_embed_url %}
+                                    {% if embed %}
+                                    <div class="ratio ratio-16x9" style="max-width: 400px;">
+                                        <iframe src="{{ embed }}" title="{{ leccion.titulo }}" allowfullscreen></iframe>
+                                    </div>
+                                    {% else %}
+                                    <a href="{{ leccion.contenido }}" target="_blank" rel="noopener">{{ leccion.contenido }}</a>
+                                    {% endif %}
+                                    {% endwith %}
+                                {% elif leccion.tipo == 'QUIZ' %}
+                                <div class="curso-leccion-contenido quiz-content">{{ leccion.contenido|linebreaks }}</div>
+                                {% elif leccion.tipo == 'PRACTICA' %}
+                                <div class="curso-leccion-contenido practica-content">{{ leccion.contenido|linebreaks }}</div>
+                                {% else %}
+                                <div class="curso-leccion-contenido">{{ leccion.contenido|linebreaks }}</div>
+                                {% endif %}
+                            </div>
                             {% endif %}
                         </li>
-                        {% if leccion.contenido %}
-                        <li class="list-group-item bg-light">
-                            <div class="small text-muted mb-1">Contenido:</div>
-                            <div class="curso-leccion-contenido">{{ leccion.contenido|linebreaks }}</div>
-                        </li>
-                        {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -87,12 +108,25 @@
     </div>
     {% else %}
     <div class="alert alert-info">
-        Este curso aún no tiene contenido publicado. Vuelve más tarde.
+        This course has no published content yet. Check back later.
     </div>
     {% endif %}
 
     <div class="mt-4">
-        <a href="{% url 'catalog:my_courses' %}" class="btn btn-outline-secondary">Volver a mis cursos</a>
+        <a href="{% url 'catalog:my_courses' %}" class="btn btn-outline-secondary">Back to my courses</a>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var bar = document.querySelector('.progress-curso .progress-bar');
+    if (bar && bar.dataset.progress !== undefined) {
+        var pct = bar.dataset.progress;
+        bar.setAttribute('aria-valuenow', pct);
+        bar.style.width = pct + '%';
+    }
+})();
+</script>
 {% endblock %}

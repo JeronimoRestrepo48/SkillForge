@@ -71,3 +71,9 @@ desarrollo/
 - Landing page y navegación
 
 Ver [docs/SPRINT1.md](docs/SPRINT1.md) para detalles.
+
+## Documentación adicional
+
+- **[Flujos principales](docs/FLUJOS.md)**: inscripción, aprendizaje y progreso, certificados, carrito y pago.
+- **API REST**: autenticación JWT (Simple JWT) y endpoint de perfil (`/api/me/`). Ver `users.api` y rutas en `config.urls`.
+- **Internacionalización**: `USE_I18N` y `LocaleMiddleware` activos; cadenas marcadas con `{% trans %}` en plantillas. Para generar/compilar mensajes: `python manage.py makemessages -l es` y `compilemessages`.

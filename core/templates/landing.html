@@ -1,46 +1,467 @@
 {% extends 'base.html' %}
+{% load core_extras %}
 
 {% block content %}
 <div class="container">
-    <section class="hero-skillforge text-center">
-        <h1 class="display-4 fw-bold mb-3">Forja tu Futuro Profesional</h1>
-        <p class="lead mb-4">Aprende con expertos. Cursos online de programación, diseño, marketing y más.</p>
-        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg px-4 py-3">Explorar Cursos</a>
+    <section class="hero-skillforge text-center py-5">
+        <h1 class="display-4 fw-bold mb-3">Forge Your Professional Future</h1>
+        <p class="lead mb-4">Learn with experts. Online courses in programming, design, marketing, and more.</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg px-4 py-3">Browse Courses</a>
     </section>
 
-    {% if categorias %}
-    <section class="py-4 section-card">
-        <h2 class="section-title h4">Categorías</h2>
+    {% if user.tipo == 'ESTUDIANTE' or user.es_estudiante %}
+    <section class="section-card py-4 mb-4">
+        <h2 class="h5 mb-4">Your dashboard</h2>
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-primary">{{ dashboard_courses_enrolled|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Courses enrolled</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-success">{{ dashboard_courses_completed|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Completed</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-warning">{{ dashboard_certificates|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Certificates</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-info">{{ site_total_courses }}</span>
+                    <p class="small text-muted mb-0 mt-1">Courses available</p>
+                </div>
+            </div>
+        </div>
+        {% if dashboard_progress %}
+        <h3 class="h6 text-muted mb-3">Courses in progress</h3>
         <div class="row g-3">
-            {% for cat in categorias %}
-            <div class="col-6 col-md-4 col-lg-2">
-                {% include 'components/card_categoria.html' with categoria=cat %}
+            {% for item in dashboard_progress %}
+            <div class="col-12 col-md-6">
+                <a href="{% url 'catalog:course_learn' item.curso.pk %}" class="text-decoration-none text-dark">
+                    <div class="card h-100 border">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-semibold">{{ item.curso.titulo|sin_certificacion }}</span>
+                                <span class="badge bg-primary">{{ item.porcentaje|floatformat:0 }}%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ item.porcentaje }}%;" aria-valuenow="{{ item.porcentaje }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted">{{ item.completadas }}/{{ item.total }} lessons</small>
+                        </div>
+                    </div>
+                </a>
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <p class="text-muted small mb-0">No courses in progress. <a href="{% url 'catalog:course_list' %}">Browse the catalog</a> to get started.</p>
+        {% endif %}
+
+        {% if dashboard_courses_enrolled and dashboard_courses_enrolled > 0 and chart_learning_overview or chart_progress_data %}
+        <h3 class="h6 text-muted mb-3 mt-4">Learning analytics</h3>
+        <div class="row g-3 mb-4">
+            {% if chart_learning_overview %}
+            <div class="col-12 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Learning overview</h4>
+                        <div class="position-relative" style="height: 220px;">
+                            <canvas id="chartLearningOverview" aria-label="Learning overview: completed, in progress, not started"></canvas>
+                        </div>
+                        {{ chart_learning_overview|json_script:"chart-learning-overview" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if chart_progress_data %}
+            <div class="col-12 col-lg-8">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Progress by course</h4>
+                        <div class="position-relative" style="height: 220px;">
+                            <canvas id="chartProgressByCourse" aria-label="Progress percentage per course"></canvas>
+                        </div>
+                        {{ chart_progress_labels|json_script:"chart-progress-labels" }}
+                        {{ chart_progress_data|json_script:"chart-progress-data" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row g-3">
+            {% if chart_categories_labels %}
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Competencies by category</h4>
+                        <div class="position-relative" style="height: 240px;">
+                            <canvas id="chartCategories" aria-label="Enrolled courses per category"></canvas>
+                        </div>
+                        {{ chart_categories_labels|json_script:"chart-categories-labels" }}
+                        {{ chart_categories_data|json_script:"chart-categories-data" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Overall progress</h4>
+                        <div class="d-flex align-items-center justify-content-center rounded-3 bg-light" style="height: 240px;">
+                            <div class="text-center">
+                                <span class="display-3 fw-bold text-primary" id="overallProgressValue">{{ chart_overall_progress|default:0 }}</span>
+                                <span class="fs-4 text-muted">%</span>
+                                <p class="small text-muted mb-0 mt-1">average across active courses</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% elif not dashboard_courses_enrolled or dashboard_courses_enrolled == 0 %}
+        <div class="mt-4">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-graph-up-arrow display-4 text-primary mb-3" aria-hidden="true"></i>
+                    <h3 class="h5 mb-2">Your learning analytics will appear here</h3>
+                    <p class="text-muted mb-4">Enroll in courses to see your progress, learning overview, and competencies by category.</p>
+                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg">Browse courses</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+    {% elif user.tipo == 'INSTRUCTOR' or user.es_instructor %}
+    <section class="section-card py-4 mb-4">
+        <h2 class="h5 mb-4">Teaching dashboard</h2>
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-primary">{{ dashboard_courses_teaching|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Your courses</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-success">{{ dashboard_courses_published|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Published</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-info">{{ site_total_courses }}</span>
+                    <p class="small text-muted mb-0 mt-1">Total on platform</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-secondary">{{ site_total_categories }}</span>
+                    <p class="small text-muted mb-0 mt-1">Categories</p>
+                </div>
+            </div>
+        </div>
+        {% if chart_course_status or chart_instructor_categories_data %}
+        <h3 class="h6 text-muted mb-3 mt-4">Teaching analytics</h3>
+        <div class="row g-3">
+            {% if chart_course_status %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Course status</h4>
+                        <div class="position-relative" style="height: 220px;">
+                            <canvas id="chartCourseStatus" aria-label="Published vs draft courses"></canvas>
+                        </div>
+                        {{ chart_course_status|json_script:"chart-course-status" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if chart_instructor_categories_data %}
+            <div class="col-12 col-md-6 col-lg-8">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Courses by category</h4>
+                        <div class="position-relative" style="height: 220px;">
+                            <canvas id="chartInstructorCategories" aria-label="Courses per category"></canvas>
+                        </div>
+                        {{ chart_instructor_categories_labels|json_script:"chart-instructor-categories-labels" }}
+                        {{ chart_instructor_categories_data|json_script:"chart-instructor-categories-data" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+    {% elif user.tipo == 'ADMINISTRADOR' or user.is_staff %}
+    <section class="section-card py-4 mb-4">
+        <h2 class="h5 mb-4">Platform overview</h2>
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-primary">{{ dashboard_total_users|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Total users</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-success">{{ site_total_courses }}</span>
+                    <p class="small text-muted mb-0 mt-1">Published courses</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-warning">{{ dashboard_total_orders|default:0 }}</span>
+                    <p class="small text-muted mb-0 mt-1">Orders</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card border-0 bg-light h-100 p-3 text-center">
+                    <span class="display-6 fw-bold text-info">{{ site_total_categories }}</span>
+                    <p class="small text-muted mb-0 mt-1">Categories</p>
+                </div>
+            </div>
+        </div>
+        {% if chart_users_by_type_data or chart_orders_days_data %}
+        <h3 class="h6 text-muted mb-3 mt-4">Platform analytics</h3>
+        <div class="row g-3">
+            {% if chart_users_by_type_data %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Users by role</h4>
+                        <div class="position-relative" style="height: 220px;">
+                            <canvas id="chartUsersByType" aria-label="Users by role"></canvas>
+                        </div>
+                        {{ chart_users_by_type_labels|json_script:"chart-users-by-type-labels" }}
+                        {{ chart_users_by_type_data|json_script:"chart-users-by-type-data" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if chart_orders_days_data %}
+            <div class="col-12 col-md-6 col-lg-8">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6 mb-3">Orders (last 7 days)</h4>
+                        <div class="position-relative" style="height: 220px;">
+                            <canvas id="chartOrdersDays" aria-label="Orders per day"></canvas>
+                        </div>
+                        {{ chart_orders_days_labels|json_script:"chart-orders-days-labels" }}
+                        {{ chart_orders_days_data|json_script:"chart-orders-days-data" }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
     </section>
     {% endif %}
 
-    {% if cursos_destacados %}
     <section class="py-4 section-card">
-        <h2 class="section-title h4">Cursos Destacados</h2>
-        <div class="row g-4">
-            {% for curso in cursos_destacados %}
-            <div class="col-md-6 col-lg-4">
-                {% include 'components/card_curso.html' with curso=curso link_text="Ver curso" %}
+        <h2 class="section-title h5 mb-4">Quick links</h2>
+        <div class="row g-3 g-md-4">
+            <div class="col-6 col-md-3">
+                <a href="{% url 'catalog:course_list' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-book fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">Browse catalog</h3>
+                        <p class="small text-muted mb-0 mt-1">Courses by category</p>
+                    </div>
+                </a>
             </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-4">
-            <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge px-4">Ver todos los cursos</a>
+            {% if user.tipo == 'ESTUDIANTE' or user.es_estudiante %}
+            <div class="col-6 col-md-3">
+                <a href="{% url 'catalog:my_courses' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-collection-play fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">My courses</h3>
+                        <p class="small text-muted mb-0 mt-1">Continue learning</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'catalog:my_certificates' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-award fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">Certifications</h3>
+                        <p class="small text-muted mb-0 mt-1">Your certificates</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'transactions:cart' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-cart3 fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">Cart</h3>
+                        <p class="small text-muted mb-0 mt-1">Pending purchases</p>
+                    </div>
+                </a>
+            </div>
+            {% elif user.tipo == 'INSTRUCTOR' or user.es_instructor %}
+            <div class="col-6 col-md-3">
+                <a href="{% url 'catalog:my_teaching' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-journal-check fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">Manage courses</h3>
+                        <p class="small text-muted mb-0 mt-1">Your courses</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'catalog:course_create' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-plus-circle fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">Create course</h3>
+                        <p class="small text-muted mb-0 mt-1">Publish a new course</p>
+                    </div>
+                </a>
+            </div>
+            {% elif user.tipo == 'ADMINISTRADOR' or user.is_staff %}
+            <div class="col-6 col-md-3">
+                <a href="{% url 'core:panel_admin' %}" class="text-decoration-none">
+                    <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
+                        <i class="bi bi-gear fs-1 text-primary mb-2" aria-hidden="true"></i>
+                        <h3 class="h6 mb-0">Admin panel</h3>
+                        <p class="small text-muted mb-0 mt-1">Users and metrics</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
         </div>
     </section>
-    {% else %}
-    <section class="empty-state text-center">
-        <i class="bi bi-journal-plus display-4"></i>
-        <p class="lead mt-3 text-body">Aún no hay cursos publicados. ¡Regístrate como instructor y crea el primero!</p>
-        <a href="{% url 'core:register' %}" class="btn btn-skillforge">Registrarse</a>
-    </section>
-    {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  function getJson(id) {
+    var el = document.getElementById(id);
+    return el ? JSON.parse(el.textContent) : null;
+  }
+
+  // Student: Learning overview (doughnut)
+  var learningOverview = getJson('chart-learning-overview');
+  var learningEl = document.getElementById('chartLearningOverview');
+  if (learningOverview && learningEl) {
+    var labels = [], data = [], colors = ['#198754', '#0d6efd', '#6c757d'];
+    if (learningOverview.completed) { labels.push('Completed'); data.push(learningOverview.completed); }
+    if (learningOverview.in_progress) { labels.push('In progress'); data.push(learningOverview.in_progress); }
+    if (learningOverview.not_started) { labels.push('Not started'); data.push(learningOverview.not_started); }
+    if (data.length) {
+      new Chart(learningEl, {
+        type: 'doughnut',
+        data: { labels: labels, datasets: [{ data: data, backgroundColor: colors.slice(0, data.length), borderWidth: 2 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+  }
+
+  // Student: Progress by course (bar)
+  var progressLabels = getJson('chart-progress-labels'), progressData = getJson('chart-progress-data');
+  var progressEl = document.getElementById('chartProgressByCourse');
+  if (progressEl && progressLabels && progressData && progressData.length) {
+    new Chart(progressEl, {
+      type: 'bar',
+      data: {
+        labels: progressLabels,
+        datasets: [{ label: 'Progress %', data: progressData, backgroundColor: 'rgba(13, 110, 253, 0.7)', borderColor: '#0d6efd', borderWidth: 1 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        scales: { x: { max: 100, beginAtZero: true }, y: { ticks: { font: { size: 11 } } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // Student: Competencies by category (horizontal bar)
+  var catLabels = getJson('chart-categories-labels'), catData = getJson('chart-categories-data');
+  var catEl = document.getElementById('chartCategories');
+  if (catEl && catLabels && catData && catData.length) {
+    new Chart(catEl, {
+      type: 'bar',
+      data: {
+        labels: catLabels,
+        datasets: [{ label: 'Courses', data: catData, backgroundColor: 'rgba(25, 135, 84, 0.7)', borderColor: '#198754', borderWidth: 1 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // Instructor: Course status (doughnut)
+  var courseStatus = getJson('chart-course-status');
+  var courseStatusEl = document.getElementById('chartCourseStatus');
+  if (courseStatusEl && courseStatus && typeof courseStatus === 'object') {
+    var statusLabels = Object.keys(courseStatus), statusData = Object.values(courseStatus);
+    if (statusData.length) {
+      new Chart(courseStatusEl, {
+        type: 'doughnut',
+        data: { labels: statusLabels, datasets: [{ data: statusData, backgroundColor: ['#198754', '#ffc107'], borderWidth: 2 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+  }
+
+  // Instructor: Courses by category (bar)
+  var instCatLabels = getJson('chart-instructor-categories-labels'), instCatData = getJson('chart-instructor-categories-data');
+  var instCatEl = document.getElementById('chartInstructorCategories');
+  if (instCatEl && instCatLabels && instCatData && instCatData.length) {
+    new Chart(instCatEl, {
+      type: 'bar',
+      data: {
+        labels: instCatLabels,
+        datasets: [{ label: 'Courses', data: instCatData, backgroundColor: 'rgba(13, 110, 253, 0.7)', borderColor: '#0d6efd', borderWidth: 1 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // Admin: Users by type (doughnut)
+  var usersLabels = getJson('chart-users-by-type-labels'), usersData = getJson('chart-users-by-type-data');
+  var usersEl = document.getElementById('chartUsersByType');
+  if (usersEl && usersLabels && usersData && usersData.length) {
+    new Chart(usersEl, {
+      type: 'doughnut',
+      data: { labels: usersLabels, datasets: [{ data: usersData, backgroundColor: ['#0d6efd', '#198754', '#6f42c1'], borderWidth: 2 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  // Admin: Orders last 7 days (line)
+  var ordersLabels = getJson('chart-orders-days-labels'), ordersData = getJson('chart-orders-days-data');
+  var ordersEl = document.getElementById('chartOrdersDays');
+  if (ordersEl && ordersLabels && ordersData) {
+    new Chart(ordersEl, {
+      type: 'line',
+      data: {
+        labels: ordersLabels,
+        datasets: [{ label: 'Orders', data: ordersData, borderColor: '#0d6efd', backgroundColor: 'rgba(13, 110, 253, 0.1)', fill: true, tension: 0.3 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+})();
+</script>
 {% endblock %}

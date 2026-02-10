@@ -7,10 +7,10 @@ from django.db import models
 
 
 class TipoUsuario(models.TextChoices):
-    """Roles del sistema."""
-    ESTUDIANTE = 'ESTUDIANTE', 'Estudiante'
+    """System roles."""
+    ESTUDIANTE = 'ESTUDIANTE', 'Student'
     INSTRUCTOR = 'INSTRUCTOR', 'Instructor'
-    ADMINISTRADOR = 'ADMINISTRADOR', 'Administrador'
+    ADMINISTRADOR = 'ADMINISTRADOR', 'Administrator'
 
 
 class EstadoUsuario(models.TextChoices):

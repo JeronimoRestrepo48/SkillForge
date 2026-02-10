@@ -147,6 +147,43 @@ class CursoAprenderView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class LeccionDetailView(LoginRequiredMixin, TemplateView):
+    """Vista de una lección individual con navegación siguiente/anterior."""
+    template_name = 'catalog/curso_leccion_detail.html'
+    login_url = '/'
+
+    def dispatch(self, request, *args, **kwargs):
+        curso = get_object_or_404(Curso, pk=kwargs['pk'])
+        if not Inscripcion.objects.filter(
+            user=request.user, curso=curso
+        ).filter(estado__in=('ACTIVA', 'COMPLETADA')).exists():
+            return redirect('catalog:course_detail', pk=curso.pk)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        curso = get_object_or_404(Curso.objects.prefetch_related('modulos__lecciones'), pk=self.kwargs['pk'])
+        leccion = get_object_or_404(Leccion, pk=self.kwargs['leccion_pk'], modulo__curso=curso)
+        context['curso'] = curso
+        context['leccion'] = leccion
+        context['modulos'] = course_service.obtener_modulos_de_curso(curso)
+        context['progreso'] = course_service.obtener_progreso_curso(self.request.user, curso)
+        lecciones_ordenadas = course_service.obtener_lecciones_ordenadas_curso(curso)
+        from catalog.models import ProgresoLeccion
+        context['lecciones_completadas'] = set(
+            ProgresoLeccion.objects.filter(
+                user=self.request.user,
+                leccion_id__in=[l.pk for l in lecciones_ordenadas],
+                completada=True
+            ).values_list('leccion_id', flat=True)
+        )
+        idx = next((i for i, l in enumerate(lecciones_ordenadas) if l.pk == leccion.pk), None)
+        context['leccion_anterior'] = lecciones_ordenadas[idx - 1] if idx and idx > 0 else None
+        context['leccion_siguiente'] = lecciones_ordenadas[idx + 1] if idx is not None and idx < len(lecciones_ordenadas) - 1 else None
+        context['leccion_completada'] = leccion.pk in context['lecciones_completadas']
+        return context
+
+
 class LeccionCompletarView(LoginRequiredMixin, View):
     """Mark lesson complete (POST). At 100% generates certificate."""
     login_url = '/'
@@ -165,15 +202,12 @@ class LeccionCompletarView(LoginRequiredMixin, View):
         progreso = course_service.obtener_progreso_curso(request.user, curso)
         if progreso['total'] > 0 and progreso['porcentaje'] >= 100:
             cert = certificate_service.crear_certificado_si_completo(request.user, curso)
-            if cert:
-                messages.success(
-                    request,
-                    f'¡Felicidades! Has completado el curso. Tu certificado está disponible en Mis certificados.'
-                )
-            else:
-                messages.success(request, f'Lección "{leccion.titulo}" marcada como completada.')
+            messages.success(
+                request,
+                'Congratulations! You have completed the course. Your certificate is available in Certifications.'
+            )
         else:
-            messages.success(request, f'Lección "{leccion.titulo}" marcada como completada.')
+            messages.success(request, f'Lesson "{leccion.titulo}" marked as complete.')
         return redirect('catalog:course_learn', pk=pk)
 
 
@@ -492,9 +526,9 @@ class CalificacionCrearActualizarView(LoginRequiredMixin, View):
                     'Tu valoración se ha guardado correctamente.' if created else 'Valoración actualizada.'
                 )
             else:
-                messages.error(request, 'Solo puedes valorar cursos que hayas completado.')
+                messages.error(request, 'You can only rate courses you have completed.')
         else:
-            messages.error(request, 'Puntuación debe ser entre 1 y 5.')
+            messages.error(request, 'Rating must be between 1 and 5.')
         next_url = request.POST.get('next') or reverse('catalog:course_detail', args=[curso_pk])
         return redirect(next_url)
 
@@ -555,10 +589,10 @@ class ComprarCertificacionView(LoginRequiredMixin, View):
         from django.contrib import messages
         certificacion = get_object_or_404(CertificacionIndustria, slug=slug, activa=True)
         if _tiene_acceso_certificacion(request.user, certificacion):
-            messages.info(request, 'Ya tienes acceso a esta certificación.')
+            messages.info(request, 'You already have access to this certification.')
             return redirect('catalog:certificacion_industria_detail', slug=slug)
         AccesoCertificacion.objects.get_or_create(user=request.user, certificacion=certificacion)
-        messages.success(request, f'Acceso a "{certificacion.nombre}" adquirido. Ya puedes ver el material y realizar el examen.')
+        messages.success(request, f'Access to "{certificacion.nombre}" purchased. You can now view the material and take the exam.')
         return redirect('catalog:certificacion_industria_detail', slug=slug)
 
 
@@ -575,12 +609,12 @@ class ExamenCertificacionView(LoginRequiredMixin, TemplateView):
         )
         if not _tiene_acceso_certificacion(request.user, self.certificacion):
             from django.contrib import messages
-            messages.warning(request, 'Debes comprar el acceso a esta certificación para realizar el examen.')
+            messages.warning(request, 'You must purchase access to this certification to take the exam.')
             return redirect('catalog:certificacion_industria_detail', slug=self.certificacion.slug)
         self.examen = getattr(self.certificacion, 'examen', None)
         if not self.examen:
             from django.contrib import messages
-            messages.warning(request, 'Esta certificación no tiene examen disponible.')
+            messages.warning(request, 'This certification has no exam available.')
             return redirect('catalog:certificacion_industria_detail', slug=self.certificacion.slug)
         return super().dispatch(request, *args, **kwargs)
 
@@ -641,9 +675,9 @@ class ExamenCertificacionView(LoginRequiredMixin, TemplateView):
         context['puntaje_minimo'] = examen.puntaje_minimo_aprobacion
         context['diploma'] = diploma
         if aprobado:
-            messages.success(request, f'¡Aprobado! Obtuviste {porcentaje}%. Puedes descargar tu diploma.')
+            messages.success(request, f'Passed! You got {porcentaje}%. You can download your diploma.')
         else:
-            messages.warning(request, f'No aprobado: {porcentaje}% (mínimo {examen.puntaje_minimo_aprobacion}%).')
+            messages.warning(request, f'Not passed: {porcentaje}% (minimum {examen.puntaje_minimo_aprobacion}%).')
         return self.render_to_response(context)
 
 

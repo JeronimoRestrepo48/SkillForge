@@ -16,6 +16,6 @@
         <p class="text-muted small mb-1">{{ curso.instructor.get_full_name|default:curso.instructor.username }}</p>
         {% endif %}
         <p class="fw-bold text-primary">{{ curso.calcular_precio_final }} COP</p>
-        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">{{ link_text|default:"Ver curso" }}</a>
+        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">{{ link_text|default:"View course" }}</a>
     </div>
 </div>

@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load core_extras %}
 
-{% block title %}Mis Cursos Inscritos - SkillForge{% endblock %}
+{% block title %}My Courses - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Mis cursos</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My courses</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Mis cursos inscritos</h1>
+    <h1 class="h2 mb-4">My enrolled courses</h1>
 
     {% if inscripciones %}
     <div class="row g-4">
@@ -30,7 +30,7 @@
                     <span class="badge bg-info mb-2">{{ ins.curso.categoria.nombre }}</span>
                     <h5 class="card-title">{{ ins.curso.titulo|sin_certificacion }}</h5>
                     <p class="card-text text-muted small">{{ ins.curso.descripcion|sin_certificacion|truncatewords:12 }}</p>
-                    <a href="{% url 'catalog:course_learn' ins.curso.pk %}" class="btn btn-skillforge btn-sm w-100">Continuar aprendiendo</a>
+                    <a href="{% url 'catalog:course_learn' ins.curso.pk %}" class="btn btn-skillforge btn-sm w-100">Continue learning</a>
                 </div>
             </div>
         </div>
@@ -39,8 +39,8 @@
     {% else %}
     <div class="text-center py-5 text-muted">
         <i class="bi bi-journal-check display-4"></i>
-        <p class="lead mt-3">Aún no estás inscrito en ningún curso</p>
-        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">Explorar cursos</a>
+        <p class="lead mt-3">You are not enrolled in any course yet</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">Browse courses</a>
     </div>
     {% endif %}
 </div>

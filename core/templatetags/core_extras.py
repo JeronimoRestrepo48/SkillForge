@@ -127,6 +127,36 @@ def placeholder_course_image(titulo, size='400x225'):
     return f'https://placehold.co/{size}/1a1a2e/eee?text={encoded}'
 
 
+def _video_embed_url(url):
+    """Return embed URL for YouTube or Vimeo, or None."""
+    if not url or not isinstance(url, str):
+        return None
+    url = url.strip()
+    # YouTube: watch?v=ID, youtu.be/ID
+    if 'youtube.com/watch?v=' in url:
+        import re
+        m = re.search(r'v=([a-zA-Z0-9_-]{11})', url)
+        return f'https://www.youtube.com/embed/{m.group(1)}' if m else None
+    if 'youtu.be/' in url:
+        import re
+        m = re.search(r'youtu\.be/([a-zA-Z0-9_-]{11})', url)
+        return f'https://www.youtube.com/embed/{m.group(1)}' if m else None
+    if 'vimeo.com/' in url:
+        import re
+        m = re.search(r'vimeo\.com/(?:video/)?(\d+)', url)
+        return f'https://player.vimeo.com/video/{m.group(1)}' if m else None
+    return None
+
+
+@register.filter
+def video_embed_url(contenido):
+    """
+    If contenido is a YouTube/Vimeo URL, return embed URL for iframe; else None.
+    Use for leccion.tipo == VIDEO.
+    """
+    return _video_embed_url(contenido)
+
+
 @register.filter
 def course_theme_image(curso, size='800x380'):
     """

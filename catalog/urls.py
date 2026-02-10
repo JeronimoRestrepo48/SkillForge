@@ -10,6 +10,7 @@ urlpatterns = [
     path('my-certificates/', views.MisCertificadosView.as_view(), name='my_certificates'),
     path('<int:pk>/', views.CursoDetailView.as_view(), name='course_detail'),
     path('<int:pk>/learn/', views.CursoAprenderView.as_view(), name='course_learn'),
+    path('<int:pk>/learn/lesson/<int:leccion_pk>/', views.LeccionDetailView.as_view(), name='lesson_detail'),
     path('<int:pk>/learn/lesson/<int:leccion_pk>/complete/', views.LeccionCompletarView.as_view(), name='lesson_complete'),
     path('<int:curso_pk>/certificate/', views.CertificadoPreviewView.as_view(), name='certificate_preview'),
     path('<int:curso_pk>/certificate/pdf/', views.CertificadoPdfView.as_view(), name='certificate_pdf'),

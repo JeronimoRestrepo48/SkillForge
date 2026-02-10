@@ -21,7 +21,7 @@ def agregar_al_carrito(user, curso: Curso, cantidad: int = 1) -> tuple[ItemCarri
     Retorna (item, mensaje). item es None si falla (ej. curso no disponible).
     """
     if not curso.esta_disponible():
-        return None, 'El curso no está disponible para compra.'
+        return None, 'This course is not available for purchase.'
     carrito = obtener_o_crear_carrito(user)
     item, created = ItemCarrito.objects.get_or_create(
         carrito=carrito,
@@ -31,7 +31,7 @@ def agregar_al_carrito(user, curso: Curso, cantidad: int = 1) -> tuple[ItemCarri
     if not created:
         item.cantidad += cantidad
         item.save(update_fields=['cantidad'])
-    return item, 'Curso agregado al carrito.' if created else 'Cantidad actualizada en el carrito.'
+    return item, 'Course added to cart.' if created else 'Quantity updated in cart.'
 
 
 def quitar_del_carrito(user, curso_id: int) -> bool:

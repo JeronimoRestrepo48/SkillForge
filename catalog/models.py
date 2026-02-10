@@ -33,11 +33,11 @@ class EstadoCurso(models.TextChoices):
 
 
 class NivelDificultad(models.TextChoices):
-    """Nivel de dificultad del curso."""
-    PRINCIPIANTE = 'PRINCIPIANTE', 'Principiante'
-    INTERMEDIO = 'INTERMEDIO', 'Intermedio'
-    AVANZADO = 'AVANZADO', 'Avanzado'
-    EXPERTO = 'EXPERTO', 'Experto'
+    """Course difficulty level."""
+    PRINCIPIANTE = 'PRINCIPIANTE', 'Beginner'
+    INTERMEDIO = 'INTERMEDIO', 'Intermediate'
+    AVANZADO = 'AVANZADO', 'Advanced'
+    EXPERTO = 'EXPERTO', 'Expert'
 
 
 class Curso(models.Model):
@@ -136,11 +136,11 @@ class Modulo(models.Model):
 
 
 class TipoLeccion(models.TextChoices):
-    """Tipo de contenido de la lección."""
+    """Lesson content type."""
     VIDEO = 'VIDEO', 'Video'
-    TEXTO = 'TEXTO', 'Texto'
+    TEXTO = 'TEXTO', 'Text'
     QUIZ = 'QUIZ', 'Quiz'
-    PRACTICA = 'PRACTICA', 'Práctica'
+    PRACTICA = 'PRACTICA', 'Practice'
 
 
 class Leccion(models.Model):

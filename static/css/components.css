@@ -140,6 +140,15 @@
     border-color: rgba(245, 158, 11, 0.35);
 }
 
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sf-shadow-hover);
+    border-color: var(--sf-flame) !important;
+}
+
 .curso-card .card-img-top {
     height: 200px;
     object-fit: cover;

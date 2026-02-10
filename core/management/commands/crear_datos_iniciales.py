@@ -8,17 +8,21 @@ from users.models import User, TipoUsuario
 
 
 def get_or_create_categorias():
+    # (nombre, descripcion, icono Bootstrap Icons)
     data = [
-        ('Programación', 'Lenguajes y frameworks de desarrollo'),
-        ('Diseño', 'UI/UX, diseño gráfico y herramientas'),
-        ('Marketing Digital', 'SEO, redes sociales, publicidad'),
-        ('Finanzas', 'Inversiones, contabilidad, finanzas personales'),
-        ('Idiomas', 'Inglés, español y otros idiomas'),
-        ('Ciberseguridad', 'Seguridad ofensiva y defensiva, Purple Team, Blue Team, Red Team'),
+        ('Programación', 'Lenguajes y frameworks de desarrollo', 'bi-code-slash'),
+        ('Diseño', 'UI/UX, diseño gráfico y herramientas', 'bi-palette'),
+        ('Marketing Digital', 'SEO, redes sociales, publicidad', 'bi-megaphone'),
+        ('Finanzas', 'Inversiones, contabilidad, finanzas personales', 'bi-currency-dollar'),
+        ('Idiomas', 'Inglés, español y otros idiomas', 'bi-translate'),
+        ('Ciberseguridad', 'Seguridad ofensiva y defensiva, Purple Team, Blue Team, Red Team', 'bi-shield-lock'),
     ]
     cats = []
-    for nombre, desc in data:
-        c, _ = Categoria.objects.get_or_create(nombre=nombre, defaults={'descripcion': desc})
+    for nombre, desc, icono in data:
+        c, _ = Categoria.objects.get_or_create(nombre=nombre, defaults={'descripcion': desc, 'icono': icono})
+        if not c.icono:
+            c.icono = icono
+            c.save()
         cats.append(c)
     return cats
 

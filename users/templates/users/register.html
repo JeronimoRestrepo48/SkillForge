@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Registro - SkillForge{% endblock %}
+{% block title %}Register - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container auth-page-wrap">
@@ -9,15 +9,15 @@
         <div class="col-md-7 col-lg-6">
             <div class="card auth-card shadow">
                 <div class="card-body">
-                    <h2 class="card-title mb-2">Crear cuenta</h2>
-                    <p class="auth-subtitle mb-4">Elige tu rol: Estudiante o Instructor</p>
+                    <h2 class="card-title mb-2">Create account</h2>
+                    <p class="auth-subtitle mb-4">Choose your role: Student or Instructor</p>
                     <form method="post" novalidate>
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-skillforge w-100 mt-3">Registrarse</button>
+                        <button type="submit" class="btn btn-skillforge w-100 mt-3">Register</button>
                     </form>
                     <p class="mt-4 text-center text-muted small">
-                        ¿Ya tienes cuenta? <a href="{% url 'core:login' %}">Iniciar sesión</a>
+                        Already have an account? <a href="{% url 'core:login' %}">Log in</a>
                     </p>
                 </div>
             </div>

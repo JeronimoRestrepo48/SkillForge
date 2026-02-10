@@ -61,7 +61,7 @@ class CarritoQuitarView(LoginRequiredMixin, View):
 
     def post(self, request, curso_id):
         quitar_del_carrito(request.user, curso_id)
-        messages.info(request, 'Curso eliminado del carrito.')
+        messages.info(request, 'Course removed from cart.')
         return redirect('transactions:cart')
 
 
@@ -108,7 +108,7 @@ class CheckoutRemoveCouponView(LoginRequiredMixin, View):
 
     def post(self, request):
         limpiar_cupon(request)
-        messages.info(request, 'Cupón eliminado.')
+        messages.info(request, 'Coupon removed.')
         return redirect('transactions:checkout')
 
 
@@ -119,7 +119,7 @@ class CheckoutConfirmarView(LoginRequiredMixin, View):
     def post(self, request):
         carrito = obtener_o_crear_carrito(request.user)
         if carrito.cantidad_items() == 0:
-            messages.warning(request, 'Tu carrito está vacío.')
+            messages.warning(request, 'Your cart is empty.')
             return redirect('transactions:cart')
         cupon = obtener_cupon_aplicado(request)
         orden = crear_orden_desde_carrito(carrito, cupon=cupon)
@@ -136,12 +136,12 @@ class CheckoutConfirmarView(LoginRequiredMixin, View):
             )
             messages.success(
                 request,
-                f'¡Compra realizada! Orden {orden.numero_orden}. Ya tienes acceso a tus cursos.'
+                f'Purchase complete! Order {orden.numero_orden}. You now have access to your courses.'
             )
             return redirect('transactions:order_confirmed', numero=orden.numero_orden)
         messages.error(
             request,
-            'No se pudo procesar la compra. Verifica que los cursos sigan disponibles.'
+            'Could not process the purchase. Please check that the courses are still available.'
         )
         return redirect('transactions:cart')
 
@@ -203,7 +203,7 @@ class OrderCancelView(LoginRequiredMixin, View):
         from transactions.models import Orden, EstadoOrden, EstadoInscripcion
         orden = get_object_or_404(Orden, numero_orden=numero, user=request.user)
         if orden.estado != EstadoOrden.CONFIRMADA:
-            messages.error(request, 'Solo se pueden cancelar órdenes confirmadas.')
+            messages.error(request, 'Only confirmed orders can be cancelled.')
             return redirect('transactions:order_list')
         with transaction.atomic():
             orden.estado = EstadoOrden.CANCELADA
@@ -212,5 +212,5 @@ class OrderCancelView(LoginRequiredMixin, View):
                 item.curso.cupos_disponibles += item.cantidad
                 item.curso.save(update_fields=['cupos_disponibles'])
             orden.inscripciones.all().update(estado=EstadoInscripcion.CANCELADA)
-        messages.success(request, f'Orden {numero} cancelada. Los cupos han sido devueltos.')
+        messages.success(request, f'Order {numero} cancelled. Slots have been returned.')
         return redirect('transactions:order_list')

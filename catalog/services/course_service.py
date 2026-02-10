@@ -107,3 +107,15 @@ def obtener_progreso_curso(user, curso: Curso) -> dict:
         completada=True
     ).count()
     return {'total': total, 'completadas': completadas, 'porcentaje': (completadas / total * 100) if total else 0}
+
+
+def obtener_lecciones_ordenadas_curso(curso: Curso):
+    """
+    Retorna lista de lecciones del curso en orden (módulo.orden, leccion.orden).
+    Útil para navegación siguiente/anterior.
+    """
+    return list(
+        Leccion.objects.filter(modulo__curso=curso).select_related('modulo').order_by(
+            'modulo__orden', 'orden'
+        )
+    )

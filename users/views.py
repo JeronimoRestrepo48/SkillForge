@@ -27,7 +27,7 @@ class RegisterView(CreateView):
             tipo=tipo,
         )
         login(self.request, user)
-        messages.success(self.request, f'¡Bienvenido a SkillForge! Cuenta creada como {user.get_tipo_display}.')
+        messages.success(self.request, f'Welcome to SkillForge! Account created as {user.get_tipo_display}.')
         return redirect(self.success_url)
 
 
@@ -100,5 +100,5 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         profile, _ = UserProfile.objects.get_or_create(user=self.request.user, defaults={'bio': bio})
         profile.bio = bio
         profile.save()
-        messages.success(self.request, 'Perfil actualizado correctamente.')
+        messages.success(self.request, 'Profile updated successfully.')
         return response
