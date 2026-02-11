@@ -14,12 +14,12 @@
 
     <h1 class="h2 mb-4">Confirmar compra</h1>
 
-    {% if items %}
+    {% if items or items_certificacion %}
     <div class="row">
         <div class="col-lg-8">
             <div class="card mb-4">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Resumen de tu pedido</h5>
+                    <h5 class="mb-0">Order summary</h5>
                 </div>
                 <ul class="list-group list-group-flush">
                     {% for item in items %}
@@ -28,10 +28,16 @@
                         <span>{{ item.subtotal }} COP</span>
                     </li>
                     {% endfor %}
+                    {% for item in items_certificacion %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>{{ item.certificacion.nombre }} (certification access) × {{ item.cantidad }}</span>
+                        <span>{{ item.subtotal }} COP</span>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
             <p class="text-muted small">
-                <i class="bi bi-info-circle"></i> Pago simulado. Al confirmar se creará la orden y tendrás acceso inmediato a los cursos.
+                <i class="bi bi-info-circle"></i> Simulated payment. On confirm, the order will be created and you will get immediate access to courses and certifications.
             </p>
         </div>
         <div class="col-lg-4">
@@ -72,7 +78,7 @@
     </div>
     {% else %}
     <div class="alert alert-warning">
-        No hay items en tu carrito. <a href="{% url 'transactions:cart' %}">Ver carrito</a> o <a href="{% url 'catalog:course_list' %}">explorar cursos</a>.
+        Your cart is empty. <a href="{% url 'transactions:cart' %}">View cart</a> or <a href="{% url 'catalog:course_list' %}">browse courses</a>.
     </div>
     {% endif %}
 </div>

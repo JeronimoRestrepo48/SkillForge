@@ -14,12 +14,15 @@
 
     <h1 class="h2 mb-4">Your cart</h1>
 
-    {% if items %}
+    {% if items or items_certificacion %}
     <div class="row">
         <div class="col-lg-8">
             <ul class="list-group list-group-flush">
                 {% for item in items %}
                 {% include 'components/curso_card_mini.html' with item=item %}
+                {% endfor %}
+                {% for item in items_certificacion %}
+                {% include 'components/certificacion_card_mini.html' with item=item %}
                 {% endfor %}
             </ul>
         </div>

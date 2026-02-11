@@ -40,11 +40,11 @@
                         {% endif %}
                     {% else %}
                         <p class="fw-bold text-primary mt-2 mb-2">{{ certificacion.precio }} COP</p>
-                        <form method="post" action="{% url 'catalog:comprar_certificacion' certificacion.slug %}">
+                        <form method="post" action="{% url 'transactions:cart_add_certificacion' certificacion.slug %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-skillforge w-100">Comprar acceso</button>
+                            <button type="submit" class="btn btn-skillforge w-100">Add to cart</button>
                         </form>
-                        <p class="small text-muted mt-2 mb-0">Tras el pago podrás acceder al material y al examen. Al aprobar obtendrás tu diploma.</p>
+                        <p class="small text-muted mt-2 mb-0">After checkout you will have access to the material and exam. On passing you will receive your diploma.</p>
                     {% endif %}
                 </div>
             </div>

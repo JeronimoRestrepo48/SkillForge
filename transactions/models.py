@@ -81,19 +81,27 @@ class CarritoCompras(models.Model):
         return f'Carrito de {self.user}'
 
     def calcular_subtotal(self) -> Decimal:
-        """Suma del precio de todos los items."""
-        return sum(
+        """Suma del precio de todos los items (cursos + certificaciones)."""
+        total_cursos = sum(
             item.curso.calcular_precio_final() * item.cantidad
             for item in self.items.all().select_related('curso')
         )
+        total_certs = sum(
+            item.certificacion.precio * item.cantidad
+            for item in self.items_certificacion.all().select_related('certificacion')
+        )
+        return total_cursos + total_certs
 
     def calcular_total(self) -> Decimal:
         """Total (por ahora igual al subtotal, sin descuentos)."""
         return self.calcular_subtotal()
 
     def cantidad_items(self) -> int:
-        """Número total de ítems (suma de cantidades)."""
-        return sum(item.cantidad for item in self.items.all())
+        """Número total de ítems (cursos + certificaciones)."""
+        return (
+            sum(item.cantidad for item in self.items.all())
+            + sum(item.cantidad for item in self.items_certificacion.all())
+        )
 
 
 class ItemCarrito(models.Model):
@@ -120,6 +128,32 @@ class ItemCarrito(models.Model):
 
     def subtotal(self) -> Decimal:
         return self.curso.calcular_precio_final() * self.cantidad
+
+
+class ItemCarritoCertificacion(models.Model):
+    """Item en el carrito: acceso a una certificación de industria (cantidad normalmente 1)."""
+    carrito = models.ForeignKey(
+        CarritoCompras,
+        on_delete=models.CASCADE,
+        related_name='items_certificacion'
+    )
+    certificacion = models.ForeignKey(
+        'catalog.CertificacionIndustria',
+        on_delete=models.CASCADE,
+        related_name='items_carrito'
+    )
+    cantidad = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        verbose_name = 'Item carrito (certificación)'
+        verbose_name_plural = 'Items carrito (certificaciones)'
+        unique_together = [['carrito', 'certificacion']]
+
+    def __str__(self):
+        return f'{self.certificacion.nombre} x {self.cantidad}'
+
+    def subtotal(self) -> Decimal:
+        return self.certificacion.precio * self.cantidad
 
 
 class EstadoOrden(models.TextChoices):
@@ -177,6 +211,32 @@ class ItemOrden(models.Model):
 
     def __str__(self):
         return f'{self.curso.titulo} x {self.cantidad}'
+
+    def subtotal(self) -> Decimal:
+        return self.precio_unitario * self.cantidad
+
+
+class ItemOrdenCertificacion(models.Model):
+    """Item de una orden: acceso a certificación de industria comprado."""
+    orden = models.ForeignKey(
+        Orden,
+        on_delete=models.CASCADE,
+        related_name='items_certificacion'
+    )
+    certificacion = models.ForeignKey(
+        'catalog.CertificacionIndustria',
+        on_delete=models.PROTECT,
+        related_name='items_orden'
+    )
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        verbose_name = 'Item orden (certificación)'
+        verbose_name_plural = 'Items orden (certificaciones)'
+
+    def __str__(self):
+        return f'{self.certificacion.nombre} x {self.cantidad}'
 
     def subtotal(self) -> Decimal:
         return self.precio_unitario * self.cantidad

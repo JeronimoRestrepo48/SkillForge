@@ -41,13 +41,17 @@
                     </td>
                     <td class="text-end">{{ orden.total }} COP</td>
                     <td class="text-end">
-                        <a href="{% url 'transactions:order_confirmed' orden.numero_orden %}" class="btn btn-outline-primary btn-sm">Ver detalle</a>
-                        <a href="{% url 'transactions:order_invoice' orden.numero_orden %}" class="btn btn-outline-secondary btn-sm">Factura</a>
+                        {% if orden.estado == 'PENDIENTE' %}
+                        <a href="{% url 'transactions:checkout_continue' orden.numero_orden %}" class="btn btn-skillforge btn-sm">Complete payment</a>
+                        {% else %}
+                        <a href="{% url 'transactions:order_confirmed' orden.numero_orden %}" class="btn btn-outline-primary btn-sm">View detail</a>
+                        <a href="{% url 'transactions:order_invoice' orden.numero_orden %}" class="btn btn-outline-secondary btn-sm">Invoice</a>
                         {% if orden.estado == 'CONFIRMADA' %}
-                        <form method="post" action="{% url 'transactions:order_cancel' orden.numero_orden %}" class="d-inline" onsubmit="return confirm('¿Cancelar esta orden? Se devolverán los cupos y perderás acceso a los cursos de esta compra.');">
+                        <form method="post" action="{% url 'transactions:order_cancel' orden.numero_orden %}" class="d-inline" onsubmit="return confirm('Cancel this order? Slots will be returned and you will lose access to courses from this purchase.');">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
                         </form>
+                        {% endif %}
                         {% endif %}
                     </td>
                 </tr>

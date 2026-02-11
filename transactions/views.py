@@ -2,22 +2,30 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db import transaction
+from urllib.parse import quote
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import TemplateView, ListView
 
-from catalog.models import Curso
+from catalog.models import Curso, CertificacionIndustria
 from catalog.services import course_service
 from transactions.services import (
     obtener_o_crear_carrito,
     agregar_al_carrito,
+    agregar_certificacion_al_carrito,
     quitar_del_carrito,
+    quitar_certificacion_del_carrito,
     crear_orden_desde_carrito,
+    crear_orden_pendiente_desde_carrito,
+    confirmar_pago_orden,
+    marcar_pago_fallido_orden,
     aplicar_cupon,
     obtener_cupon_aplicado,
     limpiar_cupon,
 )
+from transactions.payment_token import generate_payment_token, validate_payment_token
+from transactions.models import Orden, EstadoOrden
 
 
 class CarritoView(LoginRequiredMixin, TemplateView):
@@ -29,11 +37,37 @@ class CarritoView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         carrito = obtener_o_crear_carrito(self.request.user)
         context['carrito'] = carrito
-        context['items'] = carrito.items.select_related('curso').all()
+        context['items'] = carrito.items.select_related('curso', 'curso__categoria').all()
+        context['items_certificacion'] = carrito.items_certificacion.select_related('certificacion').all()
         context['subtotal'] = carrito.calcular_subtotal()
         context['total'] = carrito.calcular_total()
         context['cantidad_items'] = carrito.cantidad_items()
         return context
+
+
+class CarritoAgregarCertificacionView(LoginRequiredMixin, View):
+    """Adds certification access to cart. Redirects to certification detail or cart."""
+    login_url = '/'
+
+    def post(self, request, slug):
+        certificacion = get_object_or_404(CertificacionIndustria, slug=slug, activa=True)
+        item, msg = agregar_certificacion_al_carrito(request.user, certificacion, cantidad=1)
+        if item:
+            messages.success(request, msg)
+        else:
+            messages.error(request, msg)
+        next_url = request.POST.get('next') or request.GET.get('next') or reverse('catalog:certificacion_industria_detail', args=[slug])
+        return redirect(next_url)
+
+
+class CarritoQuitarCertificacionView(LoginRequiredMixin, View):
+    """Removes certification from cart."""
+    login_url = '/'
+
+    def post(self, request, slug):
+        quitar_certificacion_del_carrito(request.user, slug)
+        messages.info(request, 'Certification removed from cart.')
+        return redirect('transactions:cart')
 
 
 class CarritoAgregarView(LoginRequiredMixin, View):
@@ -73,7 +107,8 @@ class CheckoutView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         carrito = obtener_o_crear_carrito(self.request.user)
-        items = carrito.items.select_related('curso').all()
+        items = carrito.items.select_related('curso', 'curso__categoria').all()
+        items_certificacion = carrito.items_certificacion.select_related('certificacion').all()
         subtotal = carrito.calcular_subtotal()
         from decimal import Decimal
         cupon = obtener_cupon_aplicado(self.request)
@@ -81,6 +116,7 @@ class CheckoutView(LoginRequiredMixin, TemplateView):
         total = subtotal - descuentos
         context['carrito'] = carrito
         context['items'] = items
+        context['items_certificacion'] = items_certificacion
         context['subtotal'] = subtotal
         context['descuentos'] = descuentos
         context['total'] = total
@@ -113,7 +149,7 @@ class CheckoutRemoveCouponView(LoginRequiredMixin, View):
 
 
 class CheckoutConfirmarView(LoginRequiredMixin, View):
-    """Procesa el pago simulado: crea Orden, Inscripciones y vacía el carrito."""
+    """Inicia pago: crea Orden PENDIENTE y redirige a la pasarela simulada."""
     login_url = '/'
 
     def post(self, request):
@@ -122,28 +158,110 @@ class CheckoutConfirmarView(LoginRequiredMixin, View):
             messages.warning(request, 'Your cart is empty.')
             return redirect('transactions:cart')
         cupon = obtener_cupon_aplicado(request)
-        orden = crear_orden_desde_carrito(carrito, cupon=cupon)
+        orden = crear_orden_pendiente_desde_carrito(carrito, cupon=cupon)
         if orden:
             limpiar_cupon(request)
-            from django.core.mail import send_mail
-            from django.conf import settings
-            send_mail(
-                subject=f'Orden confirmada - SkillForge ({orden.numero_orden})',
-                message=f'Tu orden {orden.numero_orden} ha sido confirmada. Ya tienes acceso a tus cursos.',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[request.user.email],
-                fail_silently=True,
+            token = generate_payment_token(orden.numero_orden, request.user.pk)
+            return_url = request.build_absolute_uri(
+                reverse('transactions:checkout_return') + '?token=' + token
             )
-            messages.success(
-                request,
-                f'Purchase complete! Order {orden.numero_orden}. You now have access to your courses.'
-            )
-            return redirect('transactions:order_confirmed', numero=orden.numero_orden)
+            gateway_url = reverse('transactions:checkout_gateway')
+            params = f'?numero_orden={orden.numero_orden}&return_url={quote(return_url, safe="")}&total={orden.total}&token={quote(token, safe="")}'
+            return redirect(gateway_url + params)
         messages.error(
             request,
             'Could not process the purchase. Please check that the courses are still available.'
         )
         return redirect('transactions:cart')
+
+
+class GatewaySimuladaView(LoginRequiredMixin, TemplateView):
+    """Página simulada de pasarela de pago: formulario tipo tarjeta y botones Pay / Fail / Cancel."""
+    template_name = 'transactions/gateway_simulada.html'
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['numero_orden'] = self.request.GET.get('numero_orden', '')
+        context['return_url'] = self.request.GET.get('return_url', '')
+        context['total'] = self.request.GET.get('total', '0')
+        context['token'] = self.request.GET.get('token', '')
+        return context
+
+
+class CheckoutContinuePaymentView(LoginRequiredMixin, View):
+    """Redirige a la pasarela simulada con un token nuevo para una orden PENDIENTE (ej. desde Mis pedidos)."""
+    login_url = '/'
+
+    def get(self, request, numero):
+        orden = get_object_or_404(Orden, numero_orden=numero, user=request.user)
+        if orden.estado != EstadoOrden.PENDIENTE:
+            messages.info(request, 'This order is no longer pending payment.')
+            return redirect('transactions:order_confirmed', numero=numero)
+        token = generate_payment_token(orden.numero_orden, request.user.pk)
+        return_url = request.build_absolute_uri(
+            reverse('transactions:checkout_return') + '?token=' + quote(token, safe='')
+        )
+        gateway_url = reverse('transactions:checkout_gateway')
+        params = f'?numero_orden={orden.numero_orden}&return_url={quote(return_url, safe="")}&total={orden.total}&token={quote(token, safe="")}'
+        return redirect(gateway_url + params)
+
+
+class CheckoutReturnView(LoginRequiredMixin, View):
+    """Recibe el retorno desde la pasarela simulada (result=success|fail|cancel) y actualiza la orden."""
+    login_url = '/'
+
+    def get(self, request):
+        result = request.GET.get('result', '').lower()
+        token = request.GET.get('token', '')
+        if result not in ('success', 'fail', 'cancel') or not token:
+            messages.error(request, 'Invalid return from payment.')
+            return redirect('transactions:order_list')
+
+        parsed = validate_payment_token(token)
+        if not parsed:
+            messages.error(request, 'Payment link expired or invalid.')
+            return redirect('transactions:order_list')
+
+        numero_orden, user_id = parsed
+        if request.user.pk != user_id:
+            messages.error(request, 'Invalid payment session.')
+            return redirect('transactions:order_list')
+
+        orden = get_object_or_404(Orden, numero_orden=numero_orden, user=request.user)
+        if orden.estado != EstadoOrden.PENDIENTE:
+            messages.info(request, f'Order {numero_orden} was already processed.')
+            return redirect('transactions:order_confirmed', numero=numero_orden)
+
+        if result == 'success':
+            if confirmar_pago_orden(orden):
+                from django.core.mail import send_mail
+                from django.conf import settings
+                send_mail(
+                    subject=f'Order confirmed - SkillForge ({orden.numero_orden})',
+                    message=f'Your order {orden.numero_orden} has been confirmed. You now have access to your courses.',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[request.user.email],
+                    fail_silently=True,
+                )
+                messages.success(
+                    request,
+                    f'Purchase complete! Order {orden.numero_orden}. You now have access to your courses.'
+                )
+                return redirect('transactions:order_confirmed', numero=numero_orden)
+            messages.error(request, 'Could not confirm payment.')
+            return redirect('transactions:order_list')
+
+        if result == 'fail':
+            marcar_pago_fallido_orden(orden)
+            messages.error(request, 'Payment failed. You can try again from your cart.')
+            return redirect('transactions:checkout')
+
+        # result == 'cancel'
+        orden.estado = EstadoOrden.CANCELADA
+        orden.save(update_fields=['estado'])
+        messages.info(request, 'Payment cancelled. Your cart is unchanged.')
+        return redirect('transactions:checkout')
 
 
 class OrdenConfirmadaView(LoginRequiredMixin, TemplateView):

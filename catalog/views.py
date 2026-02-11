@@ -582,17 +582,22 @@ class CertificacionIndustriaDetailView(LoginRequiredMixin, TemplateView):
 
 
 class ComprarCertificacionView(LoginRequiredMixin, View):
-    """POST: compra de acceso a la certificación (pago simulado). Redirige al detalle."""
+    """POST: adds certification to cart (legacy URL). Access is granted only after checkout."""
     login_url = '/'
 
     def post(self, request, slug):
         from django.contrib import messages
+        from django.urls import reverse
+        from transactions.services import agregar_certificacion_al_carrito
         certificacion = get_object_or_404(CertificacionIndustria, slug=slug, activa=True)
         if _tiene_acceso_certificacion(request.user, certificacion):
             messages.info(request, 'You already have access to this certification.')
             return redirect('catalog:certificacion_industria_detail', slug=slug)
-        AccesoCertificacion.objects.get_or_create(user=request.user, certificacion=certificacion)
-        messages.success(request, f'Access to "{certificacion.nombre}" purchased. You can now view the material and take the exam.')
+        item, msg = agregar_certificacion_al_carrito(request.user, certificacion, cantidad=1)
+        if item:
+            messages.success(request, msg)
+        else:
+            messages.error(request, msg)
         return redirect('catalog:certificacion_industria_detail', slug=slug)
 
 

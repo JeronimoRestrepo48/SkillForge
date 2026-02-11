@@ -15,6 +15,7 @@ from transactions.models import (
     ItemOrden,
     Inscripcion,
     EstadoInscripcion,
+    EstadoOrden,
 )
 from transactions.services.cart_service import (
     obtener_o_crear_carrito,
@@ -22,7 +23,12 @@ from transactions.services.cart_service import (
     quitar_del_carrito,
     vaciar_carrito,
 )
-from transactions.services.order_service import crear_orden_desde_carrito
+from transactions.services.order_service import (
+    crear_orden_desde_carrito,
+    crear_orden_pendiente_desde_carrito,
+    confirmar_pago_orden,
+)
+from transactions.payment_token import generate_payment_token
 
 User = get_user_model()
 
@@ -74,7 +80,7 @@ class CartServiceTest(TestCase):
         self.curso.save(update_fields=['cupos_disponibles'])
         item, msg = agregar_al_carrito(self.user, self.curso)
         self.assertIsNone(item)
-        self.assertIn('no está disponible', msg)
+        self.assertIn('not available', msg)
 
     def test_quitar_del_carrito(self):
         agregar_al_carrito(self.user, self.curso)
@@ -182,15 +188,95 @@ class TransactionsViewsTest(TestCase):
         r = self.client.get(reverse('transactions:checkout'))
         self.assertEqual(r.status_code, 200)
 
-    def test_checkout_confirm_post_creates_order_redirects_to_order_confirmed(self):
+    def test_checkout_confirm_post_creates_pending_order_redirects_to_gateway(self):
         agregar_al_carrito(self.user, self.curso)
         self.client.login(username='student1', password='pass')
         r = self.client.post(reverse('transactions:checkout_confirm'))
         self.assertEqual(r.status_code, 302)
-        self.assertIn('order/', r.url)
+        self.assertIn('checkout/gateway/', r.url)
         orden = Orden.objects.filter(user=self.user).first()
         self.assertIsNotNone(orden)
-        self.assertTrue(r.url.endswith(orden.numero_orden + '/') or orden.numero_orden in r.url)
+        self.assertEqual(orden.estado, EstadoOrden.PENDIENTE)
+        self.assertFalse(Inscripcion.objects.filter(user=self.user, curso=self.curso).exists())
+        self.assertFalse(hasattr(orden, 'pago') and orden.pago)
+        carrito = obtener_o_crear_carrito(self.user)
+        self.assertEqual(carrito.cantidad_items(), 1)
+
+    def test_checkout_return_success_confirms_order_creates_inscripcion_vacia_carrito(self):
+        agregar_al_carrito(self.user, self.curso)
+        carrito = obtener_o_crear_carrito(self.user)
+        orden = crear_orden_pendiente_desde_carrito(carrito)
+        token = generate_payment_token(orden.numero_orden, self.user.pk)
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(
+            reverse('transactions:checkout_return'),
+            {'result': 'success', 'token': token},
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertIn('order/', r.url)
+        orden.refresh_from_db()
+        self.assertEqual(orden.estado, EstadoOrden.CONFIRMADA)
+        self.assertTrue(Inscripcion.objects.filter(user=self.user, curso=self.curso).exists())
+        self.assertTrue(orden.pago)
+        self.assertEqual(orden.pago.estado, 'COMPLETADO')
+        carrito = obtener_o_crear_carrito(self.user)
+        self.assertEqual(carrito.cantidad_items(), 0)
+
+    def test_checkout_return_fail_marks_order_cancelled(self):
+        agregar_al_carrito(self.user, self.curso)
+        carrito = obtener_o_crear_carrito(self.user)
+        orden = crear_orden_pendiente_desde_carrito(carrito)
+        token = generate_payment_token(orden.numero_orden, self.user.pk)
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(
+            reverse('transactions:checkout_return'),
+            {'result': 'fail', 'token': token},
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertIn('checkout', r.url)
+        orden.refresh_from_db()
+        self.assertEqual(orden.estado, EstadoOrden.CANCELADA)
+        self.assertFalse(Inscripcion.objects.filter(user=self.user, curso=self.curso).exists())
+
+    def test_checkout_return_cancel_cancels_order(self):
+        agregar_al_carrito(self.user, self.curso)
+        carrito = obtener_o_crear_carrito(self.user)
+        orden = crear_orden_pendiente_desde_carrito(carrito)
+        token = generate_payment_token(orden.numero_orden, self.user.pk)
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(
+            reverse('transactions:checkout_return'),
+            {'result': 'cancel', 'token': token},
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertIn('checkout', r.url)
+        orden.refresh_from_db()
+        self.assertEqual(orden.estado, EstadoOrden.CANCELADA)
+
+    def test_checkout_return_invalid_token_redirects_to_order_list(self):
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(
+            reverse('transactions:checkout_return'),
+            {'result': 'success', 'token': 'invalid-token'},
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertIn('orders', r.url)
+        self.assertFalse(Orden.objects.filter(user=self.user).exists())
+
+    def test_checkout_return_already_confirmed_redirects_to_order_confirmed(self):
+        agregar_al_carrito(self.user, self.curso)
+        carrito = obtener_o_crear_carrito(self.user)
+        orden = crear_orden_pendiente_desde_carrito(carrito)
+        confirmar_pago_orden(orden)
+        token = generate_payment_token(orden.numero_orden, self.user.pk)
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(
+            reverse('transactions:checkout_return'),
+            {'result': 'success', 'token': token},
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertIn(orden.numero_orden, r.url)
+        self.assertEqual(Inscripcion.objects.filter(user=self.user, curso=self.curso).count(), 1)
 
     def test_order_confirmed_get_200_for_own_order(self):
         agregar_al_carrito(self.user, self.curso)
