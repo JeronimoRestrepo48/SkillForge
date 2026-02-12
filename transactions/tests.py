@@ -298,3 +298,41 @@ class TransactionsViewsTest(TestCase):
         self.client.login(username='student1', password='pass')
         r = self.client.get(reverse('transactions:order_confirmed', args=[orden.numero_orden]))
         self.assertEqual(r.status_code, 404)
+
+    def test_order_list_200_when_logged_in(self):
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(reverse('transactions:order_list'))
+        self.assertEqual(r.status_code, 200)
+
+    def test_order_invoice_200_for_own_order(self):
+        agregar_al_carrito(self.user, self.curso)
+        carrito = obtener_o_crear_carrito(self.user)
+        orden = crear_orden_desde_carrito(carrito)
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(reverse('transactions:order_invoice', args=[orden.numero_orden]))
+        self.assertEqual(r.status_code, 200)
+
+    def test_order_invoice_404_for_other_user_order(self):
+        other = make_user('other1', 'pass')
+        orden = Orden.objects.create(
+            user=other,
+            numero_orden='SF-INV-99999999999999',
+            total=Decimal('50'),
+            subtotal=Decimal('50'),
+            descuentos=Decimal('0'),
+        )
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(reverse('transactions:order_invoice', args=[orden.numero_orden]))
+        self.assertEqual(r.status_code, 404)
+
+    def test_checkout_continue_redirects_to_gateway_for_pending_order(self):
+        agregar_al_carrito(self.user, self.curso)
+        carrito = obtener_o_crear_carrito(self.user)
+        orden = crear_orden_pendiente_desde_carrito(carrito)
+        self.client.login(username='student1', password='pass')
+        r = self.client.get(
+            reverse('transactions:checkout_continue', args=[orden.numero_orden]),
+            follow=False,
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertIn('checkout/gateway/', r.url)

@@ -1,6 +1,6 @@
 /**
  * SkillForge - Páginas
- * Hero, secciones, auth, empty states
+ * Hero, secciones, auth, empty states, dashboard, certificates
  */
 
 /* ----- Hero landing ----- */
@@ -51,6 +51,33 @@
     box-shadow: 0 8px 28px rgba(245, 158, 11, 0.5);
 }
 
+/* ----- Dashboard stats (colores SF) ----- */
+.dashboard-stat-card {
+    background: var(--sf-bg-card);
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius-lg);
+    padding: var(--sf-space-3);
+    text-align: center;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.dashboard-stat-card:hover {
+    box-shadow: var(--sf-shadow);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.dashboard-stat-card .stat-value {
+    font-family: var(--sf-font-heading);
+    font-weight: 700;
+    font-size: var(--sf-text-3xl);
+}
+
+.dashboard-stat-card .stat-label {
+    font-size: var(--sf-text-sm);
+    color: var(--sf-text-muted);
+    margin-top: var(--sf-space-1);
+}
+
 /* ----- Títulos de sección ----- */
 .section-title {
     color: var(--sf-dark);
@@ -82,15 +109,23 @@
 .empty-state i {
     color: var(--sf-flame);
     opacity: 0.8;
+    font-size: 3rem;
+}
+
+.empty-state .lead {
+    color: var(--sf-text-primary);
+    margin-top: var(--sf-space-3);
 }
 
 .empty-state .btn-skillforge {
-    margin-top: 0.5rem;
+    margin-top: var(--sf-space-3);
 }
 
 /* ----- Contenido de lección ----- */
 .curso-leccion-contenido {
     white-space: pre-wrap;
+    line-height: 1.65;
+    max-width: 70ch;
 }
 
 /* ----- Auth (login / registro) ----- */
@@ -118,11 +153,6 @@
     font-weight: 700;
 }
 
-.auth-card .form-control:focus {
-    border-color: var(--sf-flame);
-    box-shadow: 0 0 0 0.2rem rgba(245, 158, 11, 0.2);
-}
-
 .auth-page-wrap .auth-subtitle {
     color: var(--sf-dark-muted);
     font-size: 1rem;
@@ -136,6 +166,7 @@
 
 .certificado-preview-card .card {
     border: 2px solid var(--sf-border);
+    border-radius: var(--sf-radius-lg);
 }
 
 /* ----- Panel admin cards ----- */

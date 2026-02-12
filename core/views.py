@@ -13,6 +13,14 @@ from transactions.models import Orden, Inscripcion
 User = get_user_model()
 
 
+def _role_flag(user, attr):
+    """Return bool from user.attr (handles both callable and property)."""
+    val = getattr(user, attr, None)
+    if val is None:
+        return False
+    return val() if callable(val) else bool(val)
+
+
 # Ensure admin panel requires login first, then admin role
 class _AdminRequiredMixin(LoginRequiredMixin, AdminRequiredMixin):
     login_url = '/'
@@ -37,7 +45,7 @@ class LandingView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         context['site_total_courses'] = Curso.objects.filter(estado='PUBLICADO').count()
         context['site_total_categories'] = Categoria.objects.count()
-        if getattr(user, 'tipo', None) == 'ESTUDIANTE' or getattr(user, 'es_estudiante', lambda: False)():
+        if getattr(user, 'tipo', None) == 'ESTUDIANTE' or _role_flag(user, 'es_estudiante'):
             ins = Inscripcion.objects.filter(user=user).exclude(estado='CANCELADA').select_related('curso', 'curso__categoria')
             completed = ins.filter(estado='COMPLETADA').count()
             in_progress = ins.filter(estado='ACTIVA').count()
@@ -60,7 +68,7 @@ class LandingView(LoginRequiredMixin, TemplateView):
             context['chart_categories_labels'] = list(cat_counts.keys())
             context['chart_categories_data'] = list(cat_counts.values())
             context['chart_overall_progress'] = round((sum(p['porcentaje'] for p in progress_list) / len(progress_list)) if progress_list else 0, 1)
-        elif getattr(user, 'tipo', None) == 'INSTRUCTOR' or getattr(user, 'es_instructor', lambda: False)():
+        elif getattr(user, 'tipo', None) == 'INSTRUCTOR' or _role_flag(user, 'es_instructor'):
             qs = Curso.objects.filter(instructor=user)
             published = qs.filter(estado='PUBLICADO').count()
             draft = qs.filter(estado='BORRADOR').count()

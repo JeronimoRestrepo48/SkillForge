@@ -14,27 +14,27 @@
         <h2 class="h5 mb-4">Your dashboard</h2>
         <div class="row g-3 mb-4">
             <div class="col-6 col-md-3">
-                <div class="card border-0 bg-light h-100 p-3 text-center">
-                    <span class="display-6 fw-bold text-primary">{{ dashboard_courses_enrolled|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Courses enrolled</p>
+                <div class="dashboard-stat-card h-100">
+                    <span class="stat-value text-primary d-block">{{ dashboard_courses_enrolled|default:0 }}</span>
+                    <span class="stat-label d-block">Courses enrolled</span>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card border-0 bg-light h-100 p-3 text-center">
-                    <span class="display-6 fw-bold text-success">{{ dashboard_courses_completed|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Completed</p>
+                <div class="dashboard-stat-card h-100">
+                    <span class="stat-value text-success d-block">{{ dashboard_courses_completed|default:0 }}</span>
+                    <span class="stat-label d-block">Completed</span>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card border-0 bg-light h-100 p-3 text-center">
-                    <span class="display-6 fw-bold text-warning">{{ dashboard_certificates|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Certificates</p>
+                <div class="dashboard-stat-card h-100">
+                    <span class="stat-value text-warning d-block">{{ dashboard_certificates|default:0 }}</span>
+                    <span class="stat-label d-block">Certificates</span>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card border-0 bg-light h-100 p-3 text-center">
-                    <span class="display-6 fw-bold text-info">{{ site_total_courses }}</span>
-                    <p class="small text-muted mb-0 mt-1">Courses available</p>
+                <div class="dashboard-stat-card h-100">
+                    <span class="stat-value text-info d-block">{{ site_total_courses }}</span>
+                    <span class="stat-label d-block">Courses available</span>
                 </div>
             </div>
         </div>

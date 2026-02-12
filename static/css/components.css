@@ -1,7 +1,38 @@
 /**
  * SkillForge - Componentes
- * Navbar, botones, cards: paleta fuego/forja
+ * Navbar, botones, cards, formularios, badges, progress, footer
  */
+
+/* ----- Formularios (global) ----- */
+.form-label {
+    font-weight: 600;
+    color: var(--sf-dark);
+}
+
+.form-control,
+.form-select {
+    border-radius: var(--sf-radius-sm);
+    border: 1px solid var(--sf-border);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--sf-flame);
+    box-shadow: 0 0 0 0.2rem rgba(245, 158, 11, 0.2);
+}
+
+.form-control.is-invalid {
+    border-color: var(--sf-coral);
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(244, 63, 94, 0.2);
+}
+
+.invalid-feedback {
+    color: var(--sf-coral);
+}
 
 /* ----- Navbar ----- */
 .navbar-skillforge {
@@ -88,7 +119,7 @@
 .navbar-skillforge .dropdown-menu {
     border: 1px solid var(--sf-border);
     box-shadow: var(--sf-shadow-hover);
-    border-radius: 0.75rem;
+    border-radius: var(--sf-radius-md);
 }
 
 .navbar-skillforge .badge.bg-danger {
@@ -101,6 +132,7 @@
     color: #fff !important;
     border: none;
     font-weight: 600;
+    border-radius: var(--sf-radius-sm);
     box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -116,6 +148,7 @@
     border-color: var(--sf-flame);
     color: var(--sf-orange);
     font-weight: 500;
+    border-radius: var(--sf-radius-sm);
 }
 
 .btn-outline-primary:hover {
@@ -124,11 +157,24 @@
     color: var(--sf-dark);
 }
 
+.btn-ghost {
+    background: transparent;
+    color: var(--sf-dark-muted);
+    border: none;
+    font-weight: 500;
+    transition: color 0.2s, background 0.2s;
+}
+
+.btn-ghost:hover {
+    color: var(--sf-orange);
+    background: rgba(245, 158, 11, 0.08);
+}
+
 /* ----- Cards ----- */
 .card {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     border: 1px solid var(--sf-border);
-    border-radius: 1rem;
+    border-radius: var(--sf-radius-lg);
     box-shadow: var(--sf-shadow);
     overflow: hidden;
     background: var(--sf-bg-card);
@@ -191,6 +237,7 @@
     background: var(--sf-bg-card);
     border: 2px solid var(--sf-border);
     transition: all 0.25s ease;
+    border-radius: var(--sf-radius-lg);
 }
 
 .card-categoria:hover {
@@ -212,6 +259,26 @@
     font-weight: 600;
 }
 
+/* ----- Badges (SF style) ----- */
+.badge {
+    border-radius: 9999px;
+    padding-left: 0.65em;
+    padding-right: 0.65em;
+    font-weight: 500;
+}
+
+/* ----- Progress bar (SF) ----- */
+.progress {
+    height: 8px;
+    border-radius: var(--sf-radius-sm);
+    background-color: var(--sf-bg-subtle);
+}
+
+.progress-bar {
+    border-radius: var(--sf-radius-sm);
+    transition: width 0.4s ease;
+}
+
 /* ----- Footer ----- */
 footer.skillforge-footer {
     background: var(--sf-nav-bg);
@@ -228,12 +295,29 @@ footer.skillforge-footer {
 
 .skillforge-footer a {
     color: var(--sf-flame-light);
+    transition: color 0.2s;
+}
+
+.skillforge-footer a:hover {
+    color: #fff;
+}
+
+.skillforge-footer .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sf-space-3);
+    margin-bottom: var(--sf-space-2);
+}
+
+.skillforge-footer .footer-links a {
+    text-decoration: none;
 }
 
 /* ----- Alertas ----- */
 .alert {
     border: none;
-    border-radius: 0.75rem;
+    border-radius: var(--sf-radius-md);
     box-shadow: var(--sf-shadow);
 }
 
@@ -266,6 +350,7 @@ footer.skillforge-footer {
     font-weight: 500;
     border: none;
     border-bottom: 3px solid transparent;
+    transition: color 0.2s;
 }
 
 .nav-tabs .nav-link:hover {
@@ -283,6 +368,7 @@ footer.skillforge-footer {
     color: var(--sf-orange);
     font-weight: 500;
     border-color: var(--sf-border);
+    border-radius: var(--sf-radius-sm);
 }
 
 .pagination .page-link:hover {

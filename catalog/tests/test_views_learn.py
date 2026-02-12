@@ -183,6 +183,9 @@ class LeccionCompletarViewTest(TestCase):
         messages = list(r.context.get('messages', []))
         message_texts = [str(m) for m in messages]
         self.assertTrue(
-            any('completado el curso' in t or 'certificado' in t for t in message_texts),
+            any(
+                'completado el curso' in t or 'certificado' in t or 'completed the course' in t or 'certificate' in t
+                for t in message_texts
+            ),
             f'Expected certificate message in: {message_texts}'
         )

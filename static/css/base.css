@@ -1,6 +1,7 @@
 /**
  * SkillForge - Estilos base
  * Paleta: Forja y fuego (amber, naranja, coral sobre metal oscuro)
+ * Sistema semántico + tipografía + overrides Bootstrap
  */
 :root {
     /* Brand - fuego y forja */
@@ -17,6 +18,15 @@
     --sf-bg: #fffbf7;
     --sf-bg-card: #ffffff;
     --sf-muted: #64748b;
+    /* Semánticos (texto y fondos) */
+    --sf-text-primary: var(--sf-dark);
+    --sf-text-muted: var(--sf-muted);
+    --sf-bg-elevated: var(--sf-bg-card);
+    --sf-bg-subtle: #fff7ed;
+    --sf-accent-success: #10b981;
+    --sf-accent-warning: var(--sf-flame);
+    --sf-accent-danger: var(--sf-coral);
+    --sf-accent-info: var(--sf-orange);
     /* Gradientes de marca */
     --sf-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 45%, #f43f5e 100%);
     --sf-gradient-soft: linear-gradient(180deg, #fffbf7 0%, #fff7ed 30%, #fffbeb 100%);
@@ -27,7 +37,27 @@
     --sf-shadow-hover: 0 12px 28px -8px rgba(245, 158, 11, 0.25), 0 4px 12px rgba(15, 23, 42, 0.12);
     --sf-shadow-glow: 0 0 30px rgba(245, 158, 11, 0.2);
     --sf-border: rgba(245, 158, 11, 0.2);
-    /* Compatibilidad con nombres antiguos */
+    /* Espaciado */
+    --sf-space-1: 0.25rem;
+    --sf-space-2: 0.5rem;
+    --sf-space-3: 1rem;
+    --sf-space-4: 1.5rem;
+    --sf-space-5: 2rem;
+    /* Tipografía */
+    --sf-text-xs: 0.75rem;
+    --sf-text-sm: 0.875rem;
+    --sf-text-base: 1rem;
+    --sf-text-lg: 1.125rem;
+    --sf-text-xl: 1.25rem;
+    --sf-text-2xl: 1.5rem;
+    --sf-text-3xl: 1.875rem;
+    --sf-font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sf-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* Radius */
+    --sf-radius-sm: 0.5rem;
+    --sf-radius-md: 0.75rem;
+    --sf-radius-lg: 1rem;
+    /* Compatibilidad */
     --skillforge-primary: var(--sf-flame);
     --skillforge-primary-hover: var(--sf-orange);
     --skillforge-primary-light: #fef3c7;
@@ -35,7 +65,7 @@
     --skillforge-dark-soft: var(--sf-dark-soft);
     --skillforge-accent: var(--sf-coral);
     --skillforge-accent-hover: var(--sf-coral-hover);
-    --skillforge-success: #10b981;
+    --skillforge-success: var(--sf-accent-success);
     --skillforge-warning: var(--sf-flame);
     --skillforge-card-shadow: var(--sf-shadow);
     --skillforge-card-shadow-hover: var(--sf-shadow-hover);
@@ -56,17 +86,65 @@ body {
     flex-direction: column;
     background: var(--sf-gradient-soft);
     background-attachment: fixed;
-    color: var(--sf-dark);
+    color: var(--sf-text-primary);
+    font-family: var(--sf-font-body);
+    line-height: 1.6;
 }
 
 main {
     flex: 1;
 }
 
-/* Tipografía con toque premium */
+/* Tipografía: títulos con fuente de marca */
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: var(--sf-font-heading);
+    letter-spacing: -0.02em;
+}
+
 h1, h2, h3, .fw-bold {
     letter-spacing: -0.02em;
 }
+
+/* Párrafos largos: legibilidad */
+.prose p, .curso-leccion-contenido {
+    max-width: 70ch;
+    line-height: 1.65;
+}
+
+/* Utilidades de color SkillForge (sustituyen Bootstrap en dashboard/cards) */
+.text-sf-primary { color: var(--sf-orange) !important; }
+.text-sf-success { color: var(--sf-accent-success) !important; }
+.text-sf-warning { color: var(--sf-flame) !important; }
+.text-sf-info { color: var(--sf-orange) !important; }
+.bg-sf-primary { background-color: var(--sf-flame) !important; }
+.bg-sf-success { background-color: var(--sf-accent-success) !important; }
+.bg-sf-warning { background-color: var(--sf-flame) !important; }
+.bg-sf-info { background-color: var(--sf-orange) !important; }
+
+/* Override Bootstrap primary/success/warning/info para usar paleta SF */
+.text-primary { color: var(--sf-orange) !important; }
+.text-success { color: var(--sf-accent-success) !important; }
+.text-warning { color: var(--sf-flame) !important; }
+.text-info { color: var(--sf-orange) !important; }
+.bg-primary { background-color: var(--sf-flame) !important; }
+.bg-success { background-color: var(--sf-accent-success) !important; }
+.bg-warning { background-color: var(--sf-flame) !important; }
+.bg-info { background: var(--sf-gradient) !important; color: #fff !important; }
+.btn-primary {
+    background: var(--sf-gradient) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+.btn-primary:hover {
+    background: linear-gradient(135deg, #d97706 0%, #c2410c 50%, #e11d48 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+}
+.progress-bar.bg-primary { background: var(--sf-gradient) !important; }
+.progress-bar.bg-success { background-color: var(--sf-accent-success) !important; }
+.badge.bg-primary { background-color: var(--sf-flame) !important; }
+.badge.bg-info { background: var(--sf-gradient) !important; border: none; color: #fff !important; }
 
 /* Texto con gradiente de marca */
 .text-gradient-sf {
