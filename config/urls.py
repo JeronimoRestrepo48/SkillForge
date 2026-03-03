@@ -13,6 +13,7 @@ from catalog.api import CourseRateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', include('core.urls')),
     path('courses/', include('catalog.urls')),
     path('cart/', include('transactions.urls')),

@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load core_extras %}
 
-{% block title %}Cart - SkillForge{% endblock %}
+{% block title %}{% trans "Cart" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Cart</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Cart" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Your cart</h1>
+    <h1 class="h2 mb-4">{% trans "Your cart" %}</h1>
 
     {% if items or items_certificacion %}
     <div class="row">
@@ -33,8 +34,8 @@
     {% else %}
     <div class="text-center py-5">
         <i class="bi bi-cart-x display-4 text-muted"></i>
-        <p class="lead mt-3">Your cart is empty</p>
-        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">Browse courses</a>
+        <p class="lead mt-3">{% trans "Your cart is empty" %}</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">{% trans "Browse courses" %}</a>
     </div>
     {% endif %}
 </div>

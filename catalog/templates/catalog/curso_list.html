@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Courses - SkillForge{% endblock %}
+{% block title %}{% trans "Courses" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="section-card">
-        <h1 class="section-title h4">Course Catalog</h1>
+        <h1 class="section-title h4">{% trans "Course Catalog" %}</h1>
 
         {% if categorias %}
         <section class="mb-4">
-            <h2 class="h6 text-muted mb-3">Categories</h2>
+            <h2 class="h6 text-muted mb-3">{% trans "Categories" %}</h2>
             <div class="row g-3 mb-4">
                 {% for cat in categorias %}
                 <div class="col-6 col-md-4 col-lg-2">
@@ -24,7 +25,8 @@
         <div class="row g-4">
         {% for curso in cursos %}
         <div class="col-md-6 col-lg-4">
-            {% include 'components/card_curso.html' with curso=curso show_categoria=1 show_instructor=1 link_text="View details" %}
+            {% trans "View details" as link_text %}
+            {% include 'components/card_curso.html' with curso=curso show_categoria=1 show_instructor=1 link_text=link_text %}
         </div>
         {% endfor %}
     </div>
@@ -33,11 +35,11 @@
         <nav class="mt-4">
             <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a></li>
             {% endif %}
-            <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+            <li class="page-item disabled"><span class="page-link">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span></li>
                 {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -46,7 +48,7 @@
         {% else %}
         <div class="empty-state text-center">
             <i class="bi bi-search display-4"></i>
-            <p class="lead mt-3 text-body">No courses published yet.</p>
+            <p class="lead mt-3 text-body">{% trans "No courses published yet." %}</p>
         </div>
         {% endif %}
     </div>

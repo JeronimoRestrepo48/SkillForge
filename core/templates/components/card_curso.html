@@ -1,4 +1,4 @@
-{% load static %}{% load core_extras %}
+{% load static %}{% load i18n %}{% load core_extras %}
 <div class="card h-100 curso-card">
     {% if curso.imagen %}
     <img src="{{ curso.imagen.url }}" class="card-img-top" alt="{{ curso.titulo|sin_certificacion }}" style="object-fit: cover; height: 225px;">
@@ -16,6 +16,7 @@
         <p class="text-muted small mb-1">{{ curso.instructor.get_full_name|default:curso.instructor.username }}</p>
         {% endif %}
         <p class="fw-bold text-primary">{{ curso.calcular_precio_final }} COP</p>
-        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">{{ link_text|default:"View course" }}</a>
+        {% trans "View course" as view_course_default %}
+        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-outline-primary btn-sm">{{ link_text|default:view_course_default }}</a>
     </div>
 </div>

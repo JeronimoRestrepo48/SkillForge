@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Checkout - SkillForge{% endblock %}
+{% block title %}{% trans "Checkout" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'transactions:cart' %}">Cart</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'transactions:cart' %}">{% trans "Cart" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Checkout" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Confirm purchase</h1>
+    <h1 class="h2 mb-4">{% trans "Confirm purchase" %}</h1>
 
     {% if items or items_certificacion %}
     <div class="row">
         <div class="col-lg-8">
             <div class="card mb-4">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Order summary</h5>
+                    <h5 class="mb-0">{% trans "Order summary" %}</h5>
                 </div>
                 <ul class="list-group list-group-flush">
                     {% for item in items %}
@@ -30,55 +31,55 @@
                     {% endfor %}
                     {% for item in items_certificacion %}
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>{{ item.certificacion.nombre }} (certification access) × {{ item.cantidad }}</span>
+                        <span>{{ item.certificacion.nombre }} ({% trans "certification access" %}) × {{ item.cantidad }}</span>
                         <span>{{ item.subtotal }} COP</span>
                     </li>
                     {% endfor %}
                 </ul>
             </div>
             <p class="text-muted small">
-                <i class="bi bi-info-circle"></i> Simulated payment. On confirm, the order will be created and you will get immediate access to courses and certifications.
+                <i class="bi bi-info-circle"></i> {% trans "Simulated payment. On confirm, the order will be created and you will get immediate access to courses and certifications." %}
             </p>
         </div>
         <div class="col-lg-4">
             <div class="card shadow mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Discount coupon</h5>
+                    <h5 class="card-title">{% trans "Discount coupon" %}</h5>
                     {% if cupon_aplicado %}
-                    <p class="text-success small mb-2"><i class="bi bi-tag-fill"></i> {{ cupon_aplicado.codigo }} applied</p>
+                    <p class="text-success small mb-2"><i class="bi bi-tag-fill"></i> {{ cupon_aplicado.codigo }} {% trans "applied" %}</p>
                     <form method="post" action="{% url 'transactions:checkout_remove_coupon' %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Remove coupon</button>
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">{% trans "Remove coupon" %}</button>
                     </form>
                     {% else %}
                     <form method="post" action="{% url 'transactions:checkout_apply_coupon' %}" class="d-flex gap-2">
                         {% csrf_token %}
-                        <input type="text" name="codigo" class="form-control form-control-sm" placeholder="Code" maxlength="50">
-                        <button type="submit" class="btn btn-outline-primary btn-sm">Apply</button>
+                        <input type="text" name="codigo" class="form-control form-control-sm" placeholder="{% trans 'Code' %}" maxlength="50">
+                        <button type="submit" class="btn btn-outline-primary btn-sm">{% trans "Apply" %}</button>
                     </form>
                     {% endif %}
                 </div>
             </div>
             <div class="card shadow">
                 <div class="card-body">
-                    <h5 class="card-title">Amount to pay</h5>
-                    <p class="mb-1">Subtotal: {{ subtotal }} COP</p>
+                    <h5 class="card-title">{% trans "Amount to pay" %}</h5>
+                    <p class="mb-1">{% trans "Subtotal" %}: {{ subtotal }} COP</p>
                     {% if descuentos %}
-                    <p class="mb-1 text-success">Discount: -{{ descuentos }} COP</p>
+                    <p class="mb-1 text-success">{% trans "Discount" %}: -{{ descuentos }} COP</p>
                     {% endif %}
                     <p class="fs-4 text-primary fw-bold">{{ total }} COP</p>
                     <form method="post" action="{% url 'transactions:checkout_confirm' %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-skillforge w-100">Confirm purchase</button>
+                        <button type="submit" class="btn btn-skillforge w-100">{% trans "Confirm purchase" %}</button>
                     </form>
-                    <a href="{% url 'transactions:cart' %}" class="btn btn-outline-secondary w-100 mt-2">Back to cart</a>
+                    <a href="{% url 'transactions:cart' %}" class="btn btn-outline-secondary w-100 mt-2">{% trans "Back to cart" %}</a>
                 </div>
             </div>
         </div>
     </div>
     {% else %}
     <div class="alert alert-warning">
-        Your cart is empty. <a href="{% url 'transactions:cart' %}">View cart</a> or <a href="{% url 'catalog:course_list' %}">browse courses</a>.
+        {% trans "Your cart is empty." %} <a href="{% url 'transactions:cart' %}">{% trans "View cart" %}</a> {% trans "or" %} <a href="{% url 'catalog:course_list' %}">{% trans "browse courses" %}</a>.
     </div>
     {% endif %}
 </div>

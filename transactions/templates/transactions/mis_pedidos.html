@@ -1,27 +1,28 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}My orders - SkillForge{% endblock %}
+{% block title %}{% trans "My orders" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">My orders</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "My orders" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">My orders</h1>
+    <h1 class="h2 mb-4">{% trans "My orders" %}</h1>
 
     {% if ordenes %}
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
-                    <th>Order</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th class="text-end">Total</th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th class="text-end">{% trans "Total" %}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -42,14 +43,14 @@
                     <td class="text-end">{{ orden.total }} COP</td>
                     <td class="text-end">
                         {% if orden.estado == 'PENDIENTE' %}
-                        <a href="{% url 'transactions:checkout_continue' orden.numero_orden %}" class="btn btn-skillforge btn-sm">Complete payment</a>
+                        <a href="{% url 'transactions:checkout_continue' orden.numero_orden %}" class="btn btn-skillforge btn-sm">{% trans "Complete payment" %}</a>
                         {% else %}
-                        <a href="{% url 'transactions:order_confirmed' orden.numero_orden %}" class="btn btn-outline-primary btn-sm">View detail</a>
-                        <a href="{% url 'transactions:order_invoice' orden.numero_orden %}" class="btn btn-outline-secondary btn-sm">Invoice</a>
+                        <a href="{% url 'transactions:order_confirmed' orden.numero_orden %}" class="btn btn-outline-primary btn-sm">{% trans "View detail" %}</a>
+                        <a href="{% url 'transactions:order_invoice' orden.numero_orden %}" class="btn btn-outline-secondary btn-sm">{% trans "Invoice" %}</a>
                         {% if orden.estado == 'CONFIRMADA' %}
-                        <form method="post" action="{% url 'transactions:order_cancel' orden.numero_orden %}" class="d-inline" onsubmit="return confirm('Cancel this order? Slots will be returned and you will lose access to courses from this purchase.');">
+                        <form method="post" action="{% url 'transactions:order_cancel' orden.numero_orden %}" class="d-inline" onsubmit="return confirm('{% trans "Cancel this order? Slots will be returned and you will lose access to courses from this purchase." %}');">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Cancel" %}</button>
                         </form>
                         {% endif %}
                         {% endif %}
@@ -61,7 +62,7 @@
     </div>
     {% else %}
     <div class="alert alert-info">
-        You have no orders yet. <a href="{% url 'catalog:course_list' %}">Browse courses</a> or <a href="{% url 'transactions:cart' %}">view cart</a>.
+        {% trans "You have no orders yet." %} <a href="{% url 'catalog:course_list' %}">{% trans "Browse courses" %}</a> {% trans "or" %} <a href="{% url 'transactions:cart' %}">{% trans "view cart" %}</a>.
     </div>
     {% endif %}
 </div>

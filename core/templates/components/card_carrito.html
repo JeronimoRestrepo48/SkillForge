@@ -1,10 +1,11 @@
+{% load i18n %}
 <div class="card shadow">
     <div class="card-body">
-        <h5 class="card-title">Summary</h5>
-        <p class="d-flex justify-content-between mb-2"><span>Subtotal ({{ cantidad_items }} course{{ cantidad_items|pluralize }})</span> <strong>{{ total }} COP</strong></p>
+        <h5 class="card-title">{% trans "Summary" %}</h5>
+        <p class="d-flex justify-content-between mb-2"><span>{% blocktrans count counter=cantidad_items %}Subtotal ({{ counter }} course){% plural %}Subtotal ({{ counter }} courses){% endblocktrans %}</span> <strong>{{ total }} COP</strong></p>
         <hr>
-        <p class="d-flex justify-content-between mb-3"><span>Total</span> <strong class="text-primary fs-5">{{ total }} COP</strong></p>
-        <a href="{% url 'transactions:checkout' %}" class="btn btn-skillforge w-100">Proceed to checkout</a>
-        <a href="{% url 'catalog:course_list' %}" class="btn btn-outline-secondary w-100 mt-2">Continue shopping</a>
+        <p class="d-flex justify-content-between mb-3"><span>{% trans "Total" %}</span> <strong class="text-primary fs-5">{{ total }} COP</strong></p>
+        <a href="{% url 'transactions:checkout' %}" class="btn btn-skillforge w-100">{% trans "Proceed to checkout" %}</a>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-outline-secondary w-100 mt-2">{% trans "Continue shopping" %}</a>
     </div>
 </div>

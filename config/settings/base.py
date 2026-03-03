@@ -66,6 +66,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.carrito_cantidad',
@@ -90,6 +91,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'en'
+LANGUAGES = [
+    ('en', 'English'),
+    ('es', 'Español'),
+]
 TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True

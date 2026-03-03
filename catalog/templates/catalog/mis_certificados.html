@@ -1,23 +1,24 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}My certificates - SkillForge{% endblock %}
+{% block title %}{% trans "My certificates" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Certificates</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Certificates" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Certificates</h1>
+    <h1 class="h2 mb-4">{% trans "Certificates" %}</h1>
     <p class="lead text-muted mb-4">
-        Here you will find your <strong>course completion certificates</strong> (PDF when you finish a course) and your <strong>industry certification diplomas</strong> (knowledge endorsement after passing the exam).
+        {% blocktrans %}Here you will find your <strong>course completion certificates</strong> (PDF when you finish a course) and your <strong>industry certification diplomas</strong> (knowledge endorsement after passing the exam).{% endblocktrans %}
     </p>
 
-    <h2 class="h5 mb-3">Course completion certificates</h2>
-    <p class="small text-muted mb-3">Generated when you complete 100% of the course. You can download them as PDF.</p>
+    <h2 class="h5 mb-3">{% trans "Course completion certificates" %}</h2>
+    <p class="small text-muted mb-3">{% trans "Generated when you complete 100% of the course. You can download them as PDF." %}</p>
     {% if certificados %}
     <div class="row g-4 mb-5">
         {% for cert in certificados %}
@@ -26,11 +27,11 @@
                 <div class="card-body certificado-card-preview border-top border-primary border-3">
                     <p class="text-muted small mb-1">{{ cert.curso.categoria.nombre }}</p>
                     <h5 class="card-title">{{ cert.curso.titulo }}</h5>
-                    <p class="small mb-1"><strong>No.</strong> {{ cert.numero_certificado }}</p>
+                    <p class="small mb-1"><strong>{% trans "No." %}</strong> {{ cert.numero_certificado }}</p>
                     <p class="small text-muted mb-2">{{ cert.fecha_emision|date:"d/m/Y" }}</p>
-                    <a href="{% url 'catalog:certificate_preview' cert.curso_id %}" class="btn btn-outline-primary btn-sm me-1">View</a>
-                    <a href="{% url 'catalog:certificate_pdf' cert.curso_id %}" class="btn btn-skillforge btn-sm me-1">Download PDF</a>
-                    <a href="{% url 'catalog:certificate_verify' cert.codigo_verificacion %}" class="btn btn-outline-secondary btn-sm" target="_blank">Verify</a>
+                    <a href="{% url 'catalog:certificate_preview' cert.curso_id %}" class="btn btn-outline-primary btn-sm me-1">{% trans "View" %}</a>
+                    <a href="{% url 'catalog:certificate_pdf' cert.curso_id %}" class="btn btn-skillforge btn-sm me-1">{% trans "Download PDF" %}</a>
+                    <a href="{% url 'catalog:certificate_verify' cert.codigo_verificacion %}" class="btn btn-outline-secondary btn-sm" target="_blank">{% trans "Verify" %}</a>
                 </div>
             </div>
         </div>
@@ -38,24 +39,24 @@
     </div>
     {% else %}
     <div class="alert alert-light border mb-5">
-        You have no course completion certificates yet. Complete a course to 100% to get your PDF certificate.
-        <a href="{% url 'catalog:my_courses' %}">Go to my courses</a>
+        {% blocktrans %}You have no course completion certificates yet. Complete a course to 100% to get your PDF certificate.{% endblocktrans %}
+        <a href="{% url 'catalog:my_courses' %}">{% trans "Go to my courses" %}</a>
     </div>
     {% endif %}
 
-    <h2 class="h5 mb-3">Industry certification diplomas</h2>
-    <p class="small text-muted mb-3">Knowledge endorsement after passing the certified exam (not just course completion).</p>
+    <h2 class="h5 mb-3">{% trans "Industry certification diplomas" %}</h2>
+    <p class="small text-muted mb-3">{% trans "Knowledge endorsement after passing the certified exam (not just course completion)." %}</p>
     {% if diplomas %}
     <div class="row g-4">
         {% for d in diplomas %}
         <div class="col-md-6 col-lg-4">
             <div class="card h-100">
                 <div class="card-body border-top border-success border-3">
-                    <p class="text-muted small mb-1">Industry certification</p>
+                    <p class="text-muted small mb-1">{% trans "Industry certification" %}</p>
                     <h5 class="card-title">{{ d.certificacion.nombre }}</h5>
-                    <p class="small mb-1"><strong>Score:</strong> {{ d.puntaje }}%</p>
+                    <p class="small mb-1"><strong>{% trans "Score:" %}</strong> {{ d.puntaje }}%</p>
                     <p class="small text-muted mb-2">{{ d.fecha_examen|date:"d/m/Y" }}</p>
-                    <a href="{% url 'catalog:diploma_certificacion_pdf' d.certificacion.slug %}" class="btn btn-skillforge btn-sm">Download diploma (PDF)</a>
+                    <a href="{% url 'catalog:diploma_certificacion_pdf' d.certificacion.slug %}" class="btn btn-skillforge btn-sm">{% trans "Download diploma (PDF)" %}</a>
                 </div>
             </div>
         </div>
@@ -63,7 +64,7 @@
     </div>
     {% else %}
     <div class="alert alert-light border">
-        You have no industry diplomas yet. <a href="{% url 'catalog:certificaciones_industria' %}">Browse certifications</a>, purchase access and pass the exam to get your diploma.
+        {% blocktrans %}You have no industry diplomas yet.{% endblocktrans %} <a href="{% url 'catalog:certificaciones_industria' %}">{% trans "Browse certifications" %}</a>{% trans ", purchase access and pass the exam to get your diploma." %}
     </div>
     {% endif %}
 </div>

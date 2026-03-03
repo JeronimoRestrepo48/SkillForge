@@ -1,27 +1,28 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}Editar perfil - SkillForge{% endblock %}
+{% block title %}{% trans "Edit profile" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'users:profile' %}">Mi cuenta</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Editar perfil</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'users:profile' %}">{% trans "My account" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Edit profile" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Editar perfil</h1>
+    <h1 class="h2 mb-4">{% trans "Edit profile" %}</h1>
 
     <div class="card">
         <div class="card-body">
             <form method="post" novalidate>
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button type="submit" class="btn btn-skillforge">Guardar</button>
-                <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-skillforge">{% trans "Save" %}</button>
+                <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
             </form>
         </div>
     </div>

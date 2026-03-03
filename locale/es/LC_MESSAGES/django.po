@@ -1,0 +1,610 @@
+# Spanish translations for SkillForge.
+# Copyright (C) 2026 SkillForge
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SkillForge 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-03 09:09-0500\n"
+"PO-Revision-Date: 2026-03-03 09:15-0500\n"
+"Last-Translator: SkillForge Team\n"
+"Language-Team: Español\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Industry certifications"
+msgstr "Certificaciones de industria"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Professionally endorsed industry certifications (cybersecurity, AI, DevSecOps, etc.). They include study material and a 40-question certified exam. <strong>Access to material and exam requires payment.</strong> On passing you receive a diploma certifying knowledge endorsement (not just course completion)."
+msgstr "Certificaciones profesionales avaladas por la industria (ciberseguridad, IA, DevSecOps, etc.). Incluyen material de estudio y un examen certificado de 40 preguntas. <strong>El acceso al material y al examen requiere pago.</strong> Al aprobar recibes un diploma que certifica avalación de conocimientos (no solo completitud de curso)."
+
+msgid "Material + 40-question exam · Diploma on pass"
+msgstr "Material + examen de 40 preguntas · Diploma al aprobar"
+
+msgid "You have access"
+msgstr "Tienes acceso"
+
+msgid "View material and exam"
+msgstr "Ver material y examen"
+
+msgid "View more and add to cart"
+msgstr "Ver más y añadir al carrito"
+
+msgid "No industry certifications are published at this time."
+msgstr "No hay certificaciones de industria publicadas en este momento."
+
+msgid "Courses"
+msgstr "Cursos"
+
+msgid "Course Catalog"
+msgstr "Catálogo de cursos"
+
+msgid "Categories"
+msgstr "Categorías"
+
+msgid "View details"
+msgstr "Ver detalles"
+
+msgid "Previous"
+msgstr "Anterior"
+
+#, python-format
+msgid "Page %(current)s of %(total)s"
+msgstr "Página %(current)s de %(total)s"
+
+msgid "Next"
+msgstr "Siguiente"
+
+msgid "No courses published yet."
+msgstr "Aún no hay cursos publicados."
+
+msgid "My certificates"
+msgstr "Mis certificados"
+
+msgid "Certificates"
+msgstr "Certificados"
+
+msgid "Here you will find your <strong>course completion certificates</strong> (PDF when you finish a course) and your <strong>industry certification diplomas</strong> (knowledge endorsement after passing the exam)."
+msgstr "Aquí encontrarás tus <strong>certificados de completitud de curso</strong> (PDF al terminar un curso) y tus <strong>diplomas de certificación de industria</strong> (avalación de conocimientos al aprobar el examen)."
+
+msgid "Course completion certificates"
+msgstr "Certificados de completitud de curso"
+
+#, python-format
+msgid "Generated when you complete 100%% of the course. You can download them as PDF."
+msgstr "Se generan al completar el 100%% del curso. Puedes descargarlos en PDF."
+
+msgid "No."
+msgstr "N.º"
+
+msgid "View"
+msgstr "Ver"
+
+msgid "Download PDF"
+msgstr "Descargar PDF"
+
+msgid "Verify"
+msgstr "Verificar"
+
+#, python-format
+msgid "You have no course completion certificates yet. Complete a course to 100%% to get your PDF certificate."
+msgstr "Aún no tienes certificados de curso. Completa un curso al 100%% para obtener tu certificado en PDF."
+
+msgid "Go to my courses"
+msgstr "Ir a mis cursos"
+
+msgid "Industry certification diplomas"
+msgstr "Diplomas de certificación de industria"
+
+msgid "Knowledge endorsement after passing the certified exam (not just course completion)."
+msgstr "Avalación de conocimientos al aprobar el examen certificado (no solo completitud de curso)."
+
+msgid "Industry certification"
+msgstr "Certificación de industria"
+
+msgid "Score:"
+msgstr "Puntaje:"
+
+msgid "Download diploma (PDF)"
+msgstr "Descargar diploma (PDF)"
+
+msgid "You have no industry diplomas yet."
+msgstr "Aún no tienes diplomas de industria."
+
+msgid "Browse certifications"
+msgstr "Explorar certificaciones"
+
+msgid ", purchase access and pass the exam to get your diploma."
+msgstr ", compra acceso y aprueba el examen para obtener tu diploma."
+
+msgid "My Courses"
+msgstr "Mis cursos"
+
+msgid "My courses"
+msgstr "Mis cursos"
+
+msgid "My enrolled courses"
+msgstr "Mis cursos inscritos"
+
+msgid "Continue learning"
+msgstr "Continuar aprendiendo"
+
+msgid "You are not enrolled in any course yet"
+msgstr "Aún no estás inscrito en ningún curso"
+
+msgid "Browse courses"
+msgstr "Explorar cursos"
+
+msgid "Forge Your Professional Future"
+msgstr "Forja tu futuro profesional"
+
+msgid "Learning"
+msgstr "Aprendizaje"
+
+msgid "Certifications"
+msgstr "Certificaciones"
+
+msgid "Industry certs"
+msgstr "Cert. industria"
+
+msgid "My orders"
+msgstr "Mis pedidos"
+
+msgid "Teaching"
+msgstr "Enseñanza"
+
+msgid "Manage courses"
+msgstr "Gestionar cursos"
+
+msgid "Create course"
+msgstr "Crear curso"
+
+msgid "Admin panel"
+msgstr "Panel admin"
+
+msgid "Cart"
+msgstr "Carrito"
+
+msgid "Switch to English"
+msgstr "Cambiar a inglés"
+
+msgid "Cambiar a Español"
+msgstr "Cambiar a español"
+
+msgid "Instructor"
+msgstr "Instructor"
+
+msgid "Student"
+msgstr "Estudiante"
+
+msgid "My account"
+msgstr "Mi cuenta"
+
+msgid "Log out"
+msgstr "Cerrar sesión"
+
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+msgid "Register"
+msgstr "Registrarse"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Footer navigation"
+msgstr "Navegación del pie de página"
+
+msgid "Summary"
+msgstr "Resumen"
+
+#, python-format
+msgid "Subtotal (%(counter)s course)"
+msgid_plural "Subtotal (%(counter)s courses)"
+msgstr[0] "Subtotal (%(counter)s curso)"
+msgstr[1] "Subtotal (%(counter)s cursos)"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Proceed to checkout"
+msgstr "Ir al pago"
+
+msgid "Continue shopping"
+msgstr "Seguir comprando"
+
+msgid "View course"
+msgstr "Ver curso"
+
+msgid "Learn with experts. Online courses in programming, design, marketing, and more."
+msgstr "Aprende con expertos. Cursos en línea de programación, diseño, marketing y más."
+
+msgid "Browse Courses"
+msgstr "Explorar cursos"
+
+msgid "Your dashboard"
+msgstr "Tu panel"
+
+msgid "Courses enrolled"
+msgstr "Cursos inscritos"
+
+msgid "Completed"
+msgstr "Completados"
+
+msgid "Courses available"
+msgstr "Cursos disponibles"
+
+msgid "Courses in progress"
+msgstr "Cursos en progreso"
+
+#, python-format
+msgid "%(completadas)s/%(total)s lessons"
+msgstr "%(completadas)s/%(total)s lecciones"
+
+msgid "No courses in progress."
+msgstr "No tienes cursos en progreso."
+
+msgid "Browse the catalog"
+msgstr "Explora el catálogo"
+
+msgid "to get started."
+msgstr "para comenzar."
+
+msgid "Learning analytics"
+msgstr "Analíticas de aprendizaje"
+
+msgid "Learning overview"
+msgstr "Resumen de aprendizaje"
+
+msgid "Progress by course"
+msgstr "Progreso por curso"
+
+msgid "Competencies by category"
+msgstr "Competencias por categoría"
+
+msgid "Overall progress"
+msgstr "Progreso general"
+
+msgid "average across active courses"
+msgstr "promedio en cursos activos"
+
+msgid "Your learning analytics will appear here"
+msgstr "Tus analíticas de aprendizaje aparecerán aquí"
+
+msgid "Enroll in courses to see your progress, learning overview, and competencies by category."
+msgstr "Inscríbete en cursos para ver tu progreso, resumen de aprendizaje y competencias por categoría."
+
+msgid "Teaching dashboard"
+msgstr "Panel de enseñanza"
+
+msgid "Your courses"
+msgstr "Tus cursos"
+
+msgid "Published"
+msgstr "Publicados"
+
+msgid "Total on platform"
+msgstr "Total en la plataforma"
+
+msgid "Teaching analytics"
+msgstr "Analíticas de enseñanza"
+
+msgid "Course status"
+msgstr "Estado de cursos"
+
+msgid "Courses by category"
+msgstr "Cursos por categoría"
+
+msgid "Platform overview"
+msgstr "Resumen de la plataforma"
+
+msgid "Total users"
+msgstr "Total de usuarios"
+
+msgid "Published courses"
+msgstr "Cursos publicados"
+
+msgid "Orders"
+msgstr "Órdenes"
+
+msgid "Platform analytics"
+msgstr "Analíticas de plataforma"
+
+msgid "Users by role"
+msgstr "Usuarios por rol"
+
+msgid "Orders (last 7 days)"
+msgstr "Órdenes (últimos 7 días)"
+
+msgid "Quick links"
+msgstr "Accesos rápidos"
+
+msgid "Browse catalog"
+msgstr "Explorar catálogo"
+
+msgid "Your certificates"
+msgstr "Tus certificados"
+
+msgid "Pending purchases"
+msgstr "Compras pendientes"
+
+msgid "Publish a new course"
+msgstr "Publicar un nuevo curso"
+
+msgid "Users and metrics"
+msgstr "Usuarios y métricas"
+
+msgid "Panel de administración"
+msgstr "Panel de administración"
+
+msgid "Inicio"
+msgstr "Inicio"
+
+msgid "Panel Admin"
+msgstr "Panel Admin"
+
+msgid "Usuarios"
+msgstr "Usuarios"
+
+msgid "Ver en Admin"
+msgstr "Ver en Admin"
+
+msgid "Cursos publicados"
+msgstr "Cursos publicados"
+
+msgid "Órdenes recientes"
+msgstr "Órdenes recientes"
+
+#, python-format
+msgid "%(count)s últimas"
+msgstr "%(count)s últimas"
+
+msgid "Número"
+msgstr "Número"
+
+msgid "Usuario"
+msgstr "Usuario"
+
+msgid "Fecha"
+msgstr "Fecha"
+
+msgid "No hay órdenes."
+msgstr "No hay órdenes."
+
+msgid "Abrir Django Admin"
+msgstr "Abrir Django Admin"
+
+msgid "Your cart"
+msgstr "Tu carrito"
+
+msgid "Your cart is empty"
+msgstr "Tu carrito está vacío"
+
+msgid "Checkout"
+msgstr "Pago"
+
+msgid "Confirm purchase"
+msgstr "Confirmar compra"
+
+msgid "Order summary"
+msgstr "Resumen del pedido"
+
+msgid "certification access"
+msgstr "acceso a certificación"
+
+msgid "Simulated payment. On confirm, the order will be created and you will get immediate access to courses and certifications."
+msgstr "Pago simulado. Al confirmar, se creará la orden y obtendrás acceso inmediato a los cursos y certificaciones."
+
+msgid "Discount coupon"
+msgstr "Cupón de descuento"
+
+msgid "applied"
+msgstr "aplicado"
+
+msgid "Remove coupon"
+msgstr "Quitar cupón"
+
+msgid "Code"
+msgstr "Código"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Amount to pay"
+msgstr "Monto a pagar"
+
+msgid "Subtotal"
+msgstr "Subtotal"
+
+msgid "Discount"
+msgstr "Descuento"
+
+msgid "Back to cart"
+msgstr "Volver al carrito"
+
+msgid "Your cart is empty."
+msgstr "Tu carrito está vacío."
+
+msgid "View cart"
+msgstr "Ver carrito"
+
+msgid "or"
+msgstr "o"
+
+msgid "browse courses"
+msgstr "explorar cursos"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "Order"
+msgstr "Orden"
+
+msgid "Simulated invoice"
+msgstr "Factura simulada"
+
+msgid "Demo only"
+msgstr "Solo demostración"
+
+msgid "Invoice No."
+msgstr "Factura N.º"
+
+msgid "Issue date"
+msgstr "Fecha de emisión"
+
+msgid "Customer"
+msgstr "Cliente"
+
+msgid "Course"
+msgstr "Curso"
+
+msgid "Quantity"
+msgstr "Cantidad"
+
+msgid "Unit price"
+msgstr "Precio unitario"
+
+msgid "Discounts"
+msgstr "Descuentos"
+
+msgid "Payment"
+msgstr "Pago"
+
+msgid "This document is a simulated invoice. It has no tax validity or integration with external providers."
+msgstr "Este documento es una factura simulada. No tiene validez fiscal ni integración con proveedores externos."
+
+msgid "Back to order"
+msgstr "Volver a la orden"
+
+msgid "Simulation"
+msgstr "Simulación"
+
+msgid "This is a simulated payment gateway. No real charge is made."
+msgstr "Esta es una pasarela de pago simulada. No se realiza ningún cobro real."
+
+msgid "Amount"
+msgstr "Monto"
+
+msgid "Card number (simulation)"
+msgstr "Número de tarjeta (simulación)"
+
+msgid "Expiry"
+msgstr "Vencimiento"
+
+msgid "CVV"
+msgstr "CVV"
+
+msgid "Pay successfully"
+msgstr "Pagar exitosamente"
+
+msgid "Simulate failure"
+msgstr "Simular fallo"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Complete payment"
+msgstr "Completar pago"
+
+msgid "View detail"
+msgstr "Ver detalle"
+
+msgid "Cancel this order? Slots will be returned and you will lose access to courses from this purchase."
+msgstr "¿Cancelar esta orden? Los cupos se devolverán y perderás acceso a los cursos de esta compra."
+
+msgid "You have no orders yet."
+msgstr "Aún no tienes pedidos."
+
+msgid "view cart"
+msgstr "ver carrito"
+
+msgid "Order confirmed"
+msgstr "Orden confirmada"
+
+msgid "¡Compra realizada con éxito!"
+msgstr "¡Compra realizada con éxito!"
+
+msgid "Cursos a los que tienes acceso"
+msgstr "Cursos a los que tienes acceso"
+
+msgid "Ir al curso"
+msgstr "Ir al curso"
+
+msgid "Ver factura"
+msgstr "Ver factura"
+
+msgid "Ver mis cursos inscritos"
+msgstr "Ver mis cursos inscritos"
+
+msgid "Explorar más cursos"
+msgstr "Explorar más cursos"
+
+msgid "Access your SkillForge account"
+msgstr "Accede a tu cuenta de SkillForge"
+
+msgid "Don't have an account?"
+msgstr "¿No tienes cuenta?"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Personal data"
+msgstr "Datos personales"
+
+msgid "Edit your name, email and biography."
+msgstr "Edita tu nombre, email y biografía."
+
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+msgid "Courses you are enrolled in."
+msgstr "Cursos en los que estás inscrito."
+
+msgid "View all"
+msgstr "Ver todos"
+
+msgid "You are not enrolled in any course yet."
+msgstr "Aún no estás inscrito en ningún curso."
+
+msgid "Explore courses"
+msgstr "Explorar cursos"
+
+msgid "Certificates obtained upon completing courses."
+msgstr "Certificados obtenidos al completar cursos."
+
+#, python-format
+msgid "You don't have any certificates yet. Complete a course 100%% to get one."
+msgstr "Aún no tienes certificados. Completa un curso al 100%% para obtener uno."
+
+msgid "Shopping cart"
+msgstr "Carrito de compras"
+
+msgid "Courses you have in your cart."
+msgstr "Cursos que tienes en tu carrito."
+
+msgid "Go to cart"
+msgstr "Ir al carrito"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Create account"
+msgstr "Crear cuenta"
+
+msgid "Choose your role: Student or Instructor"
+msgstr "Elige tu rol: Estudiante o Instructor"
+
+msgid "Already have an account?"
+msgstr "¿Ya tienes cuenta?"

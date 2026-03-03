@@ -1,31 +1,32 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 
-{% block title %}My account - SkillForge{% endblock %}
+{% block title %}{% trans "My account" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">My account</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "My account" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">My account</h1>
+    <h1 class="h2 mb-4">{% trans "My account" %}</h1>
 
     <ul class="nav nav-tabs mb-4" id="miCuentaTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#perfil" type="button" role="tab">Profile</button>
+            <button class="nav-link active" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#perfil" type="button" role="tab">{% trans "Profile" %}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="cursos-tab" data-bs-toggle="tab" data-bs-target="#cursos" type="button" role="tab">My courses</button>
+            <button class="nav-link" id="cursos-tab" data-bs-toggle="tab" data-bs-target="#cursos" type="button" role="tab">{% trans "My courses" %}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="certificaciones-tab" data-bs-toggle="tab" data-bs-target="#certificaciones" type="button" role="tab">Certifications</button>
+            <button class="nav-link" id="certificaciones-tab" data-bs-toggle="tab" data-bs-target="#certificaciones" type="button" role="tab">{% trans "Certifications" %}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="carrito-tab" data-bs-toggle="tab" data-bs-target="#carrito" type="button" role="tab">Cart</button>
+            <button class="nav-link" id="carrito-tab" data-bs-toggle="tab" data-bs-target="#carrito" type="button" role="tab">{% trans "Cart" %}</button>
         </li>
     </ul>
 
@@ -33,9 +34,9 @@
         <div class="tab-pane fade show active" id="perfil" role="tabpanel">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Datos personales</h5>
-                    <p class="text-muted small">Edita tu nombre, email y biografía.</p>
-                    <a href="{% url 'users:profile_edit' %}" class="btn btn-skillforge">Editar perfil</a>
+                    <h5 class="card-title">{% trans "Personal data" %}</h5>
+                    <p class="text-muted small">{% trans "Edit your name, email and biography." %}</p>
+                    <a href="{% url 'users:profile_edit' %}" class="btn btn-skillforge">{% trans "Edit profile" %}</a>
                 </div>
             </div>
         </div>
@@ -43,8 +44,8 @@
         <div class="tab-pane fade" id="cursos" role="tabpanel">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Mis cursos</h5>
-                    <p class="text-muted small">Cursos en los que estás inscrito.</p>
+                    <h5 class="card-title">{% trans "My courses" %}</h5>
+                    <p class="text-muted small">{% trans "Courses you are enrolled in." %}</p>
                     {% if inscripciones %}
                     <ul class="list-group list-group-flush">
                         {% for ins in inscripciones %}
@@ -54,10 +55,10 @@
                         </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'catalog:my_courses' %}" class="btn btn-outline-primary btn-sm mt-3">Ver todos</a>
+                    <a href="{% url 'catalog:my_courses' %}" class="btn btn-outline-primary btn-sm mt-3">{% trans "View all" %}</a>
                     {% else %}
-                    <p class="text-muted mb-0">Aún no estás inscrito en ningún curso.</p>
-                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-sm mt-2">Explorar cursos</a>
+                    <p class="text-muted mb-0">{% trans "You are not enrolled in any course yet." %}</p>
+                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-sm mt-2">{% trans "Explore courses" %}</a>
                     {% endif %}
                 </div>
             </div>
@@ -66,24 +67,24 @@
         <div class="tab-pane fade" id="certificaciones" role="tabpanel">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Certificaciones</h5>
-                    <p class="text-muted small">Certificados obtenidos al completar cursos.</p>
+                    <h5 class="card-title">{% trans "Certifications" %}</h5>
+                    <p class="text-muted small">{% trans "Certificates obtained upon completing courses." %}</p>
                     {% if certificados %}
                     <ul class="list-group list-group-flush">
                         {% for cert in certificados %}
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <span>{{ cert.curso.titulo }}</span>
                             <div>
-                                <a href="{% url 'catalog:certificate_preview' cert.curso_id %}" class="btn btn-outline-primary btn-sm">Ver</a>
-                                <a href="{% url 'catalog:certificate_verify' cert.codigo_verificacion %}" class="btn btn-outline-secondary btn-sm" target="_blank">Verificar</a>
+                                <a href="{% url 'catalog:certificate_preview' cert.curso_id %}" class="btn btn-outline-primary btn-sm">{% trans "View" %}</a>
+                                <a href="{% url 'catalog:certificate_verify' cert.codigo_verificacion %}" class="btn btn-outline-secondary btn-sm" target="_blank">{% trans "Verify" %}</a>
                             </div>
                         </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'catalog:my_certificates' %}" class="btn btn-outline-primary btn-sm mt-3">Ver todos</a>
+                    <a href="{% url 'catalog:my_certificates' %}" class="btn btn-outline-primary btn-sm mt-3">{% trans "View all" %}</a>
                     {% else %}
-                    <p class="text-muted mb-0">Aún no tienes certificados. Completa un curso al 100% para obtener uno.</p>
-                    <a href="{% url 'catalog:my_courses' %}" class="btn btn-skillforge btn-sm mt-2">Ir a mis cursos</a>
+                    <p class="text-muted mb-0">{% trans "You don't have any certificates yet. Complete a course 100% to get one." %}</p>
+                    <a href="{% url 'catalog:my_courses' %}" class="btn btn-skillforge btn-sm mt-2">{% trans "Go to my courses" %}</a>
                     {% endif %}
                 </div>
             </div>
@@ -92,8 +93,8 @@
         <div class="tab-pane fade" id="carrito" role="tabpanel">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Carrito de compras</h5>
-                    <p class="text-muted small">Cursos que tienes en el carrito.</p>
+                    <h5 class="card-title">{% trans "Shopping cart" %}</h5>
+                    <p class="text-muted small">{% trans "Courses you have in your cart." %}</p>
                     {% if carrito_items %}
                     <ul class="list-group list-group-flush">
                         {% for item in carrito_items %}
@@ -103,10 +104,10 @@
                         </li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'transactions:cart' %}" class="btn btn-skillforge mt-3">Ir al carrito</a>
+                    <a href="{% url 'transactions:cart' %}" class="btn btn-skillforge mt-3">{% trans "Go to cart" %}</a>
                     {% else %}
-                    <p class="text-muted mb-0">Tu carrito está vacío.</p>
-                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-sm mt-2">Explorar cursos</a>
+                    <p class="text-muted mb-0">{% trans "Your cart is empty." %}</p>
+                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-sm mt-2">{% trans "Explore courses" %}</a>
                     {% endif %}
                 </div>
             </div>

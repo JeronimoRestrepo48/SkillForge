@@ -1,45 +1,46 @@
 {% extends 'base.html' %}
 {% load core_extras %}
+{% load i18n %}
 
 {% block content %}
 <div class="container">
     <section class="hero-skillforge text-center py-5">
-        <h1 class="display-4 fw-bold mb-3">Forge Your Professional Future</h1>
-        <p class="lead mb-4">Learn with experts. Online courses in programming, design, marketing, and more.</p>
-        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg px-4 py-3">Browse Courses</a>
+        <h1 class="display-4 fw-bold mb-3">{% trans "Forge Your Professional Future" %}</h1>
+        <p class="lead mb-4">{% trans "Learn with experts. Online courses in programming, design, marketing, and more." %}</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg px-4 py-3">{% trans "Browse Courses" %}</a>
     </section>
 
     {% if user.tipo == 'ESTUDIANTE' or user.es_estudiante %}
     <section class="section-card py-4 mb-4">
-        <h2 class="h5 mb-4">Your dashboard</h2>
+        <h2 class="h5 mb-4">{% trans "Your dashboard" %}</h2>
         <div class="row g-3 mb-4">
             <div class="col-6 col-md-3">
                 <div class="dashboard-stat-card h-100">
                     <span class="stat-value text-primary d-block">{{ dashboard_courses_enrolled|default:0 }}</span>
-                    <span class="stat-label d-block">Courses enrolled</span>
+                    <span class="stat-label d-block">{% trans "Courses enrolled" %}</span>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="dashboard-stat-card h-100">
                     <span class="stat-value text-success d-block">{{ dashboard_courses_completed|default:0 }}</span>
-                    <span class="stat-label d-block">Completed</span>
+                    <span class="stat-label d-block">{% trans "Completed" %}</span>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="dashboard-stat-card h-100">
                     <span class="stat-value text-warning d-block">{{ dashboard_certificates|default:0 }}</span>
-                    <span class="stat-label d-block">Certificates</span>
+                    <span class="stat-label d-block">{% trans "Certificates" %}</span>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="dashboard-stat-card h-100">
                     <span class="stat-value text-info d-block">{{ site_total_courses }}</span>
-                    <span class="stat-label d-block">Courses available</span>
+                    <span class="stat-label d-block">{% trans "Courses available" %}</span>
                 </div>
             </div>
         </div>
         {% if dashboard_progress %}
-        <h3 class="h6 text-muted mb-3">Courses in progress</h3>
+        <h3 class="h6 text-muted mb-3">{% trans "Courses in progress" %}</h3>
         <div class="row g-3">
             {% for item in dashboard_progress %}
             <div class="col-12 col-md-6">
@@ -53,7 +54,7 @@
                             <div class="progress" style="height: 8px;">
                                 <div class="progress-bar bg-primary" role="progressbar" style="width: {{ item.porcentaje }}%;" aria-valuenow="{{ item.porcentaje }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <small class="text-muted">{{ item.completadas }}/{{ item.total }} lessons</small>
+                            <small class="text-muted">{% blocktrans with completadas=item.completadas total=item.total %}{{ completadas }}/{{ total }} lessons{% endblocktrans %}</small>
                         </div>
                     </div>
                 </a>
@@ -61,17 +62,17 @@
             {% endfor %}
         </div>
         {% else %}
-        <p class="text-muted small mb-0">No courses in progress. <a href="{% url 'catalog:course_list' %}">Browse the catalog</a> to get started.</p>
+        <p class="text-muted small mb-0">{% blocktrans %}No courses in progress.{% endblocktrans %} <a href="{% url 'catalog:course_list' %}">{% trans "Browse the catalog" %}</a> {% trans "to get started." %}</p>
         {% endif %}
 
         {% if dashboard_courses_enrolled and dashboard_courses_enrolled > 0 and chart_learning_overview or chart_progress_data %}
-        <h3 class="h6 text-muted mb-3 mt-4">Learning analytics</h3>
+        <h3 class="h6 text-muted mb-3 mt-4">{% trans "Learning analytics" %}</h3>
         <div class="row g-3 mb-4">
             {% if chart_learning_overview %}
             <div class="col-12 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Learning overview</h4>
+                        <h4 class="h6 mb-3">{% trans "Learning overview" %}</h4>
                         <div class="position-relative" style="height: 220px;">
                             <canvas id="chartLearningOverview" aria-label="Learning overview: completed, in progress, not started"></canvas>
                         </div>
@@ -84,7 +85,7 @@
             <div class="col-12 col-lg-8">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Progress by course</h4>
+                        <h4 class="h6 mb-3">{% trans "Progress by course" %}</h4>
                         <div class="position-relative" style="height: 220px;">
                             <canvas id="chartProgressByCourse" aria-label="Progress percentage per course"></canvas>
                         </div>
@@ -100,7 +101,7 @@
             <div class="col-12 col-lg-6">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Competencies by category</h4>
+                        <h4 class="h6 mb-3">{% trans "Competencies by category" %}</h4>
                         <div class="position-relative" style="height: 240px;">
                             <canvas id="chartCategories" aria-label="Enrolled courses per category"></canvas>
                         </div>
@@ -113,12 +114,12 @@
             <div class="col-12 col-lg-6">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Overall progress</h4>
+                        <h4 class="h6 mb-3">{% trans "Overall progress" %}</h4>
                         <div class="d-flex align-items-center justify-content-center rounded-3 bg-light" style="height: 240px;">
                             <div class="text-center">
                                 <span class="display-3 fw-bold text-primary" id="overallProgressValue">{{ chart_overall_progress|default:0 }}</span>
                                 <span class="fs-4 text-muted">%</span>
-                                <p class="small text-muted mb-0 mt-1">average across active courses</p>
+                                <p class="small text-muted mb-0 mt-1">{% trans "average across active courses" %}</p>
                             </div>
                         </div>
                     </div>
@@ -130,9 +131,9 @@
             <div class="card border-0 shadow-sm bg-light">
                 <div class="card-body text-center py-5">
                     <i class="bi bi-graph-up-arrow display-4 text-primary mb-3" aria-hidden="true"></i>
-                    <h3 class="h5 mb-2">Your learning analytics will appear here</h3>
-                    <p class="text-muted mb-4">Enroll in courses to see your progress, learning overview, and competencies by category.</p>
-                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg">Browse courses</a>
+                    <h3 class="h5 mb-2">{% trans "Your learning analytics will appear here" %}</h3>
+                    <p class="text-muted mb-4">{% trans "Enroll in courses to see your progress, learning overview, and competencies by category." %}</p>
+                    <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge btn-lg">{% trans "Browse courses" %}</a>
                 </div>
             </div>
         </div>
@@ -140,41 +141,41 @@
     </section>
     {% elif user.tipo == 'INSTRUCTOR' or user.es_instructor %}
     <section class="section-card py-4 mb-4">
-        <h2 class="h5 mb-4">Teaching dashboard</h2>
+        <h2 class="h5 mb-4">{% trans "Teaching dashboard" %}</h2>
         <div class="row g-3">
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-primary">{{ dashboard_courses_teaching|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Your courses</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Your courses" %}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-success">{{ dashboard_courses_published|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Published</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Published" %}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-info">{{ site_total_courses }}</span>
-                    <p class="small text-muted mb-0 mt-1">Total on platform</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Total on platform" %}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-secondary">{{ site_total_categories }}</span>
-                    <p class="small text-muted mb-0 mt-1">Categories</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Categories" %}</p>
                 </div>
             </div>
         </div>
         {% if chart_course_status or chart_instructor_categories_data %}
-        <h3 class="h6 text-muted mb-3 mt-4">Teaching analytics</h3>
+        <h3 class="h6 text-muted mb-3 mt-4">{% trans "Teaching analytics" %}</h3>
         <div class="row g-3">
             {% if chart_course_status %}
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Course status</h4>
+                        <h4 class="h6 mb-3">{% trans "Course status" %}</h4>
                         <div class="position-relative" style="height: 220px;">
                             <canvas id="chartCourseStatus" aria-label="Published vs draft courses"></canvas>
                         </div>
@@ -187,7 +188,7 @@
             <div class="col-12 col-md-6 col-lg-8">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Courses by category</h4>
+                        <h4 class="h6 mb-3">{% trans "Courses by category" %}</h4>
                         <div class="position-relative" style="height: 220px;">
                             <canvas id="chartInstructorCategories" aria-label="Courses per category"></canvas>
                         </div>
@@ -202,41 +203,41 @@
     </section>
     {% elif user.tipo == 'ADMINISTRADOR' or user.is_staff %}
     <section class="section-card py-4 mb-4">
-        <h2 class="h5 mb-4">Platform overview</h2>
+        <h2 class="h5 mb-4">{% trans "Platform overview" %}</h2>
         <div class="row g-3">
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-primary">{{ dashboard_total_users|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Total users</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Total users" %}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-success">{{ site_total_courses }}</span>
-                    <p class="small text-muted mb-0 mt-1">Published courses</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Published courses" %}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-warning">{{ dashboard_total_orders|default:0 }}</span>
-                    <p class="small text-muted mb-0 mt-1">Orders</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Orders" %}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card border-0 bg-light h-100 p-3 text-center">
                     <span class="display-6 fw-bold text-info">{{ site_total_categories }}</span>
-                    <p class="small text-muted mb-0 mt-1">Categories</p>
+                    <p class="small text-muted mb-0 mt-1">{% trans "Categories" %}</p>
                 </div>
             </div>
         </div>
         {% if chart_users_by_type_data or chart_orders_days_data %}
-        <h3 class="h6 text-muted mb-3 mt-4">Platform analytics</h3>
+        <h3 class="h6 text-muted mb-3 mt-4">{% trans "Platform analytics" %}</h3>
         <div class="row g-3">
             {% if chart_users_by_type_data %}
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Users by role</h4>
+                        <h4 class="h6 mb-3">{% trans "Users by role" %}</h4>
                         <div class="position-relative" style="height: 220px;">
                             <canvas id="chartUsersByType" aria-label="Users by role"></canvas>
                         </div>
@@ -250,7 +251,7 @@
             <div class="col-12 col-md-6 col-lg-8">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h4 class="h6 mb-3">Orders (last 7 days)</h4>
+                        <h4 class="h6 mb-3">{% trans "Orders (last 7 days)" %}</h4>
                         <div class="position-relative" style="height: 220px;">
                             <canvas id="chartOrdersDays" aria-label="Orders per day"></canvas>
                         </div>
@@ -266,14 +267,14 @@
     {% endif %}
 
     <section class="py-4 section-card">
-        <h2 class="section-title h5 mb-4">Quick links</h2>
+        <h2 class="section-title h5 mb-4">{% trans "Quick links" %}</h2>
         <div class="row g-3 g-md-4">
             <div class="col-6 col-md-3">
                 <a href="{% url 'catalog:course_list' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-book fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">Browse catalog</h3>
-                        <p class="small text-muted mb-0 mt-1">Courses by category</p>
+                        <h3 class="h6 mb-0">{% trans "Browse catalog" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Courses by category" %}</p>
                     </div>
                 </a>
             </div>
@@ -282,8 +283,8 @@
                 <a href="{% url 'catalog:my_courses' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-collection-play fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">My courses</h3>
-                        <p class="small text-muted mb-0 mt-1">Continue learning</p>
+                        <h3 class="h6 mb-0">{% trans "My courses" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Continue learning" %}</p>
                     </div>
                 </a>
             </div>
@@ -291,8 +292,8 @@
                 <a href="{% url 'catalog:my_certificates' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-award fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">Certifications</h3>
-                        <p class="small text-muted mb-0 mt-1">Your certificates</p>
+                        <h3 class="h6 mb-0">{% trans "Certifications" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Your certificates" %}</p>
                     </div>
                 </a>
             </div>
@@ -300,8 +301,8 @@
                 <a href="{% url 'transactions:cart' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-cart3 fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">Cart</h3>
-                        <p class="small text-muted mb-0 mt-1">Pending purchases</p>
+                        <h3 class="h6 mb-0">{% trans "Cart" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Pending purchases" %}</p>
                     </div>
                 </a>
             </div>
@@ -310,8 +311,8 @@
                 <a href="{% url 'catalog:my_teaching' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-journal-check fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">Manage courses</h3>
-                        <p class="small text-muted mb-0 mt-1">Your courses</p>
+                        <h3 class="h6 mb-0">{% trans "Manage courses" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Your courses" %}</p>
                     </div>
                 </a>
             </div>
@@ -319,8 +320,8 @@
                 <a href="{% url 'catalog:course_create' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-plus-circle fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">Create course</h3>
-                        <p class="small text-muted mb-0 mt-1">Publish a new course</p>
+                        <h3 class="h6 mb-0">{% trans "Create course" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Publish a new course" %}</p>
                     </div>
                 </a>
             </div>
@@ -329,8 +330,8 @@
                 <a href="{% url 'core:panel_admin' %}" class="text-decoration-none">
                     <div class="card h-100 border-primary border-2 text-center p-3 card-hover">
                         <i class="bi bi-gear fs-1 text-primary mb-2" aria-hidden="true"></i>
-                        <h3 class="h6 mb-0">Admin panel</h3>
-                        <p class="small text-muted mb-0 mt-1">Users and metrics</p>
+                        <h3 class="h6 mb-0">{% trans "Admin panel" %}</h3>
+                        <p class="small text-muted mb-0 mt-1">{% trans "Users and metrics" %}</p>
                     </div>
                 </a>
             </div>
