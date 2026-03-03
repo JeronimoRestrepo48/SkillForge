@@ -298,7 +298,6 @@ class TransactionsViewsTest(TestCase):
         self.client.login(username='student1', password='pass')
         r = self.client.get(reverse('transactions:order_confirmed', args=[orden.numero_orden]))
         self.assertEqual(r.status_code, 404)
-
     def test_order_list_200_when_logged_in(self):
         self.client.login(username='student1', password='pass')
         r = self.client.get(reverse('transactions:order_list'))
@@ -336,3 +335,4 @@ class TransactionsViewsTest(TestCase):
         )
         self.assertEqual(r.status_code, 302)
         self.assertIn('checkout/gateway/', r.url)
+

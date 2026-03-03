@@ -14,18 +14,18 @@ class TipoUsuario(models.TextChoices):
 
 
 class EstadoUsuario(models.TextChoices):
-    """Estado de la cuenta del usuario."""
-    ACTIVO = 'ACTIVO', 'Activo'
-    INACTIVO = 'INACTIVO', 'Inactivo'
-    SUSPENDIDO = 'SUSPENDIDO', 'Suspendido'
+    """User account status."""
+    ACTIVO = 'ACTIVO', 'Active'
+    INACTIVO = 'INACTIVO', 'Inactive'
+    SUSPENDIDO = 'SUSPENDIDO', 'Suspended'
 
 
 class NivelExperiencia(models.TextChoices):
-    """Nivel de experiencia del estudiante."""
-    PRINCIPIANTE = 'PRINCIPIANTE', 'Principiante'
-    INTERMEDIO = 'INTERMEDIO', 'Intermedio'
-    AVANZADO = 'AVANZADO', 'Avanzado'
-    EXPERTO = 'EXPERTO', 'Experto'
+    """Student experience level."""
+    PRINCIPIANTE = 'PRINCIPIANTE', 'Beginner'
+    INTERMEDIO = 'INTERMEDIO', 'Intermediate'
+    AVANZADO = 'AVANZADO', 'Advanced'
+    EXPERTO = 'EXPERTO', 'Expert'
 
 
 class User(AbstractUser):

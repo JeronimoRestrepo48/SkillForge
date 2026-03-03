@@ -9,6 +9,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.api import MeView
+from catalog.api import CourseRateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,6 +20,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/me/', MeView.as_view(), name='api_me'),
+    path('api/courses/<int:pk>/rate/', CourseRateView.as_view(), name='api_course_rate'),
 ]
 
 if settings.DEBUG:

@@ -18,6 +18,7 @@ from .coupon_service import (
     obtener_cupon_aplicado,
     limpiar_cupon,
 )
+from .checkout_service import calcular_totales
 
 __all__ = [
     'obtener_o_crear_carrito',
@@ -33,4 +34,5 @@ __all__ = [
     'aplicar_cupon',
     'obtener_cupon_aplicado',
     'limpiar_cupon',
+    'calcular_totales',
 ]

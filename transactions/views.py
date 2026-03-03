@@ -23,8 +23,10 @@ from transactions.services import (
     aplicar_cupon,
     obtener_cupon_aplicado,
     limpiar_cupon,
+    calcular_totales,
 )
 from transactions.payment_token import generate_payment_token, validate_payment_token
+from transactions.payment_gateway_factory import PaymentGatewayFactory
 from transactions.models import Orden, EstadoOrden
 
 
@@ -109,17 +111,14 @@ class CheckoutView(LoginRequiredMixin, TemplateView):
         carrito = obtener_o_crear_carrito(self.request.user)
         items = carrito.items.select_related('curso', 'curso__categoria').all()
         items_certificacion = carrito.items_certificacion.select_related('certificacion').all()
-        subtotal = carrito.calcular_subtotal()
-        from decimal import Decimal
         cupon = obtener_cupon_aplicado(self.request)
-        descuentos = cupon.aplicar_descuento(subtotal) if cupon else Decimal('0')
-        total = subtotal - descuentos
+        totales = calcular_totales(carrito, cupon)
         context['carrito'] = carrito
         context['items'] = items
         context['items_certificacion'] = items_certificacion
-        context['subtotal'] = subtotal
-        context['descuentos'] = descuentos
-        context['total'] = total
+        context['subtotal'] = totales['subtotal']
+        context['descuentos'] = totales['descuentos']
+        context['total'] = totales['total']
         context['cupon_aplicado'] = cupon
         return context
 
@@ -165,9 +164,9 @@ class CheckoutConfirmarView(LoginRequiredMixin, View):
             return_url = request.build_absolute_uri(
                 reverse('transactions:checkout_return') + '?token=' + token
             )
-            gateway_url = reverse('transactions:checkout_gateway')
-            params = f'?numero_orden={orden.numero_orden}&return_url={quote(return_url, safe="")}&total={orden.total}&token={quote(token, safe="")}'
-            return redirect(gateway_url + params)
+            gateway = PaymentGatewayFactory.get_gateway()
+            url = gateway.get_redirect_url(orden, return_url, token, request)
+            return redirect(url)
         messages.error(
             request,
             'Could not process the purchase. Please check that the courses are still available.'
@@ -202,9 +201,9 @@ class CheckoutContinuePaymentView(LoginRequiredMixin, View):
         return_url = request.build_absolute_uri(
             reverse('transactions:checkout_return') + '?token=' + quote(token, safe='')
         )
-        gateway_url = reverse('transactions:checkout_gateway')
-        params = f'?numero_orden={orden.numero_orden}&return_url={quote(return_url, safe="")}&total={orden.total}&token={quote(token, safe="")}'
-        return redirect(gateway_url + params)
+        gateway = PaymentGatewayFactory.get_gateway()
+        url = gateway.get_redirect_url(orden, return_url, token, request)
+        return redirect(url)
 
 
 class CheckoutReturnView(LoginRequiredMixin, View):

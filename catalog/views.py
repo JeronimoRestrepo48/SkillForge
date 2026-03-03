@@ -30,8 +30,13 @@ from .models import (
 )
 from .forms import CursoForm, ModuloForm, LeccionForm, CalificacionForm
 from .services import course_service
-from .services.rating_service import puede_calificar, obtener_calificacion_curso, obtener_promedio_y_total
-from transactions.models import Inscripcion
+from .services.rating_service import (
+    puede_calificar,
+    obtener_calificacion_curso,
+    obtener_promedio_y_total,
+    obtener_calificacion_usuario_curso,
+)
+from .services.enrollment_service import esta_inscrito, inscripciones_activas, tiene_acceso_aprender
 
 
 class CursoListView(LoginRequiredMixin, ListView):
@@ -70,9 +75,7 @@ class CursoDetailView(LoginRequiredMixin, DetailView):
         context['disponible'] = self.object.esta_disponible()
         context['ya_inscrito'] = (
             self.request.user.is_authenticated
-            and Inscripcion.objects.filter(
-                user=self.request.user, curso=self.object
-            ).exclude(estado='CANCELADA').exists()
+            and esta_inscrito(self.request.user, self.object)
         )
         rating_info = obtener_promedio_y_total(self.object)
         context['rating_promedio'] = rating_info['promedio']
@@ -80,9 +83,7 @@ class CursoDetailView(LoginRequiredMixin, DetailView):
         context['calificaciones'] = obtener_calificacion_curso(self.object)[:10]
         if self.request.user.is_authenticated:
             context['puede_calificar'] = puede_calificar(self.request.user, self.object)
-            mi_cal = Calificacion.objects.filter(
-                user=self.request.user, curso=self.object
-            ).first()
+            mi_cal = obtener_calificacion_usuario_curso(self.request.user, self.object)
             context['mi_calificacion'] = mi_cal
             if context['puede_calificar'] or mi_cal:
                 context['calificacion_form'] = CalificacionForm(instance=mi_cal)
@@ -94,7 +95,7 @@ class CursoDetailView(LoginRequiredMixin, DetailView):
             context['calificacion_form'] = None
         modulos = course_service.obtener_modulos_de_curso(self.object)
         context['modulos'] = modulos
-        context['total_lecciones'] = Leccion.objects.filter(modulo__curso=self.object).count()
+        context['total_lecciones'] = course_service.total_lecciones_curso(self.object)
         return context
 
 
@@ -105,13 +106,7 @@ class MisInscripcionesView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['inscripciones'] = (
-            Inscripcion.objects
-            .filter(user=self.request.user)
-            .exclude(estado='CANCELADA')
-            .select_related('curso', 'curso__categoria')
-            .order_by('-fecha_inscripcion')
-        )
+        context['inscripciones'] = inscripciones_activas(self.request.user)
         return context
 
 
@@ -122,9 +117,7 @@ class CursoAprenderView(LoginRequiredMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         curso = get_object_or_404(Curso, pk=kwargs['pk'])
-        if not Inscripcion.objects.filter(
-            user=request.user, curso=curso
-        ).filter(estado__in=('ACTIVA', 'COMPLETADA')).exists():
+        if not tiene_acceso_aprender(request.user, curso):
             return redirect('catalog:course_detail', pk=curso.pk)
         return super().dispatch(request, *args, **kwargs)
 
@@ -154,9 +147,7 @@ class LeccionDetailView(LoginRequiredMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         curso = get_object_or_404(Curso, pk=kwargs['pk'])
-        if not Inscripcion.objects.filter(
-            user=request.user, curso=curso
-        ).filter(estado__in=('ACTIVA', 'COMPLETADA')).exists():
+        if not tiene_acceso_aprender(request.user, curso):
             return redirect('catalog:course_detail', pk=curso.pk)
         return super().dispatch(request, *args, **kwargs)
 
@@ -193,9 +184,7 @@ class LeccionCompletarView(LoginRequiredMixin, View):
         from catalog.services import certificate_service
 
         curso = get_object_or_404(Curso, pk=pk)
-        if not Inscripcion.objects.filter(
-            user=request.user, curso=curso
-        ).filter(estado__in=('ACTIVA', 'COMPLETADA')).exists():
+        if not tiene_acceso_aprender(request.user, curso):
             return redirect('catalog:course_detail', pk=pk)
         leccion = get_object_or_404(Leccion, pk=leccion_pk, modulo__curso=curso)
         course_service.marcar_leccion_completada(request.user, leccion)

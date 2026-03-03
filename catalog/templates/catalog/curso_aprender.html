@@ -45,7 +45,7 @@
                     {% if modulo.duracion_minutos %}<span class="text-muted ms-2 small">({{ modulo.duracion_minutos }} min)</span>{% endif %}
                 </button>
             </h2>
-            <div id="{{ modulo_id }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#modulosAccordion" role="region" aria-label="Contenido del módulo {{ modulo.titulo }}">
+            <div id="{{ modulo_id }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#modulosAccordion" role="region" aria-label="Module content: {{ modulo.titulo }}">
                 <div class="accordion-body p-0">
                     <ul class="list-group list-group-flush">
                         {% for leccion in modulo.lecciones.all %}

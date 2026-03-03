@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}Mis pedidos - SkillForge{% endblock %}
+{% block title %}My orders - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Mis pedidos</li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My orders</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Mis pedidos</h1>
+    <h1 class="h2 mb-4">My orders</h1>
 
     {% if ordenes %}
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
-                    <th>Orden</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
+                    <th>Order</th>
+                    <th>Date</th>
+                    <th>Status</th>
                     <th class="text-end">Total</th>
                     <th></th>
                 </tr>
@@ -61,7 +61,7 @@
     </div>
     {% else %}
     <div class="alert alert-info">
-        Aún no tienes pedidos. <a href="{% url 'catalog:course_list' %}">Explorar cursos</a> o <a href="{% url 'transactions:cart' %}">ver carrito</a>.
+        You have no orders yet. <a href="{% url 'catalog:course_list' %}">Browse courses</a> or <a href="{% url 'transactions:cart' %}">view cart</a>.
     </div>
     {% endif %}
 </div>

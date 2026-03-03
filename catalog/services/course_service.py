@@ -119,3 +119,8 @@ def obtener_lecciones_ordenadas_curso(curso: Curso):
             'modulo__orden', 'orden'
         )
     )
+
+
+def total_lecciones_curso(curso: Curso) -> int:
+    """Retorna el número total de lecciones del curso."""
+    return Leccion.objects.filter(modulo__curso=curso).count()

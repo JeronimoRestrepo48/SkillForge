@@ -7,8 +7,8 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'catalog:certificaciones_industria' %}">Certificaciones de industria</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:certificaciones_industria' %}">Industry certifications</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ certificacion.nombre }}</li>
         </ol>
     </nav>
@@ -26,16 +26,16 @@
             {% endif %}
             <div class="card mt-3">
                 <div class="card-body">
-                    <h5 class="card-title">Qué incluye</h5>
+                    <h5 class="card-title">What's included</h5>
                     <ul class="small mb-0">
-                        <li>Material de estudio completo (sin instructor)</li>
-                        <li>Examen de 40 preguntas tipo cuestionario</li>
-                        <li>Diploma PDF al aprobar (avalación de conocimientos)</li>
+                        <li>Complete study material (self-paced)</li>
+                        <li>40-question quiz-style exam</li>
+                        <li>PDF diploma on pass (knowledge endorsement)</li>
                     </ul>
                     {% if puede_acceder %}
                         {% if tiene_examen %}
                         <a href="{% url 'catalog:examen_certificacion' certificacion.slug %}" class="btn btn-skillforge w-100 mt-2">
-                            <i class="bi bi-pencil-square"></i> Ir al examen
+                            <i class="bi bi-pencil-square"></i> Go to exam
                         </a>
                         {% endif %}
                     {% else %}
@@ -55,10 +55,10 @@
 
             {% if not puede_acceder %}
             <div class="alert alert-warning">
-                <strong>Acceso con pago.</strong> Para ver el material de estudio y realizar el examen certificado debes comprar el acceso a esta certificación. El diploma que obtienes al aprobar acredita avalación de conocimientos por la industria, no solo completitud de un curso.
+                <strong>Paid access.</strong> To view the study material and take the certified exam you must purchase access to this certification. The diploma you receive on passing certifies industry knowledge endorsement, not just course completion.
             </div>
             {% else %}
-            <h2 class="h5 mb-3">Material de estudio</h2>
+            <h2 class="h5 mb-3">Study material</h2>
             {% for seccion in secciones %}
             <div class="card mb-3">
                 <div class="card-header bg-light">

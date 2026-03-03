@@ -9,9 +9,9 @@ from django.utils import timezone
 
 
 class TipoCupon(models.TextChoices):
-    """Tipo de descuento del cupón."""
-    PORCENTAJE = 'PORCENTAJE', 'Porcentaje'
-    MONTO_FIJO = 'MONTO_FIJO', 'Monto fijo'
+    """Coupon discount type."""
+    PORCENTAJE = 'PORCENTAJE', 'Percentage'
+    MONTO_FIJO = 'MONTO_FIJO', 'Fixed amount'
 
 
 class Cupon(models.Model):
@@ -157,10 +157,10 @@ class ItemCarritoCertificacion(models.Model):
 
 
 class EstadoOrden(models.TextChoices):
-    """Estado de una orden."""
-    PENDIENTE = 'PENDIENTE', 'Pendiente'
-    CONFIRMADA = 'CONFIRMADA', 'Confirmada'
-    CANCELADA = 'CANCELADA', 'Cancelada'
+    """Order status."""
+    PENDIENTE = 'PENDIENTE', 'Pending'
+    CONFIRMADA = 'CONFIRMADA', 'Confirmed'
+    CANCELADA = 'CANCELADA', 'Cancelled'
 
 
 class Orden(models.Model):
@@ -243,10 +243,10 @@ class ItemOrdenCertificacion(models.Model):
 
 
 class EstadoInscripcion(models.TextChoices):
-    """Estado de la inscripción del estudiante en un curso."""
-    ACTIVA = 'ACTIVA', 'Activa'
-    COMPLETADA = 'COMPLETADA', 'Completada'
-    CANCELADA = 'CANCELADA', 'Cancelada'
+    """Enrollment status."""
+    ACTIVA = 'ACTIVA', 'Active'
+    COMPLETADA = 'COMPLETADA', 'Completed'
+    CANCELADA = 'CANCELADA', 'Cancelled'
 
 
 class Inscripcion(models.Model):
@@ -286,17 +286,17 @@ class Inscripcion(models.Model):
 
 
 class MetodoPago(models.TextChoices):
-    """Método de pago (simulado)."""
-    SIMULADO = 'SIMULADO', 'Simulado'
-    TARJETA_SIMULADA = 'TARJETA_SIMULADA', 'Tarjeta (simulado)'
+    """Payment method (simulated)."""
+    SIMULADO = 'SIMULADO', 'Simulated'
+    TARJETA_SIMULADA = 'TARJETA_SIMULADA', 'Card (simulated)'
 
 
 class EstadoPago(models.TextChoices):
-    """Estado del pago."""
-    PENDIENTE = 'PENDIENTE', 'Pendiente'
-    COMPLETADO = 'COMPLETADO', 'Completado'
-    FALLIDO = 'FALLIDO', 'Fallido'
-    REEMBOLSADO = 'REEMBOLSADO', 'Reembolsado'
+    """Payment status."""
+    PENDIENTE = 'PENDIENTE', 'Pending'
+    COMPLETADO = 'COMPLETADO', 'Completed'
+    FALLIDO = 'FALLIDO', 'Failed'
+    REEMBOLSADO = 'REEMBOLSADO', 'Refunded'
 
 
 class Pago(models.Model):

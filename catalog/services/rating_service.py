@@ -54,3 +54,8 @@ def obtener_promedio_y_total(curso: Curso) -> dict:
         'promedio': round(agg['promedio'] or 0, 1),
         'total': agg['total'] or 0,
     }
+
+
+def obtener_calificacion_usuario_curso(user, curso: Curso):
+    """Retorna la calificación del usuario para el curso, o None si no ha valorado."""
+    return Calificacion.objects.filter(user=user, curso=curso).first()

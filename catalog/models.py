@@ -24,12 +24,12 @@ class Categoria(models.Model):
 
 
 class EstadoCurso(models.TextChoices):
-    """Estados posibles de un curso."""
-    BORRADOR = 'BORRADOR', 'Borrador'
-    EN_REVISION = 'EN_REVISION', 'En revisión'
-    PUBLICADO = 'PUBLICADO', 'Publicado'
-    PAUSADO = 'PAUSADO', 'Pausado'
-    ARCHIVADO = 'ARCHIVADO', 'Archivado'
+    """Course status."""
+    BORRADOR = 'BORRADOR', 'Draft'
+    EN_REVISION = 'EN_REVISION', 'In review'
+    PUBLICADO = 'PUBLICADO', 'Published'
+    PAUSADO = 'PAUSADO', 'Paused'
+    ARCHIVADO = 'ARCHIVADO', 'Archived'
 
 
 class NivelDificultad(models.TextChoices):
