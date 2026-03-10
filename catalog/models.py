@@ -416,3 +416,109 @@ class DiplomaCertificacionIndustria(models.Model):
 
     def __str__(self):
         return f'{self.user} — {self.certificacion.nombre} ({self.puntaje}%)'
+
+
+class TipoInsignia(models.TextChoices):
+    FIRST_COURSE = 'FIRST_COURSE', 'First Steps'
+    THREE_COURSES = 'THREE_COURSES', 'Rising Star'
+    FIVE_COURSES = 'FIVE_COURSES', 'Master Learner'
+    TEN_COURSES = 'TEN_COURSES', 'Unstoppable'
+    FIRST_REVIEW = 'FIRST_REVIEW', 'First Review'
+    FIVE_REVIEWS = 'FIVE_REVIEWS', 'Top Critic'
+    INDUSTRY_CERT = 'INDUSTRY_CERT', 'Industry Pro'
+    PERFECT_SCORE = 'PERFECT_SCORE', 'Perfect Score'
+
+
+INSIGNIA_META = {
+    TipoInsignia.FIRST_COURSE: {
+        'icon': 'bi-mortarboard-fill',
+        'color': '#28a745',
+        'description': 'Completed your first course',
+    },
+    TipoInsignia.THREE_COURSES: {
+        'icon': 'bi-star-fill',
+        'color': '#ffc107',
+        'description': 'Completed 3 courses',
+    },
+    TipoInsignia.FIVE_COURSES: {
+        'icon': 'bi-trophy-fill',
+        'color': '#fd7e14',
+        'description': 'Completed 5 courses',
+    },
+    TipoInsignia.TEN_COURSES: {
+        'icon': 'bi-lightning-charge-fill',
+        'color': '#dc3545',
+        'description': 'Completed 10 courses',
+    },
+    TipoInsignia.FIRST_REVIEW: {
+        'icon': 'bi-chat-quote-fill',
+        'color': '#6f42c1',
+        'description': 'Left your first review',
+    },
+    TipoInsignia.FIVE_REVIEWS: {
+        'icon': 'bi-pen-fill',
+        'color': '#0d6efd',
+        'description': 'Left 5 reviews',
+    },
+    TipoInsignia.INDUSTRY_CERT: {
+        'icon': 'bi-shield-fill-check',
+        'color': '#20c997',
+        'description': 'Passed an industry certification exam',
+    },
+    TipoInsignia.PERFECT_SCORE: {
+        'icon': 'bi-gem',
+        'color': '#e83e8c',
+        'description': 'Scored 100% on an industry exam',
+    },
+}
+
+
+class Insignia(models.Model):
+    """Badge awarded to a user for achieving a milestone."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='insignias'
+    )
+    tipo = models.CharField(
+        max_length=30,
+        choices=TipoInsignia.choices,
+    )
+    fecha_obtencion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Insignia'
+        verbose_name_plural = 'Insignias'
+        unique_together = [['user', 'tipo']]
+        ordering = ['-fecha_obtencion']
+
+    def __str__(self):
+        return f'{self.user} — {self.get_tipo_display()}'
+
+    @property
+    def meta(self):
+        return INSIGNIA_META.get(self.tipo, {})
+
+
+class WishlistItem(models.Model):
+    """Course saved to a user's wishlist for later purchase."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='wishlist_items'
+    )
+    curso = models.ForeignKey(
+        Curso,
+        on_delete=models.CASCADE,
+        related_name='wishlisted_by'
+    )
+    fecha_agregado = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Wishlist item'
+        verbose_name_plural = 'Wishlist items'
+        unique_together = [['user', 'curso']]
+        ordering = ['-fecha_agregado']
+
+    def __str__(self):
+        return f'{self.user} — {self.curso.titulo}'

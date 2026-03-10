@@ -36,6 +36,9 @@ def crear_o_actualizar_calificacion(user, curso: Curso, puntuacion: int, comenta
             'es_verificada': True,
         }
     )
+    if created:
+        from catalog.services.badge_service import evaluar_y_otorgar
+        evaluar_y_otorgar(user)
     return cal, created
 
 

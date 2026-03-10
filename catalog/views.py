@@ -1,4 +1,7 @@
 """Vistas del catálogo de cursos."""
+import random
+import string
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -27,6 +30,7 @@ from .models import (
     OpcionPregunta,
     AccesoCertificacion,
     DiplomaCertificacionIndustria,
+    WishlistItem,
 )
 from .forms import CursoForm, ModuloForm, LeccionForm, CalificacionForm
 from .services import course_service
@@ -49,13 +53,16 @@ class CursoListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         cat = self.request.GET.get('categoria')
+        q = self.request.GET.get('q', '').strip()
         return course_service.obtener_cursos_publicados(
-            categoria_id=int(cat) if cat and str(cat).isdigit() else None
+            categoria_id=int(cat) if cat and str(cat).isdigit() else None,
+            search_query=q or None,
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categorias'] = Categoria.objects.all()
+        context['search_query'] = self.request.GET.get('q', '')
         return context
 
 
@@ -96,6 +103,9 @@ class CursoDetailView(LoginRequiredMixin, DetailView):
         modulos = course_service.obtener_modulos_de_curso(self.object)
         context['modulos'] = modulos
         context['total_lecciones'] = course_service.total_lecciones_curso(self.object)
+        context['in_wishlist'] = WishlistItem.objects.filter(
+            user=self.request.user, curso=self.object
+        ).exists() if self.request.user.is_authenticated else False
         return context
 
 
@@ -240,6 +250,7 @@ class MisCursosView(LoginRequiredMixin, InstructorRequiredMixin, ListView):
     model = Curso
     template_name = 'catalog/mis_cursos.html'
     context_object_name = 'cursos'
+    paginate_by = 20
 
     def get_queryset(self):
         return Curso.objects.filter(instructor=self.request.user).order_by('-fecha_creacion')
@@ -453,6 +464,8 @@ class CertificadoPreviewView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['certificado'] = self.certificado
         context['curso'] = self.certificado.curso
+        from catalog.services.badge_service import obtener_insignias
+        context['insignias'] = obtener_insignias(self.request.user)
         return context
 
 
@@ -518,7 +531,10 @@ class CalificacionCrearActualizarView(LoginRequiredMixin, View):
                 messages.error(request, 'You can only rate courses you have completed.')
         else:
             messages.error(request, 'Rating must be between 1 and 5.')
-        next_url = request.POST.get('next') or reverse('catalog:course_detail', args=[curso_pk])
+        from django.utils.http import url_has_allowed_host_and_scheme
+        next_url = request.POST.get('next', '')
+        if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+            next_url = reverse('catalog:course_detail', args=[curso_pk])
         return redirect(next_url)
 
 
@@ -535,6 +551,7 @@ class CertificacionesIndustriaListView(LoginRequiredMixin, ListView):
     model = CertificacionIndustria
     template_name = 'catalog/certificaciones_industria_list.html'
     context_object_name = 'certificaciones'
+    paginate_by = 12
     login_url = '/'
 
     def get_queryset(self):
@@ -622,8 +639,6 @@ class ExamenCertificacionView(LoginRequiredMixin, TemplateView):
 
     def post(self, request, slug):
         from django.contrib import messages
-        import random
-        import string
         from django.utils import timezone
 
         examen = self.examen
@@ -659,6 +674,8 @@ class ExamenCertificacionView(LoginRequiredMixin, TemplateView):
             if not _:
                 diploma.puntaje = porcentaje
                 diploma.save(update_fields=['puntaje'])
+            from catalog.services.badge_service import evaluar_y_otorgar
+            evaluar_y_otorgar(request.user)
 
         context = self.get_context_data()
         context['respuestas'] = respuestas
@@ -700,3 +717,43 @@ class DiplomaCertificacionPdfView(LoginRequiredMixin, View):
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
         return response
+
+
+# --- Wishlist ---
+
+
+class WishlistView(LoginRequiredMixin, TemplateView):
+    """Shows the user's wishlist."""
+    template_name = 'catalog/wishlist.html'
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['wishlist_items'] = (
+            WishlistItem.objects
+            .filter(user=self.request.user)
+            .select_related('curso', 'curso__categoria', 'curso__instructor')
+        )
+        return context
+
+
+class WishlistToggleView(LoginRequiredMixin, View):
+    """POST: add or remove a course from the wishlist."""
+    login_url = '/'
+
+    def post(self, request, pk):
+        from django.contrib import messages
+        from django.utils.http import url_has_allowed_host_and_scheme
+
+        curso = get_object_or_404(Curso, pk=pk)
+        item, created = WishlistItem.objects.get_or_create(user=request.user, curso=curso)
+        if not created:
+            item.delete()
+            messages.info(request, f'"{curso.titulo}" removed from wishlist.')
+        else:
+            messages.success(request, f'"{curso.titulo}" added to wishlist.')
+
+        next_url = request.POST.get('next', '')
+        if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+            next_url = reverse('catalog:course_detail', args=[pk])
+        return redirect(next_url)

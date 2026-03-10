@@ -164,3 +164,50 @@ textarea:focus-visible {
     outline: 2px solid var(--sf-flame);
     outline-offset: 2px;
 }
+
+/* Dark mode */
+html.sf-dark {
+    --sf-bg: #0f172a;
+    --sf-bg-card: #1e293b;
+    --sf-bg-elevated: #1e293b;
+    --sf-bg-subtle: #1a2332;
+    --sf-text-primary: #e2e8f0;
+    --sf-text-muted: #94a3b8;
+    --sf-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    --sf-shadow-hover: 0 12px 28px -8px rgba(245, 158, 11, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+    --sf-border: rgba(245, 158, 11, 0.15);
+    color-scheme: dark;
+}
+html.sf-dark body {
+    background-color: var(--sf-bg);
+    color: var(--sf-text-primary);
+}
+html.sf-dark .card,
+html.sf-dark .section-card {
+    background-color: var(--sf-bg-card);
+    border-color: var(--sf-border);
+}
+html.sf-dark .table { --bs-table-bg: var(--sf-bg-card); color: var(--sf-text-primary); }
+html.sf-dark .form-control,
+html.sf-dark .form-select,
+html.sf-dark .input-group-text {
+    background-color: var(--sf-dark-soft);
+    border-color: var(--sf-dark-muted);
+    color: var(--sf-text-primary);
+}
+html.sf-dark .breadcrumb-item a { color: var(--sf-flame-light); }
+html.sf-dark .nav-tabs .nav-link { color: var(--sf-text-muted); }
+html.sf-dark .nav-tabs .nav-link.active { background-color: var(--sf-bg-card); color: var(--sf-flame); border-color: var(--sf-dark-muted) var(--sf-dark-muted) var(--sf-bg-card); }
+html.sf-dark .dropdown-menu { background-color: var(--sf-dark-soft); border-color: var(--sf-dark-muted); }
+html.sf-dark .dropdown-item { color: var(--sf-text-primary); }
+html.sf-dark .dropdown-item:hover { background-color: var(--sf-dark-muted); }
+html.sf-dark .list-group-item { background-color: var(--sf-bg-card); color: var(--sf-text-primary); border-color: var(--sf-dark-muted); }
+html.sf-dark .alert { border-color: var(--sf-dark-muted); }
+html.sf-dark .bg-light { background-color: var(--sf-dark-soft) !important; }
+html.sf-dark .text-muted { color: var(--sf-text-muted) !important; }
+html.sf-dark .text-dark { color: var(--sf-text-primary) !important; }
+html.sf-dark .accordion-button { background-color: var(--sf-dark-soft); color: var(--sf-text-primary); }
+html.sf-dark .accordion-button:not(.collapsed) { background-color: var(--sf-dark-muted); color: var(--sf-flame); }
+html.sf-dark .accordion-body { background-color: var(--sf-bg-card); }
+html.sf-dark .skillforge-footer { background: var(--sf-dark-soft); }
+html.sf-dark .modal-content { background-color: var(--sf-bg-card); color: var(--sf-text-primary); }

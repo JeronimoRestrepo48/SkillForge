@@ -1,23 +1,41 @@
 """
 Servicio de cursos - encapsula la lógica de negocio del dominio Catálogo.
 """
+import logging
+
 from django.db import models
+from django.db.models import Avg, Count
 from django.utils import timezone
+
+logger = logging.getLogger('catalog')
 
 from catalog.models import Curso, Categoria, EstadoCurso, Modulo, Leccion, ProgresoLeccion
 from users.models import User
 
 
-def obtener_cursos_publicados(categoria_id=None):
+def obtener_cursos_publicados(categoria_id=None, search_query=None):
     """
-    Retorna queryset de cursos publicados.
-    Opcionalmente filtra por categoría (id).
+    Retorna queryset de cursos publicados con anotaciones de rating.
+    Opcionalmente filtra por categoría (id) y/o búsqueda de texto.
     """
+    from django.db.models import Q
+
     qs = Curso.objects.filter(estado=EstadoCurso.PUBLICADO).select_related(
         'categoria', 'instructor'
+    ).annotate(
+        rating_avg=Avg('calificaciones__puntuacion'),
+        rating_count=Count('calificaciones'),
     )
     if categoria_id:
         qs = qs.filter(categoria_id=categoria_id)
+    if search_query:
+        qs = qs.filter(
+            Q(titulo__icontains=search_query)
+            | Q(descripcion__icontains=search_query)
+            | Q(categoria__nombre__icontains=search_query)
+            | Q(instructor__first_name__icontains=search_query)
+            | Q(instructor__last_name__icontains=search_query)
+        )
     return qs.order_by('-fecha_creacion')
 
 
@@ -84,6 +102,7 @@ def crear_leccion(modulo: Modulo, titulo: str, tipo: str = 'TEXTO', contenido: s
 
 def marcar_leccion_completada(user, leccion: Leccion) -> ProgresoLeccion:
     """Marca una lección como completada para el usuario."""
+    logger.info('User %s completing lesson %s (pk=%d)', user.username, leccion.titulo, leccion.pk)
     prog, created = ProgresoLeccion.objects.update_or_create(
         user=user,
         leccion=leccion,

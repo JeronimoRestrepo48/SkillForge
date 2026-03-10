@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Lecciones - {{ modulo.titulo }} - SkillForge{% endblock %}
+{% block title %}{% trans "Lecciones" %} - {{ modulo.titulo }} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">{% trans "Mis Cursos" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'catalog:module_list' curso.pk %}">{{ curso.titulo }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ modulo.titulo }}</li>
         </ol>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2 mb-0">Lecciones: {{ modulo.titulo }}</h1>
+        <h1 class="h2 mb-0">{% blocktrans with titulo=modulo.titulo %}Lecciones: {{ titulo }}{% endblocktrans %}</h1>
         <div>
             <a href="{% url 'catalog:lesson_create' curso.pk modulo.pk %}" class="btn btn-skillforge">
-                <i class="bi bi-plus-lg"></i> Nueva lección
+                <i class="bi bi-plus-lg"></i> {% trans "Nueva lección" %}
             </a>
-            <a href="{% url 'catalog:module_list' curso.pk %}" class="btn btn-outline-secondary ms-2">Volver a módulos</a>
+            <a href="{% url 'catalog:module_list' curso.pk %}" class="btn btn-outline-secondary ms-2">{% trans "Volver a módulos" %}</a>
         </div>
     </div>
 
@@ -30,20 +31,20 @@
                 <h5 class="mb-1">{{ leccion.titulo }}</h5>
                 <p class="text-muted small mb-0">
                     <span class="badge bg-secondary">{{ leccion.get_tipo_display }}</span>
-                    Orden {{ leccion.orden }}
-                    {% if leccion.duracion_minutos %}&middot; {{ leccion.duracion_minutos }} min{% endif %}
+                    {% trans "Orden" %} {{ leccion.orden }}
+                    {% if leccion.duracion_minutos %}&middot; {{ leccion.duracion_minutos }} {% trans "min" %}{% endif %}
                 </p>
             </div>
             <div class="btn-group">
-                <a href="{% url 'catalog:lesson_update' curso.pk modulo.pk leccion.pk %}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                <a href="{% url 'catalog:lesson_delete' curso.pk modulo.pk leccion.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                <a href="{% url 'catalog:lesson_update' curso.pk modulo.pk leccion.pk %}" class="btn btn-sm btn-outline-secondary">{% trans "Editar" %}</a>
+                <a href="{% url 'catalog:lesson_delete' curso.pk modulo.pk leccion.pk %}" class="btn btn-sm btn-outline-danger">{% trans "Eliminar" %}</a>
             </div>
         </div>
         {% endfor %}
     </div>
     {% else %}
     <div class="alert alert-info">
-        Aún no hay lecciones. <a href="{% url 'catalog:lesson_create' curso.pk modulo.pk %}">Crear la primera lección</a>.
+        {% trans "Aún no hay lecciones." %} <a href="{% url 'catalog:lesson_create' curso.pk modulo.pk %}">{% trans "Crear la primera lección" %}</a>.
     </div>
     {% endif %}
 </div>

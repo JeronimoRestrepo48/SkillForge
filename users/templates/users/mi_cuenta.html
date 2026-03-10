@@ -26,6 +26,9 @@
             <button class="nav-link" id="certificaciones-tab" data-bs-toggle="tab" data-bs-target="#certificaciones" type="button" role="tab">{% trans "Certifications" %}</button>
         </li>
         <li class="nav-item" role="presentation">
+            <button class="nav-link" id="insignias-tab" data-bs-toggle="tab" data-bs-target="#insignias" type="button" role="tab">{% trans "Badges" %}</button>
+        </li>
+        <li class="nav-item" role="presentation">
             <button class="nav-link" id="carrito-tab" data-bs-toggle="tab" data-bs-target="#carrito" type="button" role="tab">{% trans "Cart" %}</button>
         </li>
     </ul>
@@ -86,6 +89,31 @@
                     <p class="text-muted mb-0">{% trans "You don't have any certificates yet. Complete a course 100% to get one." %}</p>
                     <a href="{% url 'catalog:my_courses' %}" class="btn btn-skillforge btn-sm mt-2">{% trans "Go to my courses" %}</a>
                     {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="insignias" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Badges & Achievements" %}</h5>
+                    <p class="text-muted small mb-3">{% trans "Complete courses, leave reviews, and pass exams to earn badges." %}</p>
+                    <div class="row g-3">
+                        {% for badge in insignias %}
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="text-center p-3 rounded-3 border {% if badge.earned %}border-2 shadow-sm{% else %}opacity-50{% endif %}" style="{% if badge.earned %}border-color: {{ badge.color }} !important; background: linear-gradient(135deg, {{ badge.color }}08, {{ badge.color }}15);{% endif %}">
+                                <i class="bi {{ badge.icon }} display-5 d-block mb-2" style="color: {% if badge.earned %}{{ badge.color }}{% else %}#ccc{% endif %};"></i>
+                                <strong class="d-block small">{{ badge.label }}</strong>
+                                <span class="text-muted" style="font-size: .75rem;">{{ badge.description }}</span>
+                                {% if badge.earned %}
+                                <span class="badge bg-success mt-1 d-block" style="font-size:.65rem;">{% trans "Earned" %}</span>
+                                {% else %}
+                                <span class="badge bg-secondary mt-1 d-block" style="font-size:.65rem;">{% trans "Locked" %}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

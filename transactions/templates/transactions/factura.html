@@ -24,7 +24,13 @@
                 <div class="col-md-6">
                     <p class="mb-1"><strong>{% trans "Invoice No." %}</strong> {{ factura.numero_factura|default:"—" }}</p>
                     <p class="mb-1"><strong>{% trans "Order" %}</strong> {{ orden.numero_orden }}</p>
-                    <p class="mb-1"><strong>{% trans "Issue date" %}</strong> {{ factura.fecha_emision|date:"d/m/Y H:i"|default:orden.fecha_creacion|date:"d/m/Y H:i" }}</p>
+                    <p class="mb-1"><strong>{% trans "Issue date" %}</strong>
+                        {% if factura and factura.fecha_emision %}
+                            {{ factura.fecha_emision|date:"d/m/Y H:i" }}
+                        {% else %}
+                            {{ orden.fecha_creacion|date:"d/m/Y H:i" }}
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="mb-1"><strong>{% trans "Customer" %}</strong></p>

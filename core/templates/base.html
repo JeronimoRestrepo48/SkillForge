@@ -43,6 +43,7 @@
                             <li><a class="dropdown-item" href="{% url 'catalog:my_courses' %}"><i class="bi bi-collection-play me-2"></i>{% trans "My courses" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'catalog:my_certificates' %}"><i class="bi bi-award me-2"></i>{% trans "Certifications" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'catalog:certificaciones_industria' %}"><i class="bi bi-shield-check me-2"></i>{% trans "Industry certs" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'catalog:wishlist' %}"><i class="bi bi-heart me-2"></i>{% trans "Wishlist" %}</a></li>
                             <li><hr class="dropdown-divider my-1"></li>
                             <li><a class="dropdown-item" href="{% url 'transactions:order_list' %}"><i class="bi bi-box-seam me-2"></i>{% trans "My orders" %}</a></li>
                         </ul>
@@ -80,6 +81,23 @@
                         </a>
                     </li>
                     {% endif %}
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{% url 'core:notifications' %}" title="{% trans 'Notifications' %}">
+                            <i class="bi bi-bell fs-5"></i>
+                            {% if unread_notifications_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.6rem">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-outline-light btn-sm px-2 py-1" id="darkModeToggle" title="{% trans 'Toggle dark mode' %}" style="font-size:.78rem" aria-label="{% trans 'Toggle dark mode' %}">
+                            <i class="bi bi-moon-stars-fill" id="darkModeIcon"></i>
+                        </button>
+                    </li>
 
                     <li class="nav-item">
                         <form method="post" action="{% url 'set_language' %}" class="d-inline">
@@ -157,16 +175,21 @@
         </div>
     </nav>
 
-    {% if messages %}
-    <div class="container mt-2">
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090;">
+        {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% trans 'Close' %}"></button>
+        <div class="toast align-items-center text-bg-{{ message.tags|default:'info' }} border-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill me-1"></i>{% elif message.tags == 'error' or message.tags == 'danger' %}<i class="bi bi-exclamation-triangle-fill me-1"></i>{% elif message.tags == 'warning' %}<i class="bi bi-exclamation-circle-fill me-1"></i>{% else %}<i class="bi bi-info-circle-fill me-1"></i>{% endif %}
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="{% trans 'Close' %}"></button>
+            </div>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
-    {% endif %}
 
     <main class="py-4">
         {% block content %}{% endblock %}
@@ -190,6 +213,48 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    (function(){
+        document.querySelectorAll('.toast').forEach(function(el){
+            new bootstrap.Toast(el).show();
+        });
+
+        var html = document.documentElement;
+        var btn = document.getElementById('darkModeToggle');
+        var icon = document.getElementById('darkModeIcon');
+        var stored = localStorage.getItem('sf-dark-mode');
+        if (stored === 'true') {
+            html.setAttribute('data-bs-theme', 'dark');
+            html.classList.add('sf-dark');
+            if (icon) { icon.className = 'bi bi-sun-fill'; }
+        }
+        if (btn) {
+            btn.addEventListener('click', function(){
+                var isDark = html.classList.toggle('sf-dark');
+                html.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
+                localStorage.setItem('sf-dark-mode', isDark);
+                if (icon) { icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill'; }
+            });
+        }
+
+        document.querySelectorAll('form').forEach(function(f){
+            f.addEventListener('submit', function(){
+                var btns = f.querySelectorAll('button[type="submit"]');
+                btns.forEach(function(b){
+                    if (!b.dataset.noDisable) {
+                        b.disabled = true;
+                        if (!b.querySelector('.spinner-border')) {
+                            var s = document.createElement('span');
+                            s.className = 'spinner-border spinner-border-sm me-1';
+                            s.setAttribute('role', 'status');
+                            b.prepend(s);
+                        }
+                    }
+                });
+            });
+        });
+    })();
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,37 +1,115 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load core_extras %}
 
-{% block title %}Certificate - {{ curso.titulo|sin_certificacion }} - SkillForge{% endblock %}
+{% block title %}{% trans "Certificate" %} - {{ curso.titulo|sin_certificacion }} - SkillForge{% endblock %}
+
+{% block extra_css %}
+<style>
+.cert-frame {
+    border: 3px solid #1e3a5f;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+.cert-frame::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid #b8860b;
+    border-radius: 8px;
+    pointer-events: none;
+}
+.cert-header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+    color: #fff;
+    padding: 2rem 1.5rem 1.5rem;
+    text-align: center;
+}
+.cert-seal {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 2px solid #b8860b;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    margin: -30px auto 0;
+    position: relative; z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.cert-body {
+    padding: 2rem 2.5rem 1.5rem;
+    text-align: center;
+}
+.badge-row {
+    display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center;
+}
+.badge-pill-custom {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .35rem .75rem; border-radius: 20px;
+    font-size: .78rem; font-weight: 600;
+    color: #fff;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'catalog:my_certificates' %}">My certificates</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_certificates' %}">{% trans "My certificates" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ curso.titulo|sin_certificacion }}</li>
         </ol>
     </nav>
 
-    <div class="certificado-preview-card mx-auto my-4">
-        <div class="card shadow-lg border-0 overflow-hidden">
-            <div class="card-body certificado-body p-5 text-center">
-                <p class="text-muted small mb-0">SkillForge</p>
-                <h2 class="h4 mb-2">Certificate of completion</h2>
-                <p class="lead mb-1">This is to certify that</p>
-                <p class="h5 fw-bold text-primary mb-3">{{ certificado.user.get_full_name|default:certificado.user.username }}</p>
-                <p class="mb-2">has completed the course</p>
-                <p class="h5 mb-4">{{ curso.titulo|sin_certificacion }}</p>
-                <p class="small text-muted mb-1">No. {{ certificado.numero_certificado }}</p>
-                <p class="small text-muted mb-0">Verification code: <strong>{{ certificado.codigo_verificacion }}</strong></p>
-                <p class="small text-muted mt-2">{{ certificado.fecha_emision|date:"F d, Y" }}</p>
+    <div class="mx-auto my-4" style="max-width: 650px;">
+        <div class="cert-frame shadow-lg">
+            <div class="cert-header">
+                <h5 class="mb-1 fw-bold" style="letter-spacing: 2px;">SKILLFORGE</h5>
+                <p class="mb-0 small" style="opacity:.85;">{% trans "Certificate of Completion" %}</p>
+            </div>
+            <div class="cert-seal">
+                <i class="bi bi-award-fill text-warning fs-4"></i>
+            </div>
+            <div class="cert-body">
+                <p class="text-muted mb-1">{% trans "This is to certify that" %}</p>
+                <h3 class="fw-bold text-primary mb-1">{{ certificado.user.get_full_name|default:certificado.user.username }}</h3>
+                <p class="mb-1">{% trans "has successfully completed the course" %}</p>
+                <h4 class="mb-3">{{ curso.titulo|sin_certificacion }}</h4>
+
+                <div class="border-top pt-3 mt-2">
+                    <div class="row text-muted small">
+                        <div class="col">
+                            <strong>{% trans "Certificate No." %}</strong><br>{{ certificado.numero_certificado }}
+                        </div>
+                        <div class="col">
+                            <strong>{% trans "Verification" %}</strong><br>{{ certificado.codigo_verificacion }}
+                        </div>
+                        <div class="col">
+                            <strong>{% trans "Date" %}</strong><br>{{ certificado.fecha_emision|date:"M d, Y" }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    {% if insignias %}
     <div class="text-center mb-4">
-        <a href="{% url 'catalog:certificate_pdf' certificado.curso_id %}" class="btn btn-primary">Download PDF</a>
-        <a href="{% url 'catalog:certificate_verify' certificado.codigo_verificacion %}" class="btn btn-outline-secondary" target="_blank">Verify this certificate</a>
-        <a href="{% url 'catalog:my_certificates' %}" class="btn btn-skillforge ms-2">Back to my certificates</a>
+        <h6 class="text-muted mb-2"><i class="bi bi-stars me-1"></i> {% trans "Your Badges" %}</h6>
+        <div class="badge-row">
+            {% for b in insignias %}
+            <span class="badge-pill-custom" style="background-color: {{ b.color }};" title="{{ b.description }}">
+                <i class="bi {{ b.icon }}"></i> {{ b.get_tipo_display }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="text-center mb-4">
+        <a href="{% url 'catalog:certificate_pdf' certificado.curso_id %}" class="btn btn-primary"><i class="bi bi-download me-1"></i> {% trans "Download PDF" %}</a>
+        <a href="{% url 'catalog:certificate_verify' certificado.codigo_verificacion %}" class="btn btn-outline-secondary" target="_blank"><i class="bi bi-patch-check me-1"></i> {% trans "Verify" %}</a>
+        <a href="{% url 'catalog:my_certificates' %}" class="btn btn-skillforge ms-2">{% trans "My certificates" %}</a>
     </div>
 </div>
 {% endblock %}

@@ -8,6 +8,23 @@
     <div class="section-card">
         <h1 class="section-title h4">{% trans "Course Catalog" %}</h1>
 
+        <form method="get" action="" class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                <input type="text" name="q" class="form-control border-start-0" placeholder="{% trans 'Search courses by title, description, category or instructor...' %}" value="{{ search_query }}" aria-label="{% trans 'Search courses' %}">
+                <button type="submit" class="btn btn-skillforge">{% trans "Search" %}</button>
+                {% if search_query %}
+                <a href="{% url 'catalog:course_list' %}" class="btn btn-outline-secondary" title="{% trans 'Clear' %}"><i class="bi bi-x-lg"></i></a>
+                {% endif %}
+            </div>
+        </form>
+
+        {% if search_query %}
+        <p class="text-muted mb-3">
+            {% trans "Showing results for" %} "<strong>{{ search_query }}</strong>"
+        </p>
+        {% endif %}
+
         {% if categorias %}
         <section class="mb-4">
             <h2 class="h6 text-muted mb-3">{% trans "Categories" %}</h2>

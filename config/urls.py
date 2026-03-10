@@ -9,7 +9,13 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.api import MeView
-from catalog.api import CourseRateView
+from catalog.api import (
+    CourseRateView,
+    CourseListAPIView,
+    CourseDetailAPIView,
+    CourseModulesAPIView,
+    CategoryListAPIView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,9 +24,15 @@ urlpatterns = [
     path('courses/', include('catalog.urls')),
     path('cart/', include('transactions.urls')),
     path('my-account/', include('users.urls')),
+    # JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # REST API
     path('api/me/', MeView.as_view(), name='api_me'),
+    path('api/categories/', CategoryListAPIView.as_view(), name='api_category_list'),
+    path('api/courses/', CourseListAPIView.as_view(), name='api_course_list'),
+    path('api/courses/<int:pk>/', CourseDetailAPIView.as_view(), name='api_course_detail'),
+    path('api/courses/<int:pk>/modules/', CourseModulesAPIView.as_view(), name='api_course_modules'),
     path('api/courses/<int:pk>/rate/', CourseRateView.as_view(), name='api_course_rate'),
 ]
 

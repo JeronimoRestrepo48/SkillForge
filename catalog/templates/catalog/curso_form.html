@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
-{% block title %}{{ object|yesno:"Editar,Crear" }} curso - SkillForge{% endblock %}
+{% block title %}{% if object %}{% trans "Editar" %}{% else %}{% trans "Crear" %}{% endif %} {% trans "curso" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
-            <li class="breadcrumb-item active">{{ object|yesno:"Editar,Crear" }}</li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">{% trans "Mis Cursos" %}</a></li>
+            <li class="breadcrumb-item active">{% if object %}{% trans "Editar" %}{% else %}{% trans "Crear" %}{% endif %}</li>
         </ol>
     </nav>
 
-    <h2 class="mb-4">{{ object|yesno:"Editar curso,Nuevo curso" }}</h2>
+    <h2 class="mb-4">{% if object %}{% trans "Editar curso" %}{% else %}{% trans "Nuevo curso" %}{% endif %}</h2>
     <div class="card">
         <div class="card-body">
             <form method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button type="submit" class="btn btn-skillforge">Guardar</button>
-                <a href="{% url 'catalog:my_teaching' %}" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-skillforge">{% trans "Guardar" %}</button>
+                <a href="{% url 'catalog:my_teaching' %}" class="btn btn-outline-secondary">{% trans "Cancelar" %}</a>
             </form>
         </div>
     </div>

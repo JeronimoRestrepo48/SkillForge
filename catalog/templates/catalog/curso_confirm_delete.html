@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Eliminar curso - SkillForge{% endblock %}
+{% block title %}{% trans "Eliminar curso" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -8,12 +9,12 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-body">
-                    <h2 class="card-title">¿Eliminar curso?</h2>
-                    <p>Estás a punto de eliminar <strong>{{ curso.titulo }}</strong>. Esta acción no se puede deshacer.</p>
+                    <h2 class="card-title">{% trans "¿Eliminar curso?" %}</h2>
+                    <p>{% blocktrans with titulo=curso.titulo %}Estás a punto de eliminar <strong>{{ titulo }}</strong>. Esta acción no se puede deshacer.{% endblocktrans %}</p>
                     <form method="post">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-                        <a href="{% url 'catalog:my_teaching' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">{% trans "Sí, eliminar" %}</button>
+                        <a href="{% url 'catalog:my_teaching' %}" class="btn btn-outline-secondary">{% trans "Cancelar" %}</a>
                     </form>
                 </div>
             </div>

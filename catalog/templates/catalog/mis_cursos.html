@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Mis Cursos - SkillForge{% endblock %}
+{% block title %}{% trans "Mis Cursos" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2 mb-0">Mis Cursos</h1>
+        <h1 class="h2 mb-0">{% trans "Mis Cursos" %}</h1>
         <a href="{% url 'catalog:course_create' %}" class="btn btn-skillforge">
-            <i class="bi bi-plus-lg"></i> Crear curso
+            <i class="bi bi-plus-lg"></i> {% trans "Crear curso" %}
         </a>
     </div>
 
@@ -16,12 +17,12 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Título</th>
-                    <th>Categoría</th>
-                    <th>Estado</th>
-                    <th>Precio</th>
-                    <th>Cupos</th>
-                    <th>Acciones</th>
+                    <th>{% trans "Título" %}</th>
+                    <th>{% trans "Categoría" %}</th>
+                    <th>{% trans "Estado" %}</th>
+                    <th>{% trans "Precio" %}</th>
+                    <th>{% trans "Cupos" %}</th>
+                    <th>{% trans "Acciones" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,10 +34,10 @@
                     <td>{{ curso.calcular_precio_final }} COP</td>
                     <td>{{ curso.cupos_disponibles }}/{{ curso.cupos_totales }}</td>
                     <td>
-                        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-sm btn-outline-primary">Ver</a>
-                        <a href="{% url 'catalog:module_list' curso.pk %}" class="btn btn-sm btn-outline-info">Gestionar contenido</a>
-                        <a href="{% url 'catalog:course_update' curso.pk %}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                        <a href="{% url 'catalog:course_delete' curso.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        <a href="{% url 'catalog:course_detail' curso.pk %}" class="btn btn-sm btn-outline-primary">{% trans "Ver" %}</a>
+                        <a href="{% url 'catalog:module_list' curso.pk %}" class="btn btn-sm btn-outline-info">{% trans "Gestionar contenido" %}</a>
+                        <a href="{% url 'catalog:course_update' curso.pk %}" class="btn btn-sm btn-outline-secondary">{% trans "Editar" %}</a>
+                        <a href="{% url 'catalog:course_delete' curso.pk %}" class="btn btn-sm btn-outline-danger">{% trans "Eliminar" %}</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -46,8 +47,8 @@
     {% else %}
     <div class="text-center py-5 text-muted">
         <i class="bi bi-journal-plus fs-1"></i>
-        <p class="mt-2">Aún no has creado cursos.</p>
-        <a href="{% url 'catalog:course_create' %}" class="btn btn-skillforge">Crear tu primer curso</a>
+        <p class="mt-2">{% trans "Aún no has creado cursos." %}</p>
+        <a href="{% url 'catalog:course_create' %}" class="btn btn-skillforge">{% trans "Crear tu primer curso" %}</a>
     </div>
     {% endif %}
 </div>

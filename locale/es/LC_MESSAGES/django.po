@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SkillForge 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-03 09:09-0500\n"
+"POT-Creation-Date: 2026-03-09 22:37-0500\n"
 "PO-Revision-Date: 2026-03-03 09:15-0500\n"
 "Last-Translator: SkillForge Team\n"
 "Language-Team: Español\n"
@@ -15,596 +15,1731 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Industry certifications"
-msgstr "Certificaciones de industria"
-
+#: catalog/templates/catalog/certificacion_industria_detail.html:11
+#: catalog/templates/catalog/certificaciones_industria_list.html:11
+#: catalog/templates/catalog/mis_certificados.html:10
+#: catalog/templates/catalog/mis_inscripciones.html:11
+#: catalog/templates/catalog/wishlist.html:11 core/templates/base.html:32
+#: core/templates/base.html:201
+#: transactions/templates/transactions/carrito.html:11
+#: transactions/templates/transactions/checkout.html:10
+#: transactions/templates/transactions/factura.html:10
+#: transactions/templates/transactions/mis_pedidos.html:10
+#: transactions/templates/transactions/orden_confirmada.html:10
+#: users/templates/users/mi_cuenta.html:11
+#: users/templates/users/profile_edit.html:11
 msgid "Home"
 msgstr "Inicio"
 
-msgid "Professionally endorsed industry certifications (cybersecurity, AI, DevSecOps, etc.). They include study material and a 40-question certified exam. <strong>Access to material and exam requires payment.</strong> On passing you receive a diploma certifying knowledge endorsement (not just course completion)."
-msgstr "Certificaciones profesionales avaladas por la industria (ciberseguridad, IA, DevSecOps, etc.). Incluyen material de estudio y un examen certificado de 40 preguntas. <strong>El acceso al material y al examen requiere pago.</strong> Al aprobar recibes un diploma que certifica avalación de conocimientos (no solo completitud de curso)."
+#: catalog/templates/catalog/certificacion_industria_detail.html:12
+#: catalog/templates/catalog/certificaciones_industria_list.html:5
+#: catalog/templates/catalog/certificaciones_industria_list.html:12
+#: catalog/templates/catalog/certificaciones_industria_list.html:16
+msgid "Industry certifications"
+msgstr "Certificaciones de industria"
 
+#: catalog/templates/catalog/certificacion_industria_detail.html:30
+msgid "What's included"
+msgstr "Qué incluye"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:32
+msgid "Complete study material (self-paced)"
+msgstr "Material de estudio completo (a tu ritmo)"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:33
+msgid "40-question quiz-style exam"
+msgstr "Examen tipo cuestionario de 40 preguntas"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:34
+msgid "PDF diploma on pass (knowledge endorsement)"
+msgstr "Diploma PDF al aprobar (avalación de conocimientos)"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:39
+msgid "Go to exam"
+msgstr "Ir al carrito"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:46
+#: catalog/templates/catalog/curso_detail.html:192
+msgid "Add to cart"
+msgstr "Añadir al carrito"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:48
+msgid ""
+"After checkout you will have access to the material and exam. On passing you "
+"will receive your diploma."
+msgstr ""
+"Después del pago tendrás acceso al material y al examen. Al aprobar "
+"recibirás tu diploma."
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:59
+msgid ""
+"<strong>Paid access.</strong> To view the study material and take the "
+"certified exam you must purchase access to this certification. The diploma "
+"you receive on passing certifies industry knowledge endorsement, not just "
+"course completion."
+msgstr ""
+"<strong>Acceso de pago.</strong> Para ver el material de estudio y realizar "
+"el examen certificado debes comprar acceso a esta certificación. El diploma "
+"que recibes al aprobar certifica avalación de conocimientos por la "
+"industria, no solo completitud de curso."
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:62
+msgid "Study material"
+msgstr "Material de estudio"
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:73
+msgid "No hay secciones de material publicadas."
+msgstr "No hay secciones de material publicadas."
+
+#: catalog/templates/catalog/certificacion_industria_detail.html:79
+msgid "Realizar examen"
+msgstr "Realizar examen"
+
+#: catalog/templates/catalog/certificaciones_industria_list.html:18
+msgid ""
+"Professionally endorsed industry certifications (cybersecurity, AI, "
+"DevSecOps, etc.). They include study material and a 40-question certified "
+"exam. <strong>Access to material and exam requires payment.</strong> On "
+"passing you receive a diploma certifying knowledge endorsement (not just "
+"course completion)."
+msgstr ""
+"Certificaciones profesionales avaladas por la industria (ciberseguridad, IA, "
+"DevSecOps, etc.). Incluyen material de estudio y un examen certificado de 40 "
+"preguntas. <strong>El acceso al material y al examen requiere pago.</strong> "
+"Al aprobar recibes un diploma que certifica avalación de conocimientos (no "
+"solo completitud de curso)."
+
+#: catalog/templates/catalog/certificaciones_industria_list.html:37
 msgid "Material + 40-question exam · Diploma on pass"
 msgstr "Material + examen de 40 preguntas · Diploma al aprobar"
 
+#: catalog/templates/catalog/certificaciones_industria_list.html:39
 msgid "You have access"
 msgstr "Tienes acceso"
 
+#: catalog/templates/catalog/certificaciones_industria_list.html:40
 msgid "View material and exam"
 msgstr "Ver material y examen"
 
+#: catalog/templates/catalog/certificaciones_industria_list.html:43
 msgid "View more and add to cart"
 msgstr "Ver más y añadir al carrito"
 
+#: catalog/templates/catalog/certificaciones_industria_list.html:51
 msgid "No industry certifications are published at this time."
 msgstr "No hay certificaciones de industria publicadas en este momento."
 
+#: catalog/templates/catalog/certificado_preview.html:5
+msgid "Certificate"
+msgstr "Certificados"
+
+#: catalog/templates/catalog/certificado_preview.html:59
+#: catalog/templates/catalog/certificado_preview.html:112
+#: catalog/templates/catalog/mis_certificados.html:4
+msgid "My certificates"
+msgstr "Mis certificados"
+
+#: catalog/templates/catalog/certificado_preview.html:68
+msgid "Certificate of Completion"
+msgstr "Certificaciones"
+
+#: catalog/templates/catalog/certificado_preview.html:74
+msgid "This is to certify that"
+msgstr "Se certifica que"
+
+#: catalog/templates/catalog/certificado_preview.html:76
+msgid "has successfully completed the course"
+msgstr "ha completado exitosamente el curso"
+
+#: catalog/templates/catalog/certificado_preview.html:82
+msgid "Certificate No."
+msgstr "Certificados"
+
+#: catalog/templates/catalog/certificado_preview.html:85
+msgid "Verification"
+msgstr "Certificaciones"
+
+#: catalog/templates/catalog/certificado_preview.html:88
+#: transactions/templates/transactions/mis_pedidos.html:23
+msgid "Date"
+msgstr "Fecha"
+
+#: catalog/templates/catalog/certificado_preview.html:98
+msgid "Your Badges"
+msgstr "Tus cursos"
+
+#: catalog/templates/catalog/certificado_preview.html:110
+#: catalog/templates/catalog/mis_certificados.html:33
+msgid "Download PDF"
+msgstr "Descargar PDF"
+
+#: catalog/templates/catalog/certificado_preview.html:111
+#: catalog/templates/catalog/mis_certificados.html:34
+#: users/templates/users/mi_cuenta.html:82
+msgid "Verify"
+msgstr "Verificar"
+
+#: catalog/templates/catalog/certificado_verificar.html:4
+#: catalog/templates/catalog/certificado_verificar.html:10
+msgid "Verificar certificado"
+msgstr "Verificar certificado"
+
+#: catalog/templates/catalog/certificado_verificar.html:15
+msgid "Certificado válido"
+msgstr "Certificaciones"
+
+#: catalog/templates/catalog/certificado_verificar.html:18
+msgid "Estudiante:"
+msgstr "Estudiante:"
+
+#: catalog/templates/catalog/certificado_verificar.html:19
+msgid "Curso:"
+msgstr "Curso:"
+
+#: catalog/templates/catalog/certificado_verificar.html:20
+msgid "Número:"
+msgstr "Número"
+
+#: catalog/templates/catalog/certificado_verificar.html:21
+msgid "Fecha de emisión:"
+msgstr "Fecha de emisión:"
+
+#: catalog/templates/catalog/certificado_verificar.html:27
+msgid "Código no encontrado"
+msgstr "Código no encontrado"
+
+#: catalog/templates/catalog/certificado_verificar.html:30
+#, python-format
+msgid ""
+"No existe un certificado con el código <strong>%(code)s</strong>. Verifica "
+"que el código sea correcto."
+msgstr ""
+"No existe un certificado con el código <strong>%(code)s</strong>. Verifica "
+"que el código sea correcto."
+
+#: catalog/templates/catalog/certificado_verificar.html:36
+msgid "Volver al inicio"
+msgstr "Volver al inicio"
+
+#: catalog/templates/catalog/curso_aprender.html:5
+msgid "Learn:"
+msgstr "Aprendizaje"
+
+#: catalog/templates/catalog/curso_aprender.html:11
+#: catalog/templates/catalog/curso_leccion_detail.html:11
+#: catalog/templates/catalog/mis_inscripciones.html:12
+#: core/templates/base.html:43 core/templates/base.html:144
+#: core/templates/landing.html:286 users/templates/users/mi_cuenta.html:23
+#: users/templates/users/mi_cuenta.html:50
+msgid "My courses"
+msgstr "Mis cursos"
+
+#: catalog/templates/catalog/curso_aprender.html:19
+#: catalog/templates/catalog/curso_detail.html:28
+#, python-format
+msgid "by %(name)s"
+msgstr "por %(name)s"
+
+#: catalog/templates/catalog/curso_aprender.html:23
+#: catalog/templates/catalog/curso_leccion_detail.html:24
+msgid "Course progress"
+msgstr "Cursos en progreso"
+
+#: catalog/templates/catalog/curso_aprender.html:25
+#: catalog/templates/catalog/curso_leccion_detail.html:26
+#, fuzzy, python-format
+#| msgid "%(completadas)s/%(total)s lessons"
+msgid "%(completed)s/%(total)s lessons"
+msgstr "%(completadas)s/%(total)s lecciones"
+
+#: catalog/templates/catalog/curso_aprender.html:30
+#, python-format
+msgid ""
+"Here is the <strong>learning material</strong>: lessons (text, video, "
+"<strong>quizzes</strong> and practice) organized by modules. Mark each "
+"lesson as complete when you finish it. At 100%% you will get your "
+"<strong>completion certificate</strong> as PDF in the Certifications tab."
+msgstr ""
+"Aquí tienes el <strong>material de aprendizaje</strong>: lecciones (texto, "
+"video, <strong>cuestionarios</strong> y práctica) organizadas por módulos. "
+"Marca cada lección como completada al terminarla. Al 100%% obtendrás tu "
+"<strong>certificado de finalización</strong> en PDF en la pestaña "
+"Certificaciones."
+
+#: catalog/templates/catalog/curso_aprender.html:34
+#: catalog/templates/catalog/curso_detail.html:115
+msgid "Course content"
+msgstr "Estado de cursos"
+
+#: catalog/templates/catalog/curso_aprender.html:44
+#: catalog/templates/catalog/curso_detail.html:120
+msgid "Module"
+msgstr "Módulo"
+
+#: catalog/templates/catalog/curso_aprender.html:48
+msgid "Module content:"
+msgstr "Contenido del módulo:"
+
+#: catalog/templates/catalog/curso_aprender.html:56
+#: catalog/templates/catalog/curso_aprender.html:69
+#: catalog/templates/catalog/curso_leccion_detail.html:65
+#: core/templates/landing.html:26
+msgid "Completed"
+msgstr "Completados"
+
+#: catalog/templates/catalog/curso_aprender.html:58
+msgid "Pending"
+msgstr "Pendiente"
+
+#: catalog/templates/catalog/curso_aprender.html:67
+msgid "View lesson"
+msgstr "Ver todos"
+
+#: catalog/templates/catalog/curso_aprender.html:73
+msgid "Mark complete"
+msgstr "Completados"
+
+#: catalog/templates/catalog/curso_aprender.html:80
+msgid "Content:"
+msgstr "Contenido:"
+
+#: catalog/templates/catalog/curso_aprender.html:110
+msgid "This course has no published content yet. Check back later."
+msgstr "Este curso aún no tiene contenido publicado. Vuelve más tarde."
+
+#: catalog/templates/catalog/curso_aprender.html:115
+msgid "Back to my courses"
+msgstr "Ir a mis cursos"
+
+#: catalog/templates/catalog/curso_confirm_delete.html:4
+msgid "Eliminar curso"
+msgstr "Eliminar curso"
+
+#: catalog/templates/catalog/curso_confirm_delete.html:12
+msgid "¿Eliminar curso?"
+msgstr "¿Eliminar curso?"
+
+#: catalog/templates/catalog/curso_confirm_delete.html:13
+#, python-format
+msgid ""
+"Estás a punto de eliminar <strong>%(titulo)s</strong>. Esta acción no se "
+"puede deshacer."
+msgstr ""
+"Estás a punto de eliminar <strong>%(titulo)s</strong>. Esta acción no se "
+"puede deshacer."
+
+#: catalog/templates/catalog/curso_confirm_delete.html:16
+msgid "Sí, eliminar"
+msgstr "Sí, eliminar"
+
+#: catalog/templates/catalog/curso_confirm_delete.html:17
+#: catalog/templates/catalog/curso_form.html:23
+#: catalog/templates/catalog/leccion_confirm_delete.html:22
+#: catalog/templates/catalog/leccion_form.html:24
+#: catalog/templates/catalog/modulo_confirm_delete.html:21
+#: catalog/templates/catalog/modulo_form.html:23
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#: catalog/templates/catalog/curso_detail.html:13
+#: catalog/templates/catalog/curso_list.html:4 core/templates/base.html:35
+#: core/templates/base.html:202
 msgid "Courses"
 msgstr "Cursos"
 
+#: catalog/templates/catalog/curso_detail.html:33
+#, python-format
+msgid "%(hours)s hours"
+msgstr "%(hours)s horas"
+
+#: catalog/templates/catalog/curso_detail.html:34
+#, fuzzy, python-format
+#| msgid "%(count)s últimas"
+msgid "%(count)s lessons"
+msgstr "%(count)s últimas"
+
+#: catalog/templates/catalog/curso_detail.html:35
+#, fuzzy, python-format
+#| msgid "%(count)s últimas"
+msgid "%(count)s modules"
+msgstr "%(count)s últimas"
+
+#: catalog/templates/catalog/curso_detail.html:38
+#, python-format
+msgid "%(avg)s (%(counter)s rating)"
+msgid_plural "%(avg)s (%(counter)s ratings)"
+msgstr[0] "%(avg)s (%(counter)s valoración)"
+msgstr[1] "%(avg)s (%(counter)s valoraciones)"
+
+#: catalog/templates/catalog/curso_detail.html:46 core/templates/base.html:133
+msgid "Instructor"
+msgstr "Instructor"
+
+#: catalog/templates/catalog/curso_detail.html:51
+#, python-format
+msgid "%(count)s course on SkillForge"
+msgid_plural "%(count)s courses on SkillForge"
+msgstr[0] "%(count)s curso en SkillForge"
+msgstr[1] "%(count)s cursos en SkillForge"
+
+#: catalog/templates/catalog/curso_detail.html:60
+msgid "What you'll learn"
+msgstr "Lo que aprenderás"
+
+#: catalog/templates/catalog/curso_detail.html:83
+msgid "Exámenes, trabajos y calificaciones"
+msgstr "Exámenes, trabajos y calificaciones"
+
+#: catalog/templates/catalog/curso_detail.html:90
+msgid "Requirements"
+msgstr "Requisitos"
+
+#: catalog/templates/catalog/curso_detail.html:92
+msgid "Basic computer skills"
+msgstr "Conocimientos básicos de informática"
+
+#: catalog/templates/catalog/curso_detail.html:93
+msgid "Internet connection"
+msgstr "Conexión a Internet"
+
+#: catalog/templates/catalog/curso_detail.html:94
+#, python-format
+msgid "Desire to learn (level: %(level)s)"
+msgstr "Ganas de aprender (nivel: %(level)s)"
+
+#: catalog/templates/catalog/curso_detail.html:100
+#: catalog/templates/catalog/curso_detail.html:111
+msgid "Description"
+msgstr "Descripción"
+
+#: catalog/templates/catalog/curso_detail.html:103
+msgid "Curriculum"
+msgstr "Currículo"
+
+#: catalog/templates/catalog/curso_detail.html:106
+#, python-format
+msgid "Reviews (%(total)s)"
+msgstr "Reseñas (%(total)s)"
+
+#: catalog/templates/catalog/curso_detail.html:133
+msgid "This course has no published content yet."
+msgstr "Aún no hay cursos publicados."
+
+#: catalog/templates/catalog/curso_detail.html:140
+msgid "Edit your rating"
+msgstr "Editar tu valoración"
+
+#: catalog/templates/catalog/curso_detail.html:140
+msgid "Leave a rating"
+msgstr "Dejar una valoración"
+
+#: catalog/templates/catalog/curso_detail.html:141
+msgid "You can only rate courses you have completed."
+msgstr "Solo puedes calificar cursos que hayas completado."
+
+#: catalog/templates/catalog/curso_detail.html:146
+#: users/templates/users/profile_edit.html:24
+msgid "Save"
+msgstr "Guardar"
+
+#: catalog/templates/catalog/curso_detail.html:152
+#, fuzzy, python-format
+#| msgid "%(count)s últimas"
+msgid "%(counter)s rating"
+msgid_plural "%(counter)s ratings"
+msgstr[0] "%(count)s últimas"
+msgstr[1] "%(count)s últimas"
+
+#: catalog/templates/catalog/curso_detail.html:158
+msgid "Verified purchase"
+msgstr "Confirmar compra"
+
+#: catalog/templates/catalog/curso_detail.html:169
+msgid "No reviews yet. Be the first to complete the course and leave a review!"
+msgstr "Aún no hay reseñas. ¡Sé el primero en completar el curso y dejar una valoración!"
+"Aún no hay reseñas. ¡Sé el primero en completar el curso y dejar una "
+"valoración!Aún no hay reseñas. ¡Sé el primero en completar el curso y dejar "
+"una valoración!"
+
+#: catalog/templates/catalog/curso_detail.html:182
+#, fuzzy, python-format
+#| msgid "Courses available"
+msgid "%(spots)s spots available"
+msgstr "Cursos disponibles"
+
+#: catalog/templates/catalog/curso_detail.html:185
+msgid "Go to course"
+msgstr "Ir a mis cursos"
+
+#: catalog/templates/catalog/curso_detail.html:196
+msgid "Log in to purchase"
+msgstr "Confirmar compra"
+
+#: catalog/templates/catalog/curso_detail.html:199
+msgid "No spots available"
+msgstr "Cursos disponibles"
+
+#: catalog/templates/catalog/curso_detail.html:206
+msgid "In wishlist"
+msgstr "En lista de deseos"
+
+#: catalog/templates/catalog/curso_detail.html:208
+#, fuzzy
+#| msgid "Add to cart"
+msgid "Add to wishlist"
+msgstr "Añadir al carrito"
+
+#: catalog/templates/catalog/curso_form.html:5
+#: catalog/templates/catalog/curso_form.html:12
+#: catalog/templates/catalog/leccion_list.html:39
+#: catalog/templates/catalog/mis_cursos.html:39
+#: catalog/templates/catalog/modulo_list.html:40
+msgid "Editar"
+msgstr "Editar"
+
+#: catalog/templates/catalog/curso_form.html:5
+#: catalog/templates/catalog/curso_form.html:12
+msgid "Crear"
+msgstr "Crear"
+
+#: catalog/templates/catalog/curso_form.html:5
+msgid "curso"
+msgstr "Ir al curso"
+
+#: catalog/templates/catalog/curso_form.html:11
+#: catalog/templates/catalog/leccion_confirm_delete.html:10
+#: catalog/templates/catalog/leccion_form.html:11
+#: catalog/templates/catalog/leccion_list.html:10
+#: catalog/templates/catalog/mis_cursos.html:4
+#: catalog/templates/catalog/mis_cursos.html:9
+#: catalog/templates/catalog/modulo_confirm_delete.html:10
+#: catalog/templates/catalog/modulo_form.html:11
+#: catalog/templates/catalog/modulo_list.html:10
+msgid "Mis Cursos"
+msgstr "Mis Cursos"
+
+#: catalog/templates/catalog/curso_form.html:16
+msgid "Editar curso"
+msgstr "Ir al curso"
+
+#: catalog/templates/catalog/curso_form.html:16
+msgid "Nuevo curso"
+msgstr "Nuevo curso"
+
+#: catalog/templates/catalog/curso_form.html:22
+#: catalog/templates/catalog/leccion_form.html:23
+#: catalog/templates/catalog/modulo_form.html:22
+msgid "Guardar"
+msgstr "Guardar"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:20
+#, fuzzy, python-format
+#| msgid "Course status"
+msgid "Course: %(title)s"
+msgstr "Estado de cursos"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:42
+msgid "Video link:"
+msgstr "Enlace de video:"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:53
+msgid "This lesson has no content yet."
+msgstr "Esta lección aún no tiene contenido."
+
+#: catalog/templates/catalog/curso_leccion_detail.html:62
+msgid "Mark as complete"
+msgstr "Marcar como completada"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:68
+msgid "Lesson navigation"
+msgstr "Navegación del pie de página"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:70
+msgid "← Previous lesson"
+msgstr "← Lección anterior"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:74
+msgid "Back to course index"
+msgstr "Volver a la orden"
+
+#: catalog/templates/catalog/curso_leccion_detail.html:76
+msgid "Next lesson →"
+msgstr "Lección siguiente →"
+
+#: catalog/templates/catalog/curso_list.html:9
 msgid "Course Catalog"
 msgstr "Catálogo de cursos"
 
+#: catalog/templates/catalog/curso_list.html:14
+msgid "Search courses by title, description, category or instructor..."
+msgstr "Buscar cursos por título, descripción, categoría o instructor..."
+
+#: catalog/templates/catalog/curso_list.html:14
+#, fuzzy
+#| msgid "Your courses"
+msgid "Search courses"
+msgstr "Tus cursos"
+
+#: catalog/templates/catalog/curso_list.html:15
+msgid "Search"
+msgstr "Buscar"
+
+#: catalog/templates/catalog/curso_list.html:17
+msgid "Clear"
+msgstr "Limpiar"
+
+#: catalog/templates/catalog/curso_list.html:24
+msgid "Showing results for"
+msgstr "Mostrando resultados para"
+
+#: catalog/templates/catalog/curso_list.html:30 core/templates/landing.html:167
+#: core/templates/landing.html:229
 msgid "Categories"
 msgstr "Categorías"
 
+#: catalog/templates/catalog/curso_list.html:45
 msgid "View details"
 msgstr "Ver detalles"
 
+#: catalog/templates/catalog/curso_list.html:55
 msgid "Previous"
 msgstr "Anterior"
 
+#: catalog/templates/catalog/curso_list.html:57
 #, python-format
 msgid "Page %(current)s of %(total)s"
 msgstr "Página %(current)s de %(total)s"
 
+#: catalog/templates/catalog/curso_list.html:59
 msgid "Next"
 msgstr "Siguiente"
 
+#: catalog/templates/catalog/curso_list.html:68
 msgid "No courses published yet."
 msgstr "Aún no hay cursos publicados."
 
-msgid "My certificates"
-msgstr "Mis certificados"
+#: catalog/templates/catalog/examen_certificacion.html:5
+msgid "Examen:"
+msgstr "Examen:"
 
+#: catalog/templates/catalog/examen_certificacion.html:11
+#: core/templates/panel_admin.html:10
+msgid "Inicio"
+msgstr "Inicio"
+
+#: catalog/templates/catalog/examen_certificacion.html:12
+msgid "Certificaciones"
+msgstr "Certificaciones"
+
+#: catalog/templates/catalog/examen_certificacion.html:14
+msgid "Examen"
+msgstr "Examen"
+
+#: catalog/templates/catalog/examen_certificacion.html:27
+msgid "Aprobado"
+msgstr "Aprobado"
+
+#: catalog/templates/catalog/examen_certificacion.html:27
+msgid "No aprobado"
+msgstr "No aprobado"
+
+#: catalog/templates/catalog/examen_certificacion.html:28
+#, python-format
+msgid ""
+"Obtuviste <strong>%(correct)s</strong> de <strong>%(tot)s</strong> correctas "
+"(%(pct)s%%). Mínimo para aprobar: %(min_pct)s%%."
+msgstr ""
+"Obtuviste <strong>%(correct)s</strong> de <strong>%(tot)s</strong> correctas "
+"(%(pct)s%%). Mínimo para aprobar: %(min_pct)s%%."
+
+#: catalog/templates/catalog/examen_certificacion.html:30
+msgid "Tu diploma certifica la avalación de conocimientos por la industria."
+msgstr "Tu diploma certifica la avalación de conocimientos por la industria."
+
+#: catalog/templates/catalog/examen_certificacion.html:32
+msgid "Descargar diploma (PDF)"
+msgstr "Descargar diploma (PDF)"
+
+#: catalog/templates/catalog/examen_certificacion.html:38
+#: catalog/templates/catalog/examen_certificacion.html:62
+msgid "Volver al material"
+msgstr "Volver al material"
+
+#: catalog/templates/catalog/examen_certificacion.html:39
+msgid "Reintentar examen"
+msgstr "Reintentar examen"
+
+#: catalog/templates/catalog/examen_certificacion.html:61
+msgid "Enviar respuestas"
+msgstr "Enviar respuestas"
+
+#: catalog/templates/catalog/leccion_confirm_delete.html:4
+#: catalog/templates/catalog/leccion_confirm_delete.html:13
+#: catalog/templates/catalog/leccion_confirm_delete.html:17
+msgid "Eliminar lección"
+msgstr "Eliminar lección"
+
+#: catalog/templates/catalog/leccion_confirm_delete.html:18
+#, python-format
+msgid ""
+"¿Estás seguro de que deseas eliminar la lección <strong>%(titulo)s</strong>?"
+msgstr ""
+"¿Estás seguro de que deseas eliminar la lección <strong>%(titulo)s</strong>?"
+
+#: catalog/templates/catalog/leccion_confirm_delete.html:21
+#: catalog/templates/catalog/leccion_list.html:40
+#: catalog/templates/catalog/mis_cursos.html:40
+#: catalog/templates/catalog/modulo_confirm_delete.html:20
+#: catalog/templates/catalog/modulo_list.html:41
+msgid "Eliminar"
+msgstr "Eliminar"
+
+#: catalog/templates/catalog/leccion_form.html:5
+#: catalog/templates/catalog/leccion_form.html:14
+#: catalog/templates/catalog/leccion_form.html:18
+msgid "Editar lección"
+msgstr "Editar lección"
+
+#: catalog/templates/catalog/leccion_form.html:5
+#: catalog/templates/catalog/leccion_form.html:14
+#: catalog/templates/catalog/leccion_form.html:18
+#: catalog/templates/catalog/leccion_list.html:20
+msgid "Nueva lección"
+msgstr "Nueva lección"
+
+#: catalog/templates/catalog/leccion_list.html:4
+msgid "Lecciones"
+msgstr "Lecciones"
+
+#: catalog/templates/catalog/leccion_list.html:17
+#, python-format
+msgid "Lecciones: %(titulo)s"
+msgstr "Lecciones: %(titulo)s"
+
+#: catalog/templates/catalog/leccion_list.html:22
+msgid "Volver a módulos"
+msgstr "Volver a módulos"
+
+#: catalog/templates/catalog/leccion_list.html:34
+#: catalog/templates/catalog/modulo_list.html:33
+msgid "Orden"
+msgstr "Orden"
+
+#: catalog/templates/catalog/leccion_list.html:35
+#: catalog/templates/catalog/modulo_list.html:34
+msgid "min"
+msgstr "min"
+
+#: catalog/templates/catalog/leccion_list.html:47
+msgid "Aún no hay lecciones."
+msgstr "Aún no hay lecciones."
+
+#: catalog/templates/catalog/leccion_list.html:47
+msgid "Crear la primera lección"
+msgstr "Crear la primera lección"
+
+#: catalog/templates/catalog/mis_certificados.html:11
+#: catalog/templates/catalog/mis_certificados.html:15
+#: core/templates/landing.html:32
 msgid "Certificates"
 msgstr "Certificados"
 
-msgid "Here you will find your <strong>course completion certificates</strong> (PDF when you finish a course) and your <strong>industry certification diplomas</strong> (knowledge endorsement after passing the exam)."
-msgstr "Aquí encontrarás tus <strong>certificados de completitud de curso</strong> (PDF al terminar un curso) y tus <strong>diplomas de certificación de industria</strong> (avalación de conocimientos al aprobar el examen)."
+#: catalog/templates/catalog/mis_certificados.html:17
+msgid ""
+"Here you will find your <strong>course completion certificates</strong> (PDF "
+"when you finish a course) and your <strong>industry certification diplomas</"
+"strong> (knowledge endorsement after passing the exam)."
+msgstr ""
+"Aquí encontrarás tus <strong>certificados de completitud de curso</strong> "
+"(PDF al terminar un curso) y tus <strong>diplomas de certificación de "
+"industria</strong> (avalación de conocimientos al aprobar el examen).Aquí "
+"encontrarás tus <strong>certificados de completitud de curso</strong> (PDF "
+"al terminar un curso) y tus <strong>diplomas de certificación de industria</"
+"strong> (avalación de conocimientos al aprobar el examen)."
 
+#: catalog/templates/catalog/mis_certificados.html:20
 msgid "Course completion certificates"
 msgstr "Certificados de completitud de curso"
 
+#: catalog/templates/catalog/mis_certificados.html:21
 #, python-format
-msgid "Generated when you complete 100%% of the course. You can download them as PDF."
-msgstr "Se generan al completar el 100%% del curso. Puedes descargarlos en PDF."
+msgid ""
+"Generated when you complete 100%% of the course. You can download them as "
+"PDF."
+msgstr ""
+"Se generan al completar el 100%% del curso. Puedes descargarlos en PDF.Se "
+"generan al completar el 100%% del curso. Puedes descargarlos en PDF."
 
+#: catalog/templates/catalog/mis_certificados.html:30
 msgid "No."
 msgstr "N.º"
 
+#: catalog/templates/catalog/mis_certificados.html:32
+#: users/templates/users/mi_cuenta.html:81
 msgid "View"
 msgstr "Ver"
 
-msgid "Download PDF"
-msgstr "Descargar PDF"
-
-msgid "Verify"
-msgstr "Verificar"
-
+#: catalog/templates/catalog/mis_certificados.html:42
 #, python-format
-msgid "You have no course completion certificates yet. Complete a course to 100%% to get your PDF certificate."
-msgstr "Aún no tienes certificados de curso. Completa un curso al 100%% para obtener tu certificado en PDF."
+msgid ""
+"You have no course completion certificates yet. Complete a course to 100%% "
+"to get your PDF certificate."
+msgstr ""
+"Aún no tienes certificados de curso. Completa un curso al 100%% para obtener "
+"tu certificado en PDF.Aún no tienes certificados de curso. Completa un curso "
+"al 100%% para obtener tu certificado en PDF."
 
+#: catalog/templates/catalog/mis_certificados.html:43
+#: users/templates/users/mi_cuenta.html:90
 msgid "Go to my courses"
 msgstr "Ir a mis cursos"
 
+#: catalog/templates/catalog/mis_certificados.html:47
 msgid "Industry certification diplomas"
 msgstr "Diplomas de certificación de industria"
 
-msgid "Knowledge endorsement after passing the certified exam (not just course completion)."
-msgstr "Avalación de conocimientos al aprobar el examen certificado (no solo completitud de curso)."
+#: catalog/templates/catalog/mis_certificados.html:48
+msgid ""
+"Knowledge endorsement after passing the certified exam (not just course "
+"completion)."
+msgstr ""
+"Avalación de conocimientos al aprobar el examen certificado (no solo "
+"completitud de curso).Avalación de conocimientos al aprobar el examen "
+"certificado (no solo completitud de curso)."
 
+#: catalog/templates/catalog/mis_certificados.html:55
 msgid "Industry certification"
 msgstr "Certificación de industria"
 
+#: catalog/templates/catalog/mis_certificados.html:57
 msgid "Score:"
 msgstr "Puntaje:"
 
+#: catalog/templates/catalog/mis_certificados.html:59
 msgid "Download diploma (PDF)"
 msgstr "Descargar diploma (PDF)"
 
+#: catalog/templates/catalog/mis_certificados.html:67
 msgid "You have no industry diplomas yet."
 msgstr "Aún no tienes diplomas de industria."
 
+#: catalog/templates/catalog/mis_certificados.html:67
 msgid "Browse certifications"
 msgstr "Explorar certificaciones"
 
+#: catalog/templates/catalog/mis_certificados.html:67
 msgid ", purchase access and pass the exam to get your diploma."
 msgstr ", compra acceso y aprueba el examen para obtener tu diploma."
 
+#: catalog/templates/catalog/mis_cursos.html:11
+msgid "Crear curso"
+msgstr "Crear curso"
+
+#: catalog/templates/catalog/mis_cursos.html:20
+msgid "Título"
+msgstr "Título"
+
+#: catalog/templates/catalog/mis_cursos.html:21
+msgid "Categoría"
+msgstr "Categorías"
+
+#: catalog/templates/catalog/mis_cursos.html:22
+msgid "Estado"
+msgstr "Estado"
+
+#: catalog/templates/catalog/mis_cursos.html:23
+msgid "Precio"
+msgstr "Precio"
+
+#: catalog/templates/catalog/mis_cursos.html:24
+msgid "Cupos"
+msgstr "Cupos"
+
+#: catalog/templates/catalog/mis_cursos.html:25
+msgid "Acciones"
+msgstr "Acciones"
+
+#: catalog/templates/catalog/mis_cursos.html:37
+msgid "Ver"
+msgstr "Verificar"
+
+#: catalog/templates/catalog/mis_cursos.html:38
+msgid "Gestionar contenido"
+msgstr "Gestionar contenido"
+
+#: catalog/templates/catalog/mis_cursos.html:50
+msgid "Aún no has creado cursos."
+msgstr "Aún no has creado cursos."
+
+#: catalog/templates/catalog/mis_cursos.html:51
+msgid "Crear tu primer curso"
+msgstr "Crear curso"
+
+#: catalog/templates/catalog/mis_inscripciones.html:5
 msgid "My Courses"
 msgstr "Mis cursos"
 
-msgid "My courses"
-msgstr "Mis cursos"
-
+#: catalog/templates/catalog/mis_inscripciones.html:16
 msgid "My enrolled courses"
 msgstr "Mis cursos inscritos"
 
+#: catalog/templates/catalog/mis_inscripciones.html:34
+#: core/templates/landing.html:287
 msgid "Continue learning"
 msgstr "Continuar aprendiendo"
 
+#: catalog/templates/catalog/mis_inscripciones.html:43
 msgid "You are not enrolled in any course yet"
 msgstr "Aún no estás inscrito en ningún curso"
 
+#: catalog/templates/catalog/mis_inscripciones.html:44
+#: catalog/templates/catalog/wishlist.html:54 core/templates/base.html:141
+#: core/templates/landing.html:136
+#: transactions/templates/transactions/carrito.html:38
+#: transactions/templates/transactions/mis_pedidos.html:65
 msgid "Browse courses"
 msgstr "Explorar cursos"
 
+#: catalog/templates/catalog/modulo_confirm_delete.html:4
+#: catalog/templates/catalog/modulo_confirm_delete.html:12
+#: catalog/templates/catalog/modulo_confirm_delete.html:16
+msgid "Eliminar módulo"
+msgstr "Eliminar módulo"
+
+#: catalog/templates/catalog/modulo_confirm_delete.html:17
+#, python-format
+msgid ""
+"¿Estás seguro de que deseas eliminar el módulo <strong>%(titulo)s</strong>? "
+"Se eliminarán también todas sus lecciones."
+msgstr ""
+"¿Estás seguro de que deseas eliminar el módulo <strong>%(titulo)s</strong>? "
+"Se eliminarán también todas sus lecciones."
+
+#: catalog/templates/catalog/modulo_form.html:5
+#: catalog/templates/catalog/modulo_form.html:13
+#: catalog/templates/catalog/modulo_form.html:17
+msgid "Editar módulo"
+msgstr "Editar módulo"
+
+#: catalog/templates/catalog/modulo_form.html:5
+#: catalog/templates/catalog/modulo_form.html:13
+#: catalog/templates/catalog/modulo_form.html:17
+#: catalog/templates/catalog/modulo_list.html:20
+msgid "Nuevo módulo"
+msgstr "Nuevo módulo"
+
+#: catalog/templates/catalog/modulo_list.html:4
+msgid "Módulos"
+msgstr "Módulos"
+
+#: catalog/templates/catalog/modulo_list.html:12
+msgid "Contenido"
+msgstr "Contenido"
+
+#: catalog/templates/catalog/modulo_list.html:17
+#, python-format
+msgid "Contenido: %(titulo)s"
+msgstr "Contenido: %(titulo)s"
+
+#: catalog/templates/catalog/modulo_list.html:22
+msgid "Volver a mis cursos"
+msgstr "Explorar más cursos"
+
+#: catalog/templates/catalog/modulo_list.html:35
+#, fuzzy, python-format
+#| msgid "%(count)s últimas"
+msgid "%(counter)s lección"
+msgid_plural "%(counter)s lecciones"
+msgstr[0] "%(count)s últimas"
+msgstr[1] "%(count)s últimas"
+
+#: catalog/templates/catalog/modulo_list.html:39
+msgid "Ver lecciones"
+msgstr "Ver lecciones"
+
+#: catalog/templates/catalog/modulo_list.html:48
+msgid "Aún no hay módulos."
+msgstr "Aún no hay módulos."
+
+#: catalog/templates/catalog/modulo_list.html:48
+msgid "Crear el primer módulo"
+msgstr "Crear el primer módulo"
+
+#: catalog/templates/catalog/wishlist.html:5
+#: catalog/templates/catalog/wishlist.html:12 core/templates/base.html:46
+msgid "Wishlist"
+msgstr "Lista de deseos"
+
+#: catalog/templates/catalog/wishlist.html:16
+msgid "My Wishlist"
+msgstr "Mi lista de deseos"
+
+#: catalog/templates/catalog/wishlist.html:35
+#: core/templates/components/card_curso.html:25
+msgid "View course"
+msgstr "Ver curso"
+
+#: catalog/templates/catalog/wishlist.html:39
+#, fuzzy
+#| msgid "Remove coupon"
+msgid "Remove"
+msgstr "Quitar cupón"
+
+#: catalog/templates/catalog/wishlist.html:44
+msgid "Added"
+msgstr "Agregado"
+
+#: catalog/templates/catalog/wishlist.html:44
+#: core/templates/notifications.html:30
+msgid "ago"
+msgstr "atrás"
+
+#: catalog/templates/catalog/wishlist.html:53
+#, fuzzy
+#| msgid "Your cart is empty."
+msgid "Your wishlist is empty."
+msgstr "Tu carrito está vacío."
+
+#: core/templates/base.html:7 core/templates/base.html:211
+#: core/templates/landing.html:8
 msgid "Forge Your Professional Future"
 msgstr "Forja tu futuro profesional"
 
+#: core/templates/base.html:40
 msgid "Learning"
 msgstr "Aprendizaje"
 
+#: core/templates/base.html:44 core/templates/base.html:145
+#: core/templates/landing.html:295 users/templates/users/mi_cuenta.html:26
+#: users/templates/users/mi_cuenta.html:73
 msgid "Certifications"
 msgstr "Certificaciones"
 
+#: core/templates/base.html:45
 msgid "Industry certs"
 msgstr "Cert. industria"
 
+#: core/templates/base.html:48 core/templates/base.html:147
+#: core/templates/base.html:205
+#: transactions/templates/transactions/factura.html:11
+#: transactions/templates/transactions/factura.html:99
+#: transactions/templates/transactions/mis_pedidos.html:4
+#: transactions/templates/transactions/mis_pedidos.html:11
+#: transactions/templates/transactions/mis_pedidos.html:15
 msgid "My orders"
 msgstr "Mis pedidos"
 
+#: core/templates/base.html:55
 msgid "Teaching"
 msgstr "Enseñanza"
 
+#: core/templates/base.html:58 core/templates/base.html:151
+#: core/templates/landing.html:314
 msgid "Manage courses"
 msgstr "Gestionar cursos"
 
+#: core/templates/base.html:59 core/templates/landing.html:323
 msgid "Create course"
 msgstr "Crear curso"
 
+#: core/templates/base.html:65 core/templates/base.html:154
+#: core/templates/landing.html:333
 msgid "Admin panel"
 msgstr "Panel admin"
 
+#: core/templates/base.html:76 core/templates/base.html:146
+#: core/templates/landing.html:304
+#: transactions/templates/transactions/carrito.html:5
+#: transactions/templates/transactions/carrito.html:12
+#: transactions/templates/transactions/checkout.html:11
+#: users/templates/users/mi_cuenta.html:32
 msgid "Cart"
 msgstr "Carrito"
 
+#: core/templates/base.html:87 core/templates/notifications.html:4
+#: core/templates/notifications.html:9
+#, fuzzy
+#| msgid "Certifications"
+msgid "Notifications"
+msgstr "Certificaciones"
+
+#: core/templates/base.html:97
+msgid "Toggle dark mode"
+msgstr "Cambiar modo oscuro"
+
+#: core/templates/base.html:109
 msgid "Switch to English"
 msgstr "Cambiar a inglés"
 
+#: core/templates/base.html:114
 msgid "Cambiar a Español"
 msgstr "Cambiar a español"
 
-msgid "Instructor"
-msgstr "Instructor"
-
+#: core/templates/base.html:135
 msgid "Student"
 msgstr "Estudiante"
 
+#: core/templates/base.html:140 core/templates/base.html:204
+#: users/templates/users/mi_cuenta.html:5
+#: users/templates/users/mi_cuenta.html:12
+#: users/templates/users/mi_cuenta.html:16
+#: users/templates/users/profile_edit.html:12
 msgid "My account"
 msgstr "Mi cuenta"
 
+#: core/templates/base.html:160
 msgid "Log out"
 msgstr "Cerrar sesión"
 
+#: core/templates/base.html:167 core/templates/base.html:207
+#: users/templates/users/login.html:5 users/templates/users/login.html:13
+#: users/templates/users/login.html:19 users/templates/users/register.html:21
 msgid "Log in"
 msgstr "Iniciar sesión"
 
+#: core/templates/base.html:170 core/templates/base.html:208
+#: users/templates/users/login.html:22 users/templates/users/register.html:5
+#: users/templates/users/register.html:18
 msgid "Register"
 msgstr "Registrarse"
 
+#: core/templates/base.html:187
 msgid "Close"
 msgstr "Cerrar"
 
+#: core/templates/base.html:200
 msgid "Footer navigation"
 msgstr "Navegación del pie de página"
 
+#: core/templates/components/card_carrito.html:4
 msgid "Summary"
 msgstr "Resumen"
 
+#: core/templates/components/card_carrito.html:5
 #, python-format
 msgid "Subtotal (%(counter)s course)"
 msgid_plural "Subtotal (%(counter)s courses)"
 msgstr[0] "Subtotal (%(counter)s curso)"
 msgstr[1] "Subtotal (%(counter)s cursos)"
 
+#: core/templates/components/card_carrito.html:7
+#: core/templates/panel_admin.html:62
+#: transactions/templates/transactions/factura.html:77
+#: transactions/templates/transactions/mis_pedidos.html:25
 msgid "Total"
 msgstr "Total"
 
+#: core/templates/components/card_carrito.html:8
 msgid "Proceed to checkout"
 msgstr "Ir al pago"
 
+#: core/templates/components/card_carrito.html:9
 msgid "Continue shopping"
 msgstr "Seguir comprando"
 
-msgid "View course"
-msgstr "Ver curso"
+#: core/templates/components/card_categoria.html:2
+#, fuzzy, python-format
+#| msgid "No courses in progress."
+msgid "View courses in %(nombre)s"
+msgstr "No tienes cursos en progreso."
 
-msgid "Learn with experts. Online courses in programming, design, marketing, and more."
-msgstr "Aprende con expertos. Cursos en línea de programación, diseño, marketing y más."
+#: core/templates/components/certificacion_card_mini.html:13
+msgid "Certification access"
+msgstr "acceso a certificación"
 
+#: core/templates/components/certificacion_card_mini.html:20
+#: core/templates/components/curso_card_mini.html:21
+msgid "Remove from cart"
+msgstr "Ir al carrito"
+
+#: core/templates/components/curso_card_mini.html:14
+msgid "COP each"
+msgstr "COP c/u"
+
+#: core/templates/landing.html:9
+msgid ""
+"Learn with experts. Online courses in programming, design, marketing, and "
+"more."
+msgstr ""
+"Aprende con expertos. Cursos en línea de programación, diseño, marketing y "
+"más.Aprende con expertos. Cursos en línea de programación, diseño, marketing "
+"y más."
+
+#: core/templates/landing.html:10
 msgid "Browse Courses"
 msgstr "Explorar cursos"
 
+#: core/templates/landing.html:15
 msgid "Your dashboard"
 msgstr "Tu panel"
 
+#: core/templates/landing.html:20
 msgid "Courses enrolled"
 msgstr "Cursos inscritos"
 
-msgid "Completed"
-msgstr "Completados"
-
+#: core/templates/landing.html:38
 msgid "Courses available"
 msgstr "Cursos disponibles"
 
+#: core/templates/landing.html:43
 msgid "Courses in progress"
 msgstr "Cursos en progreso"
 
+#: core/templates/landing.html:57
 #, python-format
 msgid "%(completadas)s/%(total)s lessons"
 msgstr "%(completadas)s/%(total)s lecciones"
 
+#: core/templates/landing.html:65
 msgid "No courses in progress."
 msgstr "No tienes cursos en progreso."
 
+#: core/templates/landing.html:65
 msgid "Browse the catalog"
 msgstr "Explora el catálogo"
 
+#: core/templates/landing.html:65
 msgid "to get started."
 msgstr "para comenzar."
 
+#: core/templates/landing.html:69
 msgid "Learning analytics"
 msgstr "Analíticas de aprendizaje"
 
+#: core/templates/landing.html:75
 msgid "Learning overview"
 msgstr "Resumen de aprendizaje"
 
+#: core/templates/landing.html:88
 msgid "Progress by course"
 msgstr "Progreso por curso"
 
+#: core/templates/landing.html:104
 msgid "Competencies by category"
 msgstr "Competencias por categoría"
 
+#: core/templates/landing.html:117
 msgid "Overall progress"
 msgstr "Progreso general"
 
+#: core/templates/landing.html:122
 msgid "average across active courses"
 msgstr "promedio en cursos activos"
 
+#: core/templates/landing.html:134
 msgid "Your learning analytics will appear here"
 msgstr "Tus analíticas de aprendizaje aparecerán aquí"
 
-msgid "Enroll in courses to see your progress, learning overview, and competencies by category."
-msgstr "Inscríbete en cursos para ver tu progreso, resumen de aprendizaje y competencias por categoría."
+#: core/templates/landing.html:135
+msgid ""
+"Enroll in courses to see your progress, learning overview, and competencies "
+"by category."
+msgstr ""
+"Inscríbete en cursos para ver tu progreso, resumen de aprendizaje y "
+"competencias por categoría.Inscríbete en cursos para ver tu progreso, "
+"resumen de aprendizaje y competencias por categoría."
 
+#: core/templates/landing.html:144
 msgid "Teaching dashboard"
 msgstr "Panel de enseñanza"
 
+#: core/templates/landing.html:149 core/templates/landing.html:315
 msgid "Your courses"
 msgstr "Tus cursos"
 
+#: core/templates/landing.html:155
 msgid "Published"
 msgstr "Publicados"
 
+#: core/templates/landing.html:161
 msgid "Total on platform"
 msgstr "Total en la plataforma"
 
+#: core/templates/landing.html:172
 msgid "Teaching analytics"
 msgstr "Analíticas de enseñanza"
 
+#: core/templates/landing.html:178
 msgid "Course status"
 msgstr "Estado de cursos"
 
+#: core/templates/landing.html:191 core/templates/landing.html:277
 msgid "Courses by category"
 msgstr "Cursos por categoría"
 
+#: core/templates/landing.html:206
 msgid "Platform overview"
 msgstr "Resumen de la plataforma"
 
+#: core/templates/landing.html:211
 msgid "Total users"
 msgstr "Total de usuarios"
 
+#: core/templates/landing.html:217
 msgid "Published courses"
 msgstr "Cursos publicados"
 
+#: core/templates/landing.html:223
 msgid "Orders"
 msgstr "Órdenes"
 
+#: core/templates/landing.html:234
 msgid "Platform analytics"
 msgstr "Analíticas de plataforma"
 
+#: core/templates/landing.html:240
 msgid "Users by role"
 msgstr "Usuarios por rol"
 
+#: core/templates/landing.html:254
 msgid "Orders (last 7 days)"
 msgstr "Órdenes (últimos 7 días)"
 
+#: core/templates/landing.html:270
 msgid "Quick links"
 msgstr "Accesos rápidos"
 
+#: core/templates/landing.html:276
 msgid "Browse catalog"
 msgstr "Explorar catálogo"
 
+#: core/templates/landing.html:296
 msgid "Your certificates"
 msgstr "Tus certificados"
 
+#: core/templates/landing.html:305
 msgid "Pending purchases"
 msgstr "Compras pendientes"
 
+#: core/templates/landing.html:324
 msgid "Publish a new course"
 msgstr "Publicar un nuevo curso"
 
+#: core/templates/landing.html:334
 msgid "Users and metrics"
 msgstr "Usuarios y métricas"
 
+#: core/templates/notifications.html:14
+msgid "Mark all as read"
+msgstr "Marcar todo como leído"
+
+#: core/templates/notifications.html:34
+msgid "New"
+msgstr "Nuevo"
+
+#: core/templates/notifications.html:42
+#, fuzzy
+#| msgid "Certifications"
+msgid "No notifications yet."
+msgstr "Certificaciones"
+
+#: core/templates/panel_admin.html:4 core/templates/panel_admin.html:15
 msgid "Panel de administración"
 msgstr "Panel de administración"
 
-msgid "Inicio"
-msgstr "Inicio"
-
+#: core/templates/panel_admin.html:11
 msgid "Panel Admin"
 msgstr "Panel Admin"
 
+#: core/templates/panel_admin.html:21
 msgid "Usuarios"
 msgstr "Usuarios"
 
+#: core/templates/panel_admin.html:28 core/templates/panel_admin.html:37
+#: core/templates/panel_admin.html:46
 msgid "Ver en Admin"
 msgstr "Ver en Admin"
 
+#: core/templates/panel_admin.html:35
 msgid "Cursos publicados"
 msgstr "Cursos publicados"
 
+#: core/templates/panel_admin.html:44 core/templates/panel_admin.html:53
 msgid "Órdenes recientes"
 msgstr "Órdenes recientes"
 
+#: core/templates/panel_admin.html:45
 #, python-format
 msgid "%(count)s últimas"
 msgstr "%(count)s últimas"
 
+#: core/templates/panel_admin.html:60
 msgid "Número"
 msgstr "Número"
 
+#: core/templates/panel_admin.html:61
 msgid "Usuario"
 msgstr "Usuario"
 
+#: core/templates/panel_admin.html:63
 msgid "Fecha"
 msgstr "Fecha"
 
+#: core/templates/panel_admin.html:79
 msgid "No hay órdenes."
 msgstr "No hay órdenes."
 
+#: core/templates/panel_admin.html:85
 msgid "Abrir Django Admin"
 msgstr "Abrir Django Admin"
 
+#: transactions/templates/transactions/carrito.html:16
 msgid "Your cart"
 msgstr "Tu carrito"
 
+#: transactions/templates/transactions/carrito.html:37
 msgid "Your cart is empty"
 msgstr "Tu carrito está vacío"
 
+#: transactions/templates/transactions/checkout.html:4
+#: transactions/templates/transactions/checkout.html:12
 msgid "Checkout"
 msgstr "Pago"
 
+#: transactions/templates/transactions/checkout.html:16
+#: transactions/templates/transactions/checkout.html:73
 msgid "Confirm purchase"
 msgstr "Confirmar compra"
 
+#: transactions/templates/transactions/checkout.html:23
 msgid "Order summary"
 msgstr "Resumen del pedido"
 
+#: transactions/templates/transactions/checkout.html:34
 msgid "certification access"
 msgstr "acceso a certificación"
 
-msgid "Simulated payment. On confirm, the order will be created and you will get immediate access to courses and certifications."
-msgstr "Pago simulado. Al confirmar, se creará la orden y obtendrás acceso inmediato a los cursos y certificaciones."
+#: transactions/templates/transactions/checkout.html:41
+msgid ""
+"Simulated payment. On confirm, the order will be created and you will get "
+"immediate access to courses and certifications."
+msgstr ""
+"Pago simulado. Al confirmar, se creará la orden y obtendrás acceso inmediato "
+"a los cursos y certificaciones.Pago simulado. Al confirmar, se creará la "
+"orden y obtendrás acceso inmediato a los cursos y certificaciones."
 
+#: transactions/templates/transactions/checkout.html:47
 msgid "Discount coupon"
 msgstr "Cupón de descuento"
 
+#: transactions/templates/transactions/checkout.html:49
 msgid "applied"
 msgstr "aplicado"
 
+#: transactions/templates/transactions/checkout.html:52
 msgid "Remove coupon"
 msgstr "Quitar cupón"
 
+#: transactions/templates/transactions/checkout.html:57
 msgid "Code"
 msgstr "Código"
 
+#: transactions/templates/transactions/checkout.html:58
 msgid "Apply"
 msgstr "Aplicar"
 
+#: transactions/templates/transactions/checkout.html:65
 msgid "Amount to pay"
 msgstr "Monto a pagar"
 
+#: transactions/templates/transactions/checkout.html:66
+#: transactions/templates/transactions/factura.html:48
+#: transactions/templates/transactions/factura.html:67
 msgid "Subtotal"
 msgstr "Subtotal"
 
+#: transactions/templates/transactions/checkout.html:68
 msgid "Discount"
 msgstr "Descuento"
 
+#: transactions/templates/transactions/checkout.html:75
 msgid "Back to cart"
 msgstr "Volver al carrito"
 
+#: transactions/templates/transactions/checkout.html:82
+#: users/templates/users/mi_cuenta.html:137
 msgid "Your cart is empty."
 msgstr "Tu carrito está vacío."
 
+#: transactions/templates/transactions/checkout.html:82
 msgid "View cart"
 msgstr "Ver carrito"
 
+#: transactions/templates/transactions/checkout.html:82
+#: transactions/templates/transactions/mis_pedidos.html:65
 msgid "or"
 msgstr "o"
 
+#: transactions/templates/transactions/checkout.html:82
 msgid "browse courses"
 msgstr "explorar cursos"
 
+#: transactions/templates/transactions/factura.html:4
+#: transactions/templates/transactions/factura.html:13
+#: transactions/templates/transactions/mis_pedidos.html:49
 msgid "Invoice"
 msgstr "Factura"
 
+#: transactions/templates/transactions/factura.html:12
+#: transactions/templates/transactions/factura.html:26
+#: transactions/templates/transactions/gateway_simulada.html:16
+#: transactions/templates/transactions/mis_pedidos.html:22
+#: transactions/templates/transactions/orden_confirmada.html:4
+#: transactions/templates/transactions/orden_confirmada.html:18
 msgid "Order"
 msgstr "Orden"
 
+#: transactions/templates/transactions/factura.html:19
 msgid "Simulated invoice"
 msgstr "Factura simulada"
 
+#: transactions/templates/transactions/factura.html:20
 msgid "Demo only"
 msgstr "Solo demostración"
 
+#: transactions/templates/transactions/factura.html:25
 msgid "Invoice No."
 msgstr "Factura N.º"
 
+#: transactions/templates/transactions/factura.html:27
 msgid "Issue date"
 msgstr "Fecha de emisión"
 
+#: transactions/templates/transactions/factura.html:36
 msgid "Customer"
 msgstr "Cliente"
 
+#: transactions/templates/transactions/factura.html:45
 msgid "Course"
 msgstr "Curso"
 
+#: transactions/templates/transactions/factura.html:46
 msgid "Quantity"
 msgstr "Cantidad"
 
+#: transactions/templates/transactions/factura.html:47
 msgid "Unit price"
 msgstr "Precio unitario"
 
+#: transactions/templates/transactions/factura.html:72
 msgid "Discounts"
 msgstr "Descuentos"
 
+#: transactions/templates/transactions/factura.html:87
 msgid "Payment"
 msgstr "Pago"
 
-msgid "This document is a simulated invoice. It has no tax validity or integration with external providers."
-msgstr "Este documento es una factura simulada. No tiene validez fiscal ni integración con proveedores externos."
+#: transactions/templates/transactions/factura.html:92
+msgid ""
+"This document is a simulated invoice. It has no tax validity or integration "
+"with external providers."
+msgstr ""
+"Este documento es una factura simulada. No tiene validez fiscal ni "
+"integración con proveedores externos.Este documento es una factura simulada. "
+"No tiene validez fiscal ni integración con proveedores externos."
 
+#: transactions/templates/transactions/factura.html:98
 msgid "Back to order"
 msgstr "Volver a la orden"
 
+#: transactions/templates/transactions/gateway_simulada.html:4
+#: transactions/templates/transactions/gateway_simulada.html:12
 msgid "Simulation"
 msgstr "Simulación"
 
+#: transactions/templates/transactions/gateway_simulada.html:15
 msgid "This is a simulated payment gateway. No real charge is made."
 msgstr "Esta es una pasarela de pago simulada. No se realiza ningún cobro real."
+"Esta es una pasarela de pago simulada. No se realiza ningún cobro real.Esta "
+"es una pasarela de pago simulada. No se realiza ningún cobro real."
 
+#: transactions/templates/transactions/gateway_simulada.html:17
 msgid "Amount"
 msgstr "Monto"
 
+#: transactions/templates/transactions/gateway_simulada.html:20
 msgid "Card number (simulation)"
 msgstr "Número de tarjeta (simulación)"
 
+#: transactions/templates/transactions/gateway_simulada.html:25
 msgid "Expiry"
 msgstr "Vencimiento"
 
+#: transactions/templates/transactions/gateway_simulada.html:29
 msgid "CVV"
 msgstr "CVV"
 
+#: transactions/templates/transactions/gateway_simulada.html:36
 msgid "Pay successfully"
 msgstr "Pagar exitosamente"
 
+#: transactions/templates/transactions/gateway_simulada.html:39
 msgid "Simulate failure"
 msgstr "Simular fallo"
 
+#: transactions/templates/transactions/gateway_simulada.html:42
+#: transactions/templates/transactions/mis_pedidos.html:53
+#: users/templates/users/profile_edit.html:25
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid "Date"
-msgstr "Fecha"
-
+#: transactions/templates/transactions/mis_pedidos.html:24
 msgid "Status"
 msgstr "Estado"
 
+#: transactions/templates/transactions/mis_pedidos.html:46
 msgid "Complete payment"
 msgstr "Completar pago"
 
+#: transactions/templates/transactions/mis_pedidos.html:48
 msgid "View detail"
 msgstr "Ver detalle"
 
-msgid "Cancel this order? Slots will be returned and you will lose access to courses from this purchase."
-msgstr "¿Cancelar esta orden? Los cupos se devolverán y perderás acceso a los cursos de esta compra."
+#: transactions/templates/transactions/mis_pedidos.html:51
+msgid ""
+"Cancel this order? Slots will be returned and you will lose access to "
+"courses from this purchase."
+msgstr ""
+"¿Cancelar esta orden? Los cupos se devolverán y perderás acceso a los cursos "
+"de esta compra.¿Cancelar esta orden? Los cupos se devolverán y perderás "
+"acceso a los cursos de esta compra."
 
+#: transactions/templates/transactions/mis_pedidos.html:65
 msgid "You have no orders yet."
 msgstr "Aún no tienes pedidos."
 
+#: transactions/templates/transactions/mis_pedidos.html:65
 msgid "view cart"
 msgstr "ver carrito"
 
+#: transactions/templates/transactions/orden_confirmada.html:11
 msgid "Order confirmed"
 msgstr "Orden confirmada"
 
+#: transactions/templates/transactions/orden_confirmada.html:17
 msgid "¡Compra realizada con éxito!"
 msgstr "¡Compra realizada con éxito!"
 
+#: transactions/templates/transactions/orden_confirmada.html:23
 msgid "Cursos a los que tienes acceso"
 msgstr "Cursos a los que tienes acceso"
 
+#: transactions/templates/transactions/orden_confirmada.html:29
 msgid "Ir al curso"
 msgstr "Ir al curso"
 
+#: transactions/templates/transactions/orden_confirmada.html:36
 msgid "Ver factura"
 msgstr "Ver factura"
 
+#: transactions/templates/transactions/orden_confirmada.html:39
 msgid "Ver mis cursos inscritos"
 msgstr "Ver mis cursos inscritos"
 
+#: transactions/templates/transactions/orden_confirmada.html:40
 msgid "Explorar más cursos"
 msgstr "Explorar más cursos"
 
+#: users/templates/users/login.html:14
 msgid "Access your SkillForge account"
 msgstr "Accede a tu cuenta de SkillForge"
 
+#: users/templates/users/login.html:22
 msgid "Don't have an account?"
 msgstr "¿No tienes cuenta?"
 
+#: users/templates/users/mi_cuenta.html:20
 msgid "Profile"
 msgstr "Perfil"
 
+#: users/templates/users/mi_cuenta.html:29
+msgid "Badges"
+msgstr "Insignias"
+
+#: users/templates/users/mi_cuenta.html:40
 msgid "Personal data"
 msgstr "Datos personales"
 
+#: users/templates/users/mi_cuenta.html:41
 msgid "Edit your name, email and biography."
 msgstr "Edita tu nombre, email y biografía."
 
+#: users/templates/users/mi_cuenta.html:42
+#: users/templates/users/profile_edit.html:5
+#: users/templates/users/profile_edit.html:13
+#: users/templates/users/profile_edit.html:17
 msgid "Edit profile"
 msgstr "Editar perfil"
 
+#: users/templates/users/mi_cuenta.html:51
 msgid "Courses you are enrolled in."
 msgstr "Cursos en los que estás inscrito."
 
+#: users/templates/users/mi_cuenta.html:61
+#: users/templates/users/mi_cuenta.html:87
 msgid "View all"
 msgstr "Ver todos"
 
+#: users/templates/users/mi_cuenta.html:63
 msgid "You are not enrolled in any course yet."
 msgstr "Aún no estás inscrito en ningún curso."
 
+#: users/templates/users/mi_cuenta.html:64
+#: users/templates/users/mi_cuenta.html:138
 msgid "Explore courses"
 msgstr "Explorar cursos"
 
+#: users/templates/users/mi_cuenta.html:74
 msgid "Certificates obtained upon completing courses."
 msgstr "Certificados obtenidos al completar cursos."
 
+#: users/templates/users/mi_cuenta.html:89
 #, python-format
-msgid "You don't have any certificates yet. Complete a course 100%% to get one."
-msgstr "Aún no tienes certificados. Completa un curso al 100%% para obtener uno."
+msgid ""
+"You don't have any certificates yet. Complete a course 100%% to get one."
+msgstr ""
+"Aún no tienes certificados. Completa un curso al 100%% para obtener uno.Aún "
+"no tienes certificados. Completa un curso al 100%% para obtener uno."
 
+#: users/templates/users/mi_cuenta.html:99
+msgid "Badges & Achievements"
+msgstr "Insignias y Logros"
+
+#: users/templates/users/mi_cuenta.html:100
+msgid "Complete courses, leave reviews, and pass exams to earn badges."
+msgstr "Completa cursos, deja reseñas y aprueba exámenes para ganar insignias."
+"Completa cursos, deja reseñas y aprueba exámenes para ganar "
+"insignias.Completa cursos, deja reseñas y aprueba exámenes para ganar "
+"insignias."
+
+#: users/templates/users/mi_cuenta.html:109
+msgid "Earned"
+msgstr "Obtenida"
+
+#: users/templates/users/mi_cuenta.html:111
+msgid "Locked"
+msgstr "Bloqueada"
+
+#: users/templates/users/mi_cuenta.html:124
 msgid "Shopping cart"
 msgstr "Carrito de compras"
 
+#: users/templates/users/mi_cuenta.html:125
 msgid "Courses you have in your cart."
 msgstr "Cursos que tienes en tu carrito."
 
+#: users/templates/users/mi_cuenta.html:135
 msgid "Go to cart"
 msgstr "Ir al carrito"
 
-msgid "Save"
-msgstr "Guardar"
-
+#: users/templates/users/register.html:13
 msgid "Create account"
 msgstr "Crear cuenta"
 
+#: users/templates/users/register.html:14
 msgid "Choose your role: Student or Instructor"
 msgstr "Elige tu rol: Estudiante o Instructor"
 
+#: users/templates/users/register.html:21
 msgid "Already have an account?"
 msgstr "¿Ya tienes cuenta?"

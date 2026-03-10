@@ -4,9 +4,12 @@ y diplomas de certificación de industria. Incluye generación de PDF con
 diseño profesional (bordes, colores, sellos). Generación local con ReportLab.
 """
 import io
+import logging
 import random
 import string
 from django.utils import timezone
+
+logger = logging.getLogger('catalog')
 
 from catalog.models import Curso, Certificado
 from transactions.models import Inscripcion, EstadoInscripcion
@@ -127,6 +130,9 @@ def crear_certificado_si_completo(user, curso: Curso):
         codigo_verificacion=codigo,
         plantilla='default',
     )
+    logger.info('Certificate %s issued to user %s for course "%s"', numero, user.username, curso.titulo)
+    from core.services.notification_service import notificar_certificado
+    notificar_certificado(user, curso)
     from django.core.mail import send_mail
     from django.conf import settings
     send_mail(
@@ -136,86 +142,110 @@ def crear_certificado_si_completo(user, curso: Curso):
         recipient_list=[user.email],
         fail_silently=True,
     )
+    from catalog.services.badge_service import evaluar_y_otorgar
+    evaluar_y_otorgar(user)
     return cert
 
 
 def generar_pdf_certificado(certificado: Certificado) -> bytes:
     """
     Genera el PDF del certificado de completitud de curso con diseño profesional:
-    marco decorativo, banda superior, tipografía jerárquica, sello y pie con datos de verificación.
+    marco decorativo, banda superior, tipografía jerárquica, sello, insignias
+    y pie con datos de verificación.
     """
-    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.pagesizes import A4, landscape
     from reportlab.lib.units import cm
-    from reportlab.pdfgen import canvas
+    from reportlab.pdfgen import canvas as canvas_mod
+    from reportlab.lib.colors import HexColor
 
     buffer = io.BytesIO()
-    width, height = A4
-    c = canvas.Canvas(buffer, pagesize=A4)
-    margin = 1.8 * cm
+    width, height = landscape(A4)
+    c = canvas_mod.Canvas(buffer, pagesize=landscape(A4))
+    margin = 2 * cm
     cx = width / 2
     y = height - margin
 
-    # --- Marco y banda superior ---
-    _draw_certificate_frame(c, width, height, margin / cm, top_band_height_cm=2.2)
-    # Contenido de la banda (sobre el rectángulo ya dibujado)
-    c.setFillColor(_color_white())
-    c.setFont('Helvetica-Bold', 24)
-    c.drawCentredString(cx, y - 0.9 * cm, 'SKILLFORGE')
-    c.setFont('Helvetica', 11)
-    c.drawCentredString(cx, y - 1.5 * cm, 'Certificado de completitud de curso')
-    c.setFont('Helvetica', 9)
-    c.drawCentredString(cx, y - 1.95 * cm, 'Acredita que el titular ha completado la totalidad del programa.')
-    y -= 2.5 * cm
+    _draw_certificate_frame(c, width, height, margin / cm, top_band_height_cm=2.5)
 
-    # --- Cuerpo principal ---
-    c.setFillColor(_color_text_secondary())
+    c.setFillColor(_color_white())
+    c.setFont('Helvetica-Bold', 28)
+    c.drawCentredString(cx, y - 1.0 * cm, 'SKILLFORGE')
     c.setFont('Helvetica', 12)
-    c.drawCentredString(cx, y, 'Se certifica que')
-    y -= 0.5 * cm
-    # Línea decorativa
-    line_w = 4 * cm
+    c.drawCentredString(cx, y - 1.7 * cm, 'CERTIFICATE OF COMPLETION')
+    c.setFont('Helvetica', 9)
+    c.drawCentredString(cx, y - 2.15 * cm, 'This certifies that the holder has completed the full program.')
+    y -= 3.0 * cm
+
+    c.setFillColor(_color_text_secondary())
+    c.setFont('Helvetica', 13)
+    c.drawCentredString(cx, y, 'This is to certify that')
+    y -= 0.6 * cm
+    line_w = 5 * cm
     c.setStrokeColor(_color_accent())
     c.setLineWidth(1.5)
     c.line(cx - line_w / 2, y, cx + line_w / 2, y)
-    y -= 0.6 * cm
+    y -= 0.7 * cm
     nombre = certificado.user.get_full_name() or certificado.user.username
     c.setFillColor(_color_primary())
-    c.setFont('Helvetica-Bold', 18)
+    c.setFont('Helvetica-Bold', 22)
     c.drawCentredString(cx, y, nombre)
-    y -= 0.5 * cm
+    y -= 0.6 * cm
     c.setStrokeColor(_color_accent())
     c.line(cx - line_w / 2, y, cx + line_w / 2, y)
-    y -= 0.7 * cm
+    y -= 0.8 * cm
     c.setFillColor(_color_text_secondary())
-    c.setFont('Helvetica', 12)
-    c.drawCentredString(cx, y, 'ha completado el curso')
-    y -= 0.6 * cm
+    c.setFont('Helvetica', 13)
+    c.drawCentredString(cx, y, 'has successfully completed the course')
+    y -= 0.7 * cm
     c.setFillColor(_color_primary())
-    c.setFont('Helvetica-Bold', 14)
-    # Título del curso puede ser largo; dibujar centrado (una línea)
+    c.setFont('Helvetica-Bold', 16)
     curso_titulo = certificado.curso.titulo
-    c.drawCentredString(cx, y, curso_titulo[:60] + ('...' if len(curso_titulo) > 60 else ''))
+    c.drawCentredString(cx, y, curso_titulo[:70] + ('...' if len(curso_titulo) > 70 else ''))
+    y -= 0.5 * cm
+    c.setFillColor(_color_text_secondary())
+    c.setFont('Helvetica', 10)
+    categoria = getattr(certificado.curso, 'categoria', None)
+    if categoria:
+        c.drawCentredString(cx, y, f'Category: {categoria.nombre}')
+        y -= 0.4 * cm
+    instructor = getattr(certificado.curso, 'instructor', None)
+    if instructor:
+        inst_name = instructor.get_full_name() or instructor.username
+        c.drawCentredString(cx, y, f'Instructor: {inst_name}')
     y -= 1.0 * cm
 
-    # --- Sello (esquina superior derecha) ---
-    seal_x = width - margin - 2 * cm
-    seal_y = height - margin - 2.2 * cm
-    _draw_seal(c, seal_x, seal_y, 28, 'CERTIFIED')
+    # Badges earned by the user
+    from catalog.services.badge_service import obtener_insignias
+    insignias = obtener_insignias(certificado.user)
+    if insignias:
+        c.setFont('Helvetica', 8)
+        c.setFillColor(_color_text_secondary())
+        c.drawCentredString(cx, y, 'BADGES EARNED')
+        y -= 0.35 * cm
+        badge_texts = [f'[{b.get_tipo_display()}]' for b in insignias[:6]]
+        c.setFont('Helvetica-Bold', 8)
+        c.setFillColor(_color_accent())
+        c.drawCentredString(cx, y, '  '.join(badge_texts))
+        y -= 0.6 * cm
 
-    # --- Pie: número, código de verificación, fecha ---
+    seal_x = width - margin - 2.5 * cm
+    seal_y = height - margin - 2.5 * cm
+    _draw_seal(c, seal_x, seal_y, 32, 'CERTIFIED')
+
+    # Corner seal bottom-left
+    _draw_seal(c, margin + 2.5 * cm, margin + 2.5 * cm, 28, 'SKILLFORGE')
+
     c.setStrokeColor(_color_accent())
     c.setLineWidth(0.5)
     c.line(margin + 0.5 * cm, y + 0.3 * cm, width - margin - 0.5 * cm, y + 0.3 * cm)
     y -= 0.1 * cm
     c.setFillColor(_color_text_secondary())
     c.setFont('Helvetica', 9)
-    c.drawCentredString(cx, y, f'N.º {certificado.numero_certificado}')
-    y -= 0.45 * cm
-    c.drawCentredString(cx, y, f'Código de verificación: {certificado.codigo_verificacion}')
-    y -= 0.45 * cm
+    c.drawString(margin + 1 * cm, y, f'No. {certificado.numero_certificado}')
+    c.drawCentredString(cx, y, f'Verification: {certificado.codigo_verificacion}')
     fecha_str = _format_fecha_es(certificado.fecha_emision)
     if fecha_str:
-        c.drawCentredString(cx, y, fecha_str)
+        c.drawRightString(width - margin - 1 * cm, y, fecha_str)
 
     c.showPage()
     c.save()

@@ -1,5 +1,7 @@
 from django.db.models import Count
 from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +10,7 @@ from datetime import timedelta
 from catalog.models import Curso, Categoria, Certificado
 from catalog.services import course_service
 from core.mixins import AdminRequiredMixin
+from core.services import notification_service
 from transactions.models import Orden, Inscripcion
 
 User = get_user_model()
@@ -109,3 +112,40 @@ class PanelAdminView(_AdminRequiredMixin, TemplateView):
         context['cursos_publicados'] = Curso.objects.filter(estado='PUBLICADO').count()
         context['ordenes_recientes'] = Orden.objects.select_related('user')[:10]
         return context
+
+
+class NotificationsView(LoginRequiredMixin, TemplateView):
+    """List all notifications for the authenticated user."""
+    template_name = 'notifications.html'
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['notifications'] = notification_service.obtener_notificaciones(self.request.user, limit=50)
+        return context
+
+
+class MarkAllNotificationsReadView(LoginRequiredMixin, View):
+    """POST: mark all notifications as read."""
+    login_url = '/'
+
+    def post(self, request):
+        notification_service.marcar_todas_leidas(request.user)
+        return redirect('core:notifications')
+
+
+class MarkNotificationReadView(LoginRequiredMixin, View):
+    """POST: mark a single notification as read and redirect to its URL."""
+    login_url = '/'
+
+    def post(self, request, pk):
+        from core.models import Notification
+        try:
+            notif = Notification.objects.get(pk=pk, user=request.user)
+            notif.leida = True
+            notif.save(update_fields=['leida'])
+            if notif.url:
+                return redirect(notif.url)
+        except Notification.DoesNotExist:
+            pass
+        return redirect('core:notifications')

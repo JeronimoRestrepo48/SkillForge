@@ -80,6 +80,8 @@ class MiCuentaView(LoginRequiredMixin, TemplateView):
         context['carrito'] = carrito
         context['carrito_items'] = carrito.items.select_related('curso').all()
         context['profile_form'] = ProfileForm(instance=self.request.user)
+        from catalog.services.badge_service import obtener_todas_insignias_con_estado
+        context['insignias'] = obtener_todas_insignias_con_estado(self.request.user)
         return context
 
 

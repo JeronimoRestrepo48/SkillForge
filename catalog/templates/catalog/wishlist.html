@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load core_extras %}
+
+{% block title %}{% trans "Wishlist" %} - SkillForge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Wishlist" %}</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4"><i class="bi bi-heart-fill text-danger me-2"></i>{% trans "My Wishlist" %}</h1>
+
+    {% if wishlist_items %}
+    <div class="row g-4">
+        {% for item in wishlist_items %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 curso-card">
+                {% if item.curso.imagen %}
+                <img src="{{ item.curso.imagen.url }}" class="card-img-top" alt="{{ item.curso.titulo|sin_certificacion }}" style="object-fit: cover; height: 200px;">
+                {% else %}
+                <img src="{{ item.curso|course_theme_image:'400x200' }}" class="card-img-top" alt="{{ item.curso.titulo|sin_certificacion }}" loading="lazy" style="object-fit: cover; height: 200px;">
+                {% endif %}
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">{{ item.curso.get_nivel_dificultad_display }}</span>
+                    <span class="badge bg-info mb-2">{{ item.curso.categoria.nombre }}</span>
+                    <h5 class="card-title">{{ item.curso.titulo|sin_certificacion }}</h5>
+                    <p class="text-muted small mb-1">{{ item.curso.instructor.get_full_name|default:item.curso.instructor.username }}</p>
+                    <p class="fw-bold text-primary">{{ item.curso.calcular_precio_final }} COP</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'catalog:course_detail' item.curso.pk %}" class="btn btn-outline-primary btn-sm">{% trans "View course" %}</a>
+                        <form method="post" action="{% url 'catalog:wishlist_toggle' item.curso.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-heart-fill me-1"></i>{% trans "Remove" %}</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-footer text-muted small">
+                    {% trans "Added" %} {{ item.fecha_agregado|timesince }} {% trans "ago" %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-heart display-4 text-muted"></i>
+        <p class="lead text-muted mt-3">{% trans "Your wishlist is empty." %}</p>
+        <a href="{% url 'catalog:course_list' %}" class="btn btn-skillforge">{% trans "Browse courses" %}</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

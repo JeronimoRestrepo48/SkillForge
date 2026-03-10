@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Eliminar lección - SkillForge{% endblock %}
+{% block title %}{% trans "Eliminar lección" %} - SkillForge{% endblock %}
 
 {% block content %}
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">Mis Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:my_teaching' %}">{% trans "Mis Cursos" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'catalog:module_list' leccion.modulo.curso_id %}">{{ leccion.modulo.curso.titulo }}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'catalog:lesson_list' leccion.modulo.curso_id leccion.modulo_id %}">{{ leccion.modulo.titulo }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Eliminar lección</li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Eliminar lección" %}</li>
         </ol>
     </nav>
 
-    <h1 class="h2 mb-4">Eliminar lección</h1>
-    <p>¿Estás seguro de que deseas eliminar la lección <strong>{{ leccion.titulo }}</strong>?</p>
+    <h1 class="h2 mb-4">{% trans "Eliminar lección" %}</h1>
+    <p>{% blocktrans with titulo=leccion.titulo %}¿Estás seguro de que deseas eliminar la lección <strong>{{ titulo }}</strong>?{% endblocktrans %}</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Eliminar</button>
-        <a href="{% url 'catalog:lesson_list' leccion.modulo.curso_id leccion.modulo_id %}" class="btn btn-outline-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-danger">{% trans "Eliminar" %}</button>
+        <a href="{% url 'catalog:lesson_list' leccion.modulo.curso_id leccion.modulo_id %}" class="btn btn-outline-secondary">{% trans "Cancelar" %}</a>
     </form>
 </div>
 {% endblock %}

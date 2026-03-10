@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}{{ certificacion.nombre }} - SkillForge{% endblock %}
 
@@ -7,8 +8,8 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'catalog:certificaciones_industria' %}">Industry certifications</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:certificaciones_industria' %}">{% trans "Industry certifications" %}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ certificacion.nombre }}</li>
         </ol>
     </nav>
@@ -26,25 +27,25 @@
             {% endif %}
             <div class="card mt-3">
                 <div class="card-body">
-                    <h5 class="card-title">What's included</h5>
+                    <h5 class="card-title">{% trans "What's included" %}</h5>
                     <ul class="small mb-0">
-                        <li>Complete study material (self-paced)</li>
-                        <li>40-question quiz-style exam</li>
-                        <li>PDF diploma on pass (knowledge endorsement)</li>
+                        <li>{% trans "Complete study material (self-paced)" %}</li>
+                        <li>{% trans "40-question quiz-style exam" %}</li>
+                        <li>{% trans "PDF diploma on pass (knowledge endorsement)" %}</li>
                     </ul>
                     {% if puede_acceder %}
                         {% if tiene_examen %}
                         <a href="{% url 'catalog:examen_certificacion' certificacion.slug %}" class="btn btn-skillforge w-100 mt-2">
-                            <i class="bi bi-pencil-square"></i> Go to exam
+                            <i class="bi bi-pencil-square"></i> {% trans "Go to exam" %}
                         </a>
                         {% endif %}
                     {% else %}
                         <p class="fw-bold text-primary mt-2 mb-2">{{ certificacion.precio }} COP</p>
                         <form method="post" action="{% url 'transactions:cart_add_certificacion' certificacion.slug %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-skillforge w-100">Add to cart</button>
+                            <button type="submit" class="btn btn-skillforge w-100">{% trans "Add to cart" %}</button>
                         </form>
-                        <p class="small text-muted mt-2 mb-0">After checkout you will have access to the material and exam. On passing you will receive your diploma.</p>
+                        <p class="small text-muted mt-2 mb-0">{% trans "After checkout you will have access to the material and exam. On passing you will receive your diploma." %}</p>
                     {% endif %}
                 </div>
             </div>
@@ -55,10 +56,10 @@
 
             {% if not puede_acceder %}
             <div class="alert alert-warning">
-                <strong>Paid access.</strong> To view the study material and take the certified exam you must purchase access to this certification. The diploma you receive on passing certifies industry knowledge endorsement, not just course completion.
+                {% blocktrans %}<strong>Paid access.</strong> To view the study material and take the certified exam you must purchase access to this certification. The diploma you receive on passing certifies industry knowledge endorsement, not just course completion.{% endblocktrans %}
             </div>
             {% else %}
-            <h2 class="h5 mb-3">Study material</h2>
+            <h2 class="h5 mb-3">{% trans "Study material" %}</h2>
             {% for seccion in secciones %}
             <div class="card mb-3">
                 <div class="card-header bg-light">
@@ -69,13 +70,13 @@
                 </div>
             </div>
             {% empty %}
-            <p class="text-muted">No hay secciones de material publicadas.</p>
+            <p class="text-muted">{% trans "No hay secciones de material publicadas." %}</p>
             {% endfor %}
 
             {% if tiene_examen %}
             <div class="mt-4 pt-3 border-top">
                 <a href="{% url 'catalog:examen_certificacion' certificacion.slug %}" class="btn btn-skillforge btn-lg">
-                    <i class="bi bi-pencil-square me-2"></i> Realizar examen
+                    <i class="bi bi-pencil-square me-2"></i> {% trans "Realizar examen" %}
                 </a>
             </div>
             {% endif %}

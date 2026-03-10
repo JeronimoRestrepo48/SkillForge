@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load core_extras %}
+{% load i18n %}
 
 {% block title %}{{ curso.titulo|sin_certificacion }} - SkillForge{% endblock %}
 
@@ -9,7 +10,7 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'catalog:course_list' %}">Courses</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog:course_list' %}">{% trans "Courses" %}</a></li>
             <li class="breadcrumb-item active">{{ curso.titulo|sin_certificacion }}</li>
         </ol>
     </nav>
@@ -24,17 +25,17 @@
 
             <h1 class="display-6 fw-bold mb-2">{{ curso.titulo|sin_certificacion }}</h1>
             <p class="text-muted mb-2">
-                by {{ curso.instructor.get_full_name|default:curso.instructor.username }}
+                {% blocktrans with name=curso.instructor.get_full_name|default:curso.instructor.username %}by {{ name }}{% endblocktrans %}
             </p>
             <div class="d-flex flex-wrap gap-2 mb-3">
                 <span class="badge bg-secondary">{{ curso.get_nivel_dificultad_display }}</span>
                 <span class="badge bg-info">{{ curso.categoria.nombre }}</span>
-                <span class="badge bg-light text-dark">{{ curso.duracion_horas }} hours</span>
-                {% if total_lecciones %}<span class="badge bg-light text-dark border">{{ total_lecciones }} lessons</span>{% endif %}
-                {% if modulos %}<span class="badge bg-light text-dark border">{{ modulos|length }} modules</span>{% endif %}
+                <span class="badge bg-light text-dark">{% blocktrans with hours=curso.duracion_horas %}{{ hours }} hours{% endblocktrans %}</span>
+                {% if total_lecciones %}<span class="badge bg-light text-dark border">{% blocktrans with count=total_lecciones %}{{ count }} lessons{% endblocktrans %}</span>{% endif %}
+                {% if modulos %}<span class="badge bg-light text-dark border">{% blocktrans with count=modulos|length %}{{ count }} modules{% endblocktrans %}</span>{% endif %}
                 {% if rating_total > 0 %}
                 <span class="badge bg-warning text-dark">
-                    <i class="bi bi-star-fill"></i> {{ rating_promedio }} ({{ rating_total }} rating{{ rating_total|pluralize:"s" }})
+                    <i class="bi bi-star-fill"></i> {% blocktrans with avg=rating_promedio count counter=rating_total %}{{ avg }} ({{ counter }} rating){% plural %}{{ avg }} ({{ counter }} ratings){% endblocktrans %}
                 </span>
                 {% endif %}
             </div>
@@ -42,12 +43,12 @@
             <!-- Instructor -->
             <div class="card mb-4 border-0 bg-light">
                 <div class="card-body py-3">
-                    <h6 class="text-uppercase text-muted small mb-2">Instructor</h6>
+                    <h6 class="text-uppercase text-muted small mb-2">{% trans "Instructor" %}</h6>
                     <div class="d-flex align-items-center">
                         <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; font-weight: bold;">{{ curso.instructor.get_full_name|default:curso.instructor.username|slice:":1" }}</div>
                         <div>
                             <strong>{{ curso.instructor.get_full_name|default:curso.instructor.username }}</strong>
-                            <p class="mb-0 small text-muted">{{ curso.instructor.cursos_impartidos.count }} course{{ curso.instructor.cursos_impartidos.count|pluralize:"s" }} on SkillForge</p>
+                            <p class="mb-0 small text-muted">{% blocktrans count count=curso.instructor.cursos_impartidos.count %}{{ count }} course on SkillForge{% plural %}{{ count }} courses on SkillForge{% endblocktrans %}</p>
                         </div>
                     </div>
                 </div>
@@ -56,7 +57,7 @@
             <!-- What you'll learn (from first modules/lessons) -->
             {% if modulos %}
             <div class="mb-4">
-                <h5 class="fw-bold mb-3">What you'll learn</h5>
+                <h5 class="fw-bold mb-3">{% trans "What you'll learn" %}</h5>
                 <ul class="list-unstyled">
                     {% for modulo in modulos %}
                     <li class="d-flex align-items-start mb-2">
@@ -79,44 +80,44 @@
             <!-- Exámenes, trabajos y calificaciones -->
             {% if curso.info_evaluacion %}
             <div class="mb-4">
-                <h5 class="fw-bold mb-3">Exámenes, trabajos y calificaciones</h5>
+                <h5 class="fw-bold mb-3">{% trans "Exámenes, trabajos y calificaciones" %}</h5>
                 <div class="small text-muted" style="white-space: pre-line;">{{ curso.info_evaluacion }}</div>
             </div>
             {% endif %}
 
             <!-- Requirements -->
             <div class="mb-4">
-                <h5 class="fw-bold mb-3">Requirements</h5>
+                <h5 class="fw-bold mb-3">{% trans "Requirements" %}</h5>
                 <ul class="small text-muted">
-                    <li>Basic computer skills</li>
-                    <li>Internet connection</li>
-                    <li>Desire to learn (level: {{ curso.get_nivel_dificultad_display }})</li>
+                    <li>{% trans "Basic computer skills" %}</li>
+                    <li>{% trans "Internet connection" %}</li>
+                    <li>{% blocktrans with level=curso.get_nivel_dificultad_display %}Desire to learn (level: {{ level }}){% endblocktrans %}</li>
                 </ul>
             </div>
 
             <ul class="nav nav-tabs mb-3" id="cursoTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab">Description</button>
+                    <button class="nav-link active" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab">{% trans "Description" %}</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="contenido-tab" data-bs-toggle="tab" data-bs-target="#contenido" type="button" role="tab">Curriculum</button>
+                    <button class="nav-link" id="contenido-tab" data-bs-toggle="tab" data-bs-target="#contenido" type="button" role="tab">{% trans "Curriculum" %}</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="resenas-tab" data-bs-toggle="tab" data-bs-target="#resenas" type="button" role="tab">Reviews ({{ rating_total }})</button>
+                    <button class="nav-link" id="resenas-tab" data-bs-toggle="tab" data-bs-target="#resenas" type="button" role="tab">{% blocktrans with total=rating_total %}Reviews ({{ total }}){% endblocktrans %}</button>
                 </li>
             </ul>
             <div class="tab-content" id="cursoTabsContent">
                 <div class="tab-pane fade show active" id="desc" role="tabpanel">
-                    <h5>Description</h5>
+                    <h5>{% trans "Description" %}</h5>
                     <div class="curso-descripcion-larga" style="white-space: pre-line;">{{ curso.descripcion|sin_certificacion }}</div>
                 </div>
                 <div class="tab-pane fade" id="contenido" role="tabpanel">
-                    <h5>Course content</h5>
+                    <h5>{% trans "Course content" %}</h5>
                     {% if modulos %}
                     <ul class="list-group list-group-flush">
                         {% for modulo in modulos %}
                         <li class="list-group-item px-0">
-                            <strong>Module {{ forloop.counter }}:</strong> {{ modulo.titulo }}
+                            <strong>{% trans "Module" %} {{ forloop.counter }}:</strong> {{ modulo.titulo }}
                             {% if modulo.duracion_minutos %}<span class="text-muted small">({{ modulo.duracion_minutos }} min)</span>{% endif %}
                             {% if modulo.lecciones.exists %}
                             <ul class="mt-2 mb-0">
@@ -129,32 +130,32 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="text-muted">This course has no published content yet.</p>
+                    <p class="text-muted">{% trans "This course has no published content yet." %}</p>
                     {% endif %}
                 </div>
                 <div class="tab-pane fade" id="resenas" role="tabpanel">
                     {% if calificacion_form %}
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">{% if mi_calificacion %}Edit your rating{% else %}Leave a rating{% endif %}</h5>
-                            <p class="small text-muted">You can only rate courses you have completed.</p>
+                            <h5 class="card-title">{% if mi_calificacion %}{% trans "Edit your rating" %}{% else %}{% trans "Leave a rating" %}{% endif %}</h5>
+                            <p class="small text-muted">{% trans "You can only rate courses you have completed." %}</p>
                             <form method="post" action="{% url 'catalog:course_rate' curso.pk %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="next" value="{{ request.path }}">
                                 {{ calificacion_form|crispy }}
-                                <button type="submit" class="btn btn-skillforge btn-sm">Save</button>
+                                <button type="submit" class="btn btn-skillforge btn-sm">{% trans "Save" %}</button>
                             </form>
                         </div>
                     </div>
                     {% endif %}
                     {% if rating_total > 0 %}
-                    <p class="mb-2"><strong>{{ rating_promedio }}</strong> <i class="bi bi-star-fill text-warning"></i> · {{ rating_total }} rating{{ rating_total|pluralize:"s" }}</p>
+                    <p class="mb-2"><strong>{{ rating_promedio }}</strong> <i class="bi bi-star-fill text-warning"></i> · {% blocktrans count counter=rating_total %}{{ counter }} rating{% plural %}{{ counter }} ratings{% endblocktrans %}</p>
                     <ul class="list-group list-group-flush">
                         {% for cal in calificaciones %}
                         <li class="list-group-item px-0">
                             <div class="d-flex justify-content-between">
                                 <strong>{{ cal.user.get_full_name|default:cal.user.username }}</strong>
-                                <span>{% if cal.es_verificada %}<span class="badge bg-success">Verified purchase</span>{% endif %}</span>
+                                <span>{% if cal.es_verificada %}<span class="badge bg-success">{% trans "Verified purchase" %}</span>{% endif %}</span>
                             </div>
                             <p class="mb-0 small">
                                 {% for i in "12345" %}{% if forloop.counter <= cal.puntuacion %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% endfor %}
@@ -165,7 +166,7 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="text-muted">No reviews yet. Be the first to complete the course and leave a review!</p>
+                    <p class="text-muted">{% trans "No reviews yet. Be the first to complete the course and leave a review!" %}</p>
                     {% endif %}
                 </div>
             </div>
@@ -178,24 +179,35 @@
                     <p class="text-muted text-decoration-line-through small">{{ curso.precio }} COP</p>
                     {% endif %}
                     {% if disponible %}
-                    <p class="text-success small"><i class="bi bi-check-circle"></i> {{ curso.cupos_disponibles }} spots available</p>
+                    <p class="text-success small"><i class="bi bi-check-circle"></i> {% blocktrans with spots=curso.cupos_disponibles %}{{ spots }} spots available{% endblocktrans %}</p>
                     {% if ya_inscrito %}
                     <a href="{% url 'catalog:course_learn' curso.pk %}" class="btn btn-skillforge w-100 mt-2">
-                        <i class="bi bi-play-circle"></i> Go to course
+                        <i class="bi bi-play-circle"></i> {% trans "Go to course" %}
                     </a>
                     {% elif user.is_authenticated %}
                     <form method="post" action="{% url 'transactions:cart_add' curso.pk %}" class="mt-2">
                         {% csrf_token %}
                         <input type="hidden" name="next" value="{{ request.path }}">
                         <button type="submit" class="btn btn-skillforge w-100">
-                            <i class="bi bi-cart-plus"></i> Add to cart
+                            <i class="bi bi-cart-plus"></i> {% trans "Add to cart" %}
                         </button>
                     </form>
                     {% else %}
-                    <a href="{% url 'core:login' %}?next={{ request.path }}" class="btn btn-skillforge w-100 mt-2">Log in to purchase</a>
+                    <a href="{% url 'core:login' %}?next={{ request.path }}" class="btn btn-skillforge w-100 mt-2">{% trans "Log in to purchase" %}</a>
                     {% endif %}
                     {% else %}
-                    <p class="text-danger small">No spots available</p>
+                    <p class="text-danger small">{% trans "No spots available" %}</p>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'catalog:wishlist_toggle' curso.pk %}" class="mt-2">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        {% if in_wishlist %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-heart-fill me-1"></i> {% trans "In wishlist" %}</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-outline-secondary btn-sm w-100"><i class="bi bi-heart me-1"></i> {% trans "Add to wishlist" %}</button>
+                        {% endif %}
+                    </form>
                     {% endif %}
                 </div>
             </div>

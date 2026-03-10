@@ -58,7 +58,10 @@ class CarritoAgregarCertificacionView(LoginRequiredMixin, View):
             messages.success(request, msg)
         else:
             messages.error(request, msg)
-        next_url = request.POST.get('next') or request.GET.get('next') or reverse('catalog:certificacion_industria_detail', args=[slug])
+        from django.utils.http import url_has_allowed_host_and_scheme
+        next_url = request.POST.get('next') or request.GET.get('next') or ''
+        if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+            next_url = reverse('catalog:certificacion_industria_detail', args=[slug])
         return redirect(next_url)
 
 
@@ -87,7 +90,10 @@ class CarritoAgregarView(LoginRequiredMixin, View):
             messages.success(request, msg)
         else:
             messages.error(request, msg)
-        next_url = request.POST.get('next') or request.GET.get('next') or reverse('catalog:course_detail', args=[curso_id])
+        from django.utils.http import url_has_allowed_host_and_scheme
+        next_url = request.POST.get('next') or request.GET.get('next') or ''
+        if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+            next_url = reverse('catalog:course_detail', args=[curso_id])
         return redirect(next_url)
 
 
@@ -305,6 +311,7 @@ class OrderListView(LoginRequiredMixin, ListView):
     """Lista de pedidos del usuario (Mis pedidos)."""
     template_name = 'transactions/mis_pedidos.html'
     context_object_name = 'ordenes'
+    paginate_by = 15
     login_url = '/'
 
     def get_queryset(self):
