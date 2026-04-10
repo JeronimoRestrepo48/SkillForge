@@ -1,0 +1,140 @@
+INFO 2026-04-09 20:45:37,921 course_service User est completing lesson L1 (pk=1)
+INFO 2026-04-09 20:45:37,924 course_service User est completing lesson L2 (pk=2)
+INFO 2026-04-09 20:45:37,934 certificate_service Certificate SF-CERT-2026-TWOM0C issued to user est for course "Curso Test"
+INFO 2026-04-09 20:45:38,491 course_service User est completing lesson L1 (pk=1)
+INFO 2026-04-09 20:45:38,934 course_service User est completing lesson L1 (pk=1)
+INFO 2026-04-09 20:45:38,935 course_service User est completing lesson L2 (pk=2)
+INFO 2026-04-09 20:45:38,940 certificate_service Certificate SF-CERT-2026-7O3IED issued to user est for course "Curso Test"
+INFO 2026-04-09 20:45:41,614 course_service User est completing lesson L1 (pk=1)
+INFO 2026-04-09 20:45:41,619 course_service User est completing lesson L2 (pk=2)
+INFO 2026-04-09 20:45:41,623 certificate_service Certificate SF-CERT-2026-I9HH3O issued to user est for course "Curso Test"
+INFO 2026-04-09 20:45:42,007 course_service User est completing lesson L1 (pk=1)
+WARNING 2026-04-09 20:45:49,212 log Forbidden (Permission denied): /panel/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:45:53,757 log Forbidden (Permission denied): /courses/manage/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:45:54,143 log Forbidden (Permission denied): /panel/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:45:55,481 log Forbidden (Permission denied): /panel/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:45:55,752 log Forbidden (Permission denied): /panel/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:45:56,013 log Forbidden (Permission denied): /panel/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:45:56,273 log Forbidden (Permission denied): /panel/
+Traceback (most recent call last):
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 134, in dispatch
+    return self.handle_no_permission()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/jeronimorestrepoangel/.local/lib/python3.14/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
+    raise PermissionDenied(self.get_permission_denied_message())
+django.core.exceptions.PermissionDenied
+WARNING 2026-04-09 20:46:05,432 log Not Found: /cart/order/SF-99999999999999-0000/
+WARNING 2026-04-09 20:46:06,537 log Not Found: /cart/order/SF-INV-99999999999999/invoice/
+WARNING 2026-04-09 20:46:07,082 log Unauthorized: /api/me/

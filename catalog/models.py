@@ -94,6 +94,10 @@ class Curso(models.Model):
         verbose_name = 'Curso'
         verbose_name_plural = 'Cursos'
         ordering = ['-fecha_creacion']
+        indexes = [
+            models.Index(fields=['estado', 'fecha_creacion'], name='catalog_curso_estado_fecha_idx'),
+            models.Index(fields=['categoria', 'estado'], name='catalog_curso_cat_estado_idx'),
+        ]
 
     def __str__(self):
         return self.titulo

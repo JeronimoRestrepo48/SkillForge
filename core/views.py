@@ -30,12 +30,49 @@ class _AdminRequiredMixin(LoginRequiredMixin, AdminRequiredMixin):
 
 
 def health_view(request):
-    """Endpoint de salud para monitoreo (health check)."""
+    """Liveness probe: process is up (no dependency checks)."""
     return JsonResponse({
         "status": "ok",
         "service": "SkillForge",
         "version": "1.0.0",
     })
+
+
+def health_ready_view(request):
+    """Readiness probe: database and cache must respond (orchestrators / load balancers)."""
+    from django.db import connection
+    from django.core.cache import cache
+
+    checks = {}
+    db_ok = False
+    try:
+        connection.ensure_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        checks["database"] = "ok"
+        db_ok = True
+    except Exception as exc:
+        checks["database"] = f"error: {exc}"
+
+    cache_ok = False
+    try:
+        cache.set("__health_check__", "1", timeout=5)
+        if cache.get("__health_check__") == "1":
+            checks["cache"] = "ok"
+            cache_ok = True
+        else:
+            checks["cache"] = "degraded"
+    except Exception as exc:
+        checks["cache"] = f"error: {exc}"
+
+    ready = db_ok and cache_ok
+    payload = {
+        "status": "ready" if ready else "not_ready",
+        "checks": checks,
+        "service": "SkillForge",
+        "version": "1.0.0",
+    }
+    return JsonResponse(payload, status=200 if ready else 503)
 
 
 class LandingView(LoginRequiredMixin, TemplateView):

@@ -185,6 +185,10 @@ class Orden(models.Model):
         verbose_name = 'Orden'
         verbose_name_plural = 'Órdenes'
         ordering = ['-fecha_creacion']
+        indexes = [
+            models.Index(fields=['user', 'estado'], name='tx_orden_user_estado_idx'),
+            models.Index(fields=['fecha_creacion'], name='tx_orden_fecha_creacion_idx'),
+        ]
 
     def __str__(self):
         return self.numero_orden
@@ -280,6 +284,9 @@ class Inscripcion(models.Model):
         verbose_name_plural = 'Inscripciones'
         unique_together = [['user', 'curso']]
         ordering = ['-fecha_inscripcion']
+        indexes = [
+            models.Index(fields=['user', 'estado'], name='tx_insc_user_estado_idx'),
+        ]
 
     def __str__(self):
         return f'{self.user} en {self.curso.titulo}'

@@ -202,6 +202,27 @@ class TransactionsViewsTest(TestCase):
         carrito = obtener_o_crear_carrito(self.user)
         self.assertEqual(carrito.cantidad_items(), 1)
 
+    def test_integration_http_add_cart_confirm_return_success(self):
+        """Full HTTP flow: add to cart → confirm checkout → payment return success."""
+        from urllib.parse import urlparse, parse_qs
+
+        self.client.login(username='student1', password='pass')
+        self.client.post(reverse('transactions:cart_add', args=[self.curso.pk]))
+        r_confirm = self.client.post(reverse('transactions:checkout_confirm'))
+        self.assertEqual(r_confirm.status_code, 302)
+        parsed = urlparse(r_confirm.url)
+        token = parse_qs(parsed.query)['token'][0]
+        r_return = self.client.get(
+            reverse('transactions:checkout_return'),
+            {'result': 'success', 'token': token},
+        )
+        self.assertEqual(r_return.status_code, 302)
+        orden = Orden.objects.get(user=self.user)
+        self.assertEqual(orden.estado, EstadoOrden.CONFIRMADA)
+        self.assertTrue(Inscripcion.objects.filter(user=self.user, curso=self.curso).exists())
+        carrito = obtener_o_crear_carrito(self.user)
+        self.assertEqual(carrito.cantidad_items(), 0)
+
     def test_checkout_return_success_confirms_order_creates_inscripcion_vacia_carrito(self):
         agregar_al_carrito(self.user, self.curso)
         carrito = obtener_o_crear_carrito(self.user)

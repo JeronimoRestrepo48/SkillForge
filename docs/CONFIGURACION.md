@@ -122,6 +122,20 @@ JWT (Simple JWT) está configurado en `base.py`:
 
 Los endpoints son `/api/token/` y `/api/token/refresh/`; el perfil en `/api/me/`.
 
+Documentación OpenAPI: `/api/schema/` y Swagger UI en `/api/docs/` (acceso público a la documentación; los endpoints de datos siguen exigiendo JWT o sesión).
+
+---
+
+## Proxy TLS (Nginx, balanceador)
+
+Si Django recibe peticiones **HTTP** desde el proxy pero los clientes hablan **HTTPS**, configura en `production` (o el settings de despliegue):
+
+```python
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+```
+
+El proxy debe enviar la cabecera `X-Forwarded-Proto: https`. Sin esto, `request.build_absolute_uri()` y redirecciones pueden generar URLs `http://` incorrectas. Activa además `SECURE_SSL_REDIRECT` solo si el tráfico directo a Django también debe forzar HTTPS (suele delegarse al proxy).
+
 ---
 
 ## Checklist producción
@@ -134,3 +148,5 @@ Los endpoints son `/api/token/` y `/api/token/refresh/`; el perfil en `/api/me/`
 - [ ] Configurar EMAIL_BACKEND y variables SMTP si se envían correos
 - [ ] `DJANGO_SETTINGS_MODULE=config.settings.production` (o el módulo que definas)
 - [ ] No versionar `.env` (debe estar en `.gitignore`)
+- [ ] Tras proxy TLS: `SECURE_PROXY_SSL_HEADER` y cabeceras correctas en Nginx
+- [ ] Orquestación: sonda **liveness** `GET /health/` y **readiness** `GET /health/ready/` (503 si BD o caché fallan)

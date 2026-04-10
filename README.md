@@ -134,7 +134,8 @@ Prefijo base: `http://127.0.0.1:8000`.
 | `/logout/` | Cierre de sesión | |
 | `/home/` | Landing | Página principal tras login |
 | `/panel/` | Panel admin | Solo administradores |
-| `/health/` | Health check | Comprobación de servicio |
+| `/health/` | Liveness | Proceso arriba (sin comprobar BD) |
+| `/health/ready/` | Readiness | BD y caché accesibles (orquestación / balanceadores) |
 
 ### Catálogo (`/courses/`)
 
@@ -182,9 +183,13 @@ Prefijo base: `http://127.0.0.1:8000`.
 
 | Ruta | Método | Descripción |
 |------|--------|-------------|
+| `/api/schema/` | GET | Esquema OpenAPI 3 (JSON) |
+| `/api/docs/` | GET | Swagger UI (documentación interactiva; en **Authorize** usar `Bearer <access>`) |
 | `/api/token/` | POST | Obtener access + refresh (body: `username`, `password`) |
 | `/api/token/refresh/` | POST | Refrescar access (body: `refresh`) |
 | `/api/me/` | GET | Perfil del usuario autenticado (cabecera: `Authorization: Bearer <access>`) |
+
+Los listados `/api/courses/`, `/api/categories/` y `/api/courses/<id>/modules/` devuelven paginación estándar DRF (`count`, `next`, `previous`, `results`). Parámetros: `page`, `page_size` (máx. 100).
 
 ### Django Admin
 
@@ -277,6 +282,7 @@ pytest
 
 - **[docs/FLUJOS.md](docs/FLUJOS.md)** — Flujos principales: inscripción, aprendizaje, certificados, carrito, checkout, pasarela simulada, API.
 - **[docs/CONFIGURACION.md](docs/CONFIGURACION.md)** — Detalle de variables de entorno, base de datos, email y despliegue.
+- **[docs/I18N_AND_CONTENT.md](docs/I18N_AND_CONTENT.md)** — Estrategia de idioma en UI (Django i18n) frente al contenido del catálogo en base de datos.
 - **Sprints**: [SPRINT1.md](docs/SPRINT1.md), [SPRINT2.md](docs/SPRINT2.md), [SPRINT3.md](docs/SPRINT3.md), [SPRINT4.md](docs/SPRINT4.md) — Alcance y entregables por iteración.
 
 ---
@@ -287,6 +293,7 @@ pytest
 - Configurar **`ALLOWED_HOSTS`** con el dominio real.
 - Servir estáticos con **WhiteNoise** o un servidor web (Nginx/Apache); recoger `STATIC_ROOT` con `collectstatic`.
 - Base de datos: usar **PostgreSQL** (o MySQL) y `DATABASE_URL` en `.env`.
+- Tras un proxy TLS (Nginx, etc.), definir **`SECURE_PROXY_SSL_HEADER`** si la app debe detectar HTTPS por cabeceras `X-Forwarded-Proto` (ver [docs/CONFIGURACION.md](docs/CONFIGURACION.md)).
 - Configurar un **EMAIL_BACKEND** real (SMTP) y `DEFAULT_FROM_EMAIL`.
 - Crear un módulo `config.settings.production` y definir `DJANGO_SETTINGS_MODULE=config.settings.production` en el entorno de producción.
 

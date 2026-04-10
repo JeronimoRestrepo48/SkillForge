@@ -19,6 +19,7 @@ from .serializers import (
 )
 from .services.rating_service import puede_calificar, crear_o_actualizar_calificacion
 from .services import course_service
+from .pagination import CatalogAPIPagination
 
 logger = logging.getLogger('catalog')
 
@@ -30,6 +31,7 @@ class CourseListAPIView(ListAPIView):
     """
     serializer_class = CursoListSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CatalogAPIPagination
 
     def get_queryset(self):
         q = self.request.query_params.get('q', '').strip()
@@ -64,6 +66,7 @@ class CourseModulesAPIView(ListAPIView):
     """
     serializer_class = ModuloSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CatalogAPIPagination
 
     def get_queryset(self):
         return Modulo.objects.filter(
@@ -79,6 +82,7 @@ class CategoryListAPIView(ListAPIView):
     """
     serializer_class = CategoriaSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CatalogAPIPagination
 
     def get_queryset(self):
         from .models import Categoria
