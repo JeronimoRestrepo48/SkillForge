@@ -1,0 +1,110 @@
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "8001:8000"
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8000
+      CATALOG_SERVICE_URL: http://catalog-service:8000
+      TRANSACTIONS_SERVICE_URL: http://transactions-service:8000
+      JWT_SECRET: skillforge-dev-secret
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      catalog-service:
+        condition: service_healthy
+      transactions-service:
+        condition: service_healthy
+
+  auth-service:
+    build: ./services/auth-service
+    ports:
+      - "8101:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://auth:auth@auth-db:5432/authdb
+      JWT_SECRET: skillforge-dev-secret
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  catalog-service:
+    build: ./services/catalog-service
+    ports:
+      - "8102:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://catalog:catalog@catalog-db:5432/catalogdb
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  transactions-service:
+    build: ./services/transactions-service
+    ports:
+      - "8103:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://transactions:transactions@transactions-db:5432/transactionsdb
+    depends_on:
+      transactions-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  auth-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: auth
+      POSTGRES_DB: authdb
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth -d authdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  catalog-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: catalog
+      POSTGRES_PASSWORD: catalog
+      POSTGRES_DB: catalogdb
+    volumes:
+      - catalog_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catalog -d catalogdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  transactions-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: transactions
+      POSTGRES_PASSWORD: transactions
+      POSTGRES_DB: transactionsdb
+    volumes:
+      - transactions_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U transactions -d transactionsdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  auth_db_data:
+  catalog_db_data:
+  transactions_db_data:

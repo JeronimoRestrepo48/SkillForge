@@ -283,6 +283,9 @@ pytest
 - **[docs/FLUJOS.md](docs/FLUJOS.md)** — Flujos principales: inscripción, aprendizaje, certificados, carrito, checkout, pasarela simulada, API.
 - **[docs/CONFIGURACION.md](docs/CONFIGURACION.md)** — Detalle de variables de entorno, base de datos, email y despliegue.
 - **[docs/I18N_AND_CONTENT.md](docs/I18N_AND_CONTENT.md)** — Estrategia de idioma en UI (Django i18n) frente al contenido del catálogo en base de datos.
+- **[docs/WIKI_MIGRACION_A_MICROSERVICIOS_STRANGLER.md](docs/WIKI_MIGRACION_A_MICROSERVICIOS_STRANGLER.md)** — Contenido de Wiki para Taller 02 (matriz de decisión, ruteo Nginx y diagrama).
+- **[microservices/README.md](microservices/README.md)** — Implementación Flask de microservicios (gateway + auth + catalog + transactions + PostgreSQL por servicio).
+- **[microservices/docs/MIGRATION_PLAN.md](microservices/docs/MIGRATION_PLAN.md)** — Estado de migración y mejoras pendientes.
 - **Sprints**: [SPRINT1.md](docs/SPRINT1.md), [SPRINT2.md](docs/SPRINT2.md), [SPRINT3.md](docs/SPRINT3.md), [SPRINT4.md](docs/SPRINT4.md) — Alcance y entregables por iteración.
 
 ---

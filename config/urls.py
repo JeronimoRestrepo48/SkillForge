@@ -18,6 +18,7 @@ from catalog.api import (
     CourseModulesAPIView,
     CategoryListAPIView,
 )
+from transactions.api import CheckoutQuoteV1APIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -51,6 +52,7 @@ urlpatterns = [
     path('api/courses/<int:pk>/', CourseDetailAPIView.as_view(), name='api_course_detail'),
     path('api/courses/<int:pk>/modules/', CourseModulesAPIView.as_view(), name='api_course_modules'),
     path('api/courses/<int:pk>/rate/', CourseRateView.as_view(), name='api_course_rate'),
+    path('api/v1/checkout/quote/', CheckoutQuoteV1APIView.as_view(), name='api_v1_checkout_quote'),
 ]
 
 if settings.DEBUG:
