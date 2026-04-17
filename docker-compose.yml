@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: skillforge
+      POSTGRES_USER: skillforge
+      POSTGRES_PASSWORD: skillforge
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web_django:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             (python manage.py crear_datos_iniciales || true) &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    depends_on:
+      - db
+    environment:
+      DEBUG: "False"
+      SECRET_KEY: "strangler-dev-key"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,nginx"
+      DATABASE_URL: "postgres://skillforge:skillforge@db:5432/skillforge"
+
+  checkout_flask:
+    build: ./microservicio_checkout
+    ports:
+      - "5000:5000"
+
+  nginx:
+    image: nginx:1.25
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web_django
+      - checkout_flask
+
+volumes:
+  db_data:
