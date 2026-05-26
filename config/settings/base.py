@@ -205,7 +205,7 @@ ALLY_SERVICE_PUBLIC_PATH = env(
     default='api/integration/skillforge/public/',
 )
 ALLY_SERVICE_TIMEOUT = env.int('ALLY_SERVICE_TIMEOUT', default=8)
-FRANKFURTER_API_URL = env('FRANKFURTER_API_URL', default='https://api.frankfurter.app')
+FRANKFURTER_API_URL = env('FRANKFURTER_API_URL', default='https://api.frankfurter.dev')
 
 # Logging
 LOGGING = {

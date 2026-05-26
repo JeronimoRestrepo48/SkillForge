@@ -1,0 +1,51 @@
+# Perfil AWS Academy para instancias pequeñas (t2.small+ recomendado; t2.medium para stack completo).
+# Uso: docker compose -f docker-compose.yml -f docker-compose.aws.yml up -d --build
+#
+# En t2.micro use solo el perfil "core" (sin microservicios):
+#   docker compose -f docker-compose.yml -f docker-compose.aws.yml --profile core up -d --build
+
+services:
+  auth-db:
+    profiles: ["microservices"]
+  catalog-db:
+    profiles: ["microservices"]
+  transactions-db:
+    profiles: ["microservices"]
+  auth-service:
+    profiles: ["microservices"]
+  catalog-service:
+    profiles: ["microservices"]
+  transactions-service:
+    profiles: ["microservices"]
+  gateway:
+    profiles: ["microservices"]
+
+  web_django:
+    profiles: ["core", "microservices"]
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  celery_worker:
+    profiles: ["core", "microservices"]
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  checkout_flask:
+    profiles: ["core", "microservices"]
+
+  nginx:
+    profiles: ["core", "microservices"]
+    depends_on:
+      - web_django
+      - checkout_flask
+      - celery_worker
+
+  db:
+    profiles: ["core", "microservices"]
+
+  redis:
+    profiles: ["core", "microservices"]

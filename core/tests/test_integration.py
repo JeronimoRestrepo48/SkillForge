@@ -26,14 +26,18 @@ class ExchangeRateAdapterTest(TestCase):
     def test_adapter_maps_frankfurter_response(self, mock_get):
         mock_get.return_value = MagicMock(
             status_code=200,
-            json=lambda: {'rates': {'COP': 4200.5}},
+            json=lambda: {'base': 'USD', 'quote': 'COP', 'rate': 4200.5, 'date': '2026-05-26'},
         )
-        adapter = FrankfurterExchangeRateAdapter(base_url='https://api.frankfurter.app')
+        adapter = FrankfurterExchangeRateAdapter(base_url='https://api.frankfurter.dev')
         result = adapter.get_rate('USD', 'COP')
         self.assertEqual(result['base'], 'USD')
         self.assertEqual(result['target'], 'COP')
         self.assertEqual(result['rate'], 4200.5)
         self.assertEqual(result['provider'], 'frankfurter')
+        mock_get.assert_called_once_with(
+            'https://api.frankfurter.dev/v2/rate/USD/COP',
+            timeout=8,
+        )
 
 
 @override_settings(ALLY_SERVICE_URL='')
@@ -42,4 +46,4 @@ class AllyConsumerMockTest(TestCase):
         from core.integration.ally_consumer import fetch_ally_public_data
 
         data = fetch_ally_public_data()
-        self.assertEqual(data['_meta']['source'], 'mock')
+        self.assertEqual(data['meta']['source'], 'mock')

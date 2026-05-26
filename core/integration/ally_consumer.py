@@ -24,12 +24,12 @@ def fetch_ally_public_data() -> dict:
         response = requests.get(full_url, timeout=settings.ALLY_SERVICE_TIMEOUT)
         response.raise_for_status()
         data = response.json()
-        data['_meta'] = {'source': 'ally-live', 'url': full_url}
+        data['meta'] = {'source': 'ally-live', 'url': full_url}
         return data
     except requests.RequestException as exc:
         logger.warning('Ally service unavailable: %s', exc)
         fallback = _mock_ally_payload()
-        fallback['_meta'] = {
+        fallback['meta'] = {
             'source': 'ally-fallback',
             'error': str(exc),
             'attempted_url': full_url,
@@ -53,7 +53,7 @@ def _mock_ally_payload() -> dict:
         },
         'capabilities': ['catalog-api', 'enrollments'],
         'public_endpoint': '/api/integration/ally/public/',
-        '_meta': {
+        'meta': {
             'source': 'mock',
             'hint': 'Set ALLY_SERVICE_URL to the ally EC2 base URL (e.g. http://3.x.x.x)',
         },

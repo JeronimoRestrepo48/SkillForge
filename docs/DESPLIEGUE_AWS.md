@@ -17,7 +17,7 @@ Guía para desplegar el ecosistema híbrido SkillForge en una instancia **EC2** 
 ## 1. Preparar la instancia EC2 (AWS Academy)
 
 1. Inicia sesión en **AWS Academy Learner Lab** y abre la consola EC2.
-2. Lanza una instancia **Amazon Linux 2023** o **Ubuntu 22.04** (t2.medium o superior recomendado).
+2. Lanza una instancia **Amazon Linux 2023** o **Ubuntu 22.04** (**t2.medium** recomendado para el stack completo con microservicios; **t2.small** mínimo con perfil `core`).
 3. Security Group: permite **SSH (22)** y **HTTP (80)** desde `0.0.0.0/0` (o el rango que indique el profesor).
 4. Asocia una **Elastic IP** y anótala (la entregarás en la plataforma institucional).
 
@@ -78,9 +78,25 @@ En `docker-compose.yml` ya están definidos `REDIS_URL`, `CELERY_BROKER_URL` y `
 
 ## 5. Levantar el stack
 
+**Desde la EC2:**
+
 ```bash
+cd ~/skillforge
 docker compose up -d --build
 ```
+
+**Desde tu PC (recomendado, con clave en `~/.ssh/jeronimo.pem`):**
+
+```bash
+cd Proyecto/desarrollo
+chmod +x scripts/deploy-ec2.sh
+# Stack completo (t2.medium+)
+./scripts/deploy-ec2.sh ec2-user@ec2-54-242-178-107.compute-1.amazonaws.com microservices
+# Solo monolito + strangler + Celery (instancias pequeñas)
+./scripts/deploy-ec2.sh ec2-user@ec2-54-242-178-107.compute-1.amazonaws.com core
+```
+
+Si la instancia deja de responder tras el despliegue, reiníciala en la consola AWS (posible falta de RAM) y vuelve a ejecutar el script.
 
 La primera ejecución puede tardar varios minutos (build de imágenes + migraciones).
 

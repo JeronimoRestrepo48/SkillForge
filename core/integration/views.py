@@ -1,6 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -47,7 +45,6 @@ class ExchangeRateAPIView(APIView):
             )
 
 
-@method_decorator(cache_page(60), name='dispatch')
 class IntegrationHubView(LoginRequiredMixin, TemplateView):
     """UI: muestra datos del aliado y tipo de cambio (tercero vía Adapter)."""
 

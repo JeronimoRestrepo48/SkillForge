@@ -1,5 +1,5 @@
 """
-Adapter concreto: API pública Frankfurter (https://www.frankfurter.app/).
+Adapter concreto: API pública Frankfurter v2 (https://frankfurter.dev/).
 """
 from datetime import datetime, timezone
 
@@ -10,7 +10,7 @@ from core.integration.adapters.base import ExchangeRateProvider, ExchangeRateRes
 
 
 class FrankfurterExchangeRateAdapter(ExchangeRateProvider):
-    """Implementación del contrato usando Frankfurter (sin API key)."""
+    """Implementación del contrato usando Frankfurter v2 (sin API key)."""
 
     def __init__(self, base_url: str | None = None, timeout: int = 8):
         self.base_url = (base_url or settings.FRANKFURTER_API_URL).rstrip('/')
@@ -19,21 +19,17 @@ class FrankfurterExchangeRateAdapter(ExchangeRateProvider):
     def get_rate(self, base: str, target: str) -> ExchangeRateResult:
         base = base.upper()
         target = target.upper()
-        url = f'{self.base_url}/latest'
-        response = requests.get(
-            url,
-            params={'from': base, 'to': target},
-            timeout=self.timeout,
-        )
+        url = f'{self.base_url}/v2/rate/{base}/{target}'
+        response = requests.get(url, timeout=self.timeout)
         response.raise_for_status()
         payload = response.json()
-        rates = payload.get('rates') or {}
-        if target not in rates:
+        rate = payload.get('rate')
+        if rate is None:
             raise ValueError(f'Rate {base}->{target} not available from Frankfurter')
         return {
-            'base': base,
-            'target': target,
-            'rate': float(rates[target]),
+            'base': payload.get('base', base),
+            'target': payload.get('quote', target),
+            'rate': float(rate),
             'provider': 'frankfurter',
             'fetched_at': datetime.now(tz=timezone.utc).isoformat(),
         }
