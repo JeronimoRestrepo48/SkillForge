@@ -286,9 +286,28 @@ pytest
 - **[docs/WIKI_MIGRACION_A_MICROSERVICIOS_STRANGLER.md](docs/WIKI_MIGRACION_A_MICROSERVICIOS_STRANGLER.md)** — Contenido de Wiki para Taller 02 (matriz de decisión, ruteo Nginx y diagrama).
 - **[microservices/README.md](microservices/README.md)** — Implementación Flask de microservicios (gateway + auth + catalog + transactions + PostgreSQL por servicio).
 - **[microservices/docs/MIGRATION_PLAN.md](microservices/docs/MIGRATION_PLAN.md)** — Estado de migración y mejoras pendientes.
+- **[docs/WIKI_ENTREGABLE_2.md](docs/WIKI_ENTREGABLE_2.md)** — Arquitectura híbrida, integración, Celery, diagrama AWS (Entregable 2).
+- **[docs/DESPLIEGUE_AWS.md](docs/DESPLIEGUE_AWS.md)** — Guía paso a paso para AWS Academy (EC2 + Docker Compose + Elastic IP).
 - **Sprints**: [SPRINT1.md](docs/SPRINT1.md), [SPRINT2.md](docs/SPRINT2.md), [SPRINT3.md](docs/SPRINT3.md), [SPRINT4.md](docs/SPRINT4.md) — Alcance y entregables por iteración.
 
 ---
+
+## Docker Compose (Entregable 2 — ecosistema completo)
+
+Incluye Django, microservicios Flask, Nginx (API Gateway), Redis, Celery, PostgreSQL y el microservicio strangler de checkout:
+
+```bash
+docker compose up -d --build
+```
+
+Acceso: **http://127.0.0.1/** (puerto 80). Ver [docs/DESPLIEGUE_AWS.md](docs/DESPLIEGUE_AWS.md) para AWS Academy.
+
+| URL | Descripción |
+|-----|-------------|
+| `/integration/hub/` | Consumo equipo aliado + tipo de cambio (Adapter) |
+| `/api/integration/skillforge/public/` | JSON público (servicio a proveer) |
+| `POST /api/v2/checkout/quote` | Cotización Flask (Strangler) |
+| `/api/token`, `/api/courses`, … | API microservicios vía gateway |
 
 ## Producción
 

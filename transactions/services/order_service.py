@@ -40,10 +40,20 @@ def crear_orden_desde_carrito(carrito: CarritoCompras, cupon=None) -> Orden | No
     if builder is None:
         return None
     builder.set_estado(EstadoOrden.CONFIRMADA)
-    return builder.build(
+    orden = builder.build(
         crear_pago_factura_inscripciones=True,
         vaciar_carrito_callback=vaciar_carrito,
     )
+    if orden:
+        try:
+            from core.tasks import enviar_notificacion_orden_async, generar_reporte_actividad_async
+
+            enviar_notificacion_orden_async.delay(orden.user_id, orden.numero_orden)
+            generar_reporte_actividad_async.delay(orden.user_id)
+        except Exception:
+            from core.services import notification_service
+            notification_service.notificar_orden(orden.user, orden.numero_orden)
+    return orden
 
 
 def crear_orden_pendiente_desde_carrito(carrito: CarritoCompras, cupon=None) -> Orden | None:
@@ -103,6 +113,16 @@ def confirmar_pago_orden(orden: Orden) -> bool:
                 certificacion=item.certificacion,
             )
         vaciar_carrito(orden.user)
+
+    try:
+        from core.tasks import enviar_notificacion_orden_async, generar_reporte_actividad_async
+
+        enviar_notificacion_orden_async.delay(orden.user_id, orden.numero_orden)
+        generar_reporte_actividad_async.delay(orden.user_id)
+    except Exception:
+        from core.services import notification_service
+        notification_service.notificar_orden(orden.user, orden.numero_orden)
+
     return True
 
 

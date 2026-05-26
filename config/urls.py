@@ -53,6 +53,7 @@ urlpatterns = [
     path('api/courses/<int:pk>/modules/', CourseModulesAPIView.as_view(), name='api_course_modules'),
     path('api/courses/<int:pk>/rate/', CourseRateView.as_view(), name='api_course_rate'),
     path('api/v1/checkout/quote/', CheckoutQuoteV1APIView.as_view(), name='api_v1_checkout_quote'),
+    path('api/integration/', include('core.integration.urls')),
 ]
 
 if settings.DEBUG:

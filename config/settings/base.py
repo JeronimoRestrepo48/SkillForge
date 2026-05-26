@@ -170,14 +170,42 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
-# Caching
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'skillforge-cache',
-        'TIMEOUT': 300,
+# Caching (Redis en Docker/AWS; LocMem en desarrollo local sin broker)
+_REDIS_URL = env('REDIS_URL', default='')
+if _REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': _REDIS_URL,
+            'TIMEOUT': 300,
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'skillforge-cache',
+            'TIMEOUT': 300,
+        }
+    }
+
+# Celery / message broker (Entregable 2)
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default=_REDIS_URL or 'redis://127.0.0.1:6379/0')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default=CELERY_BROKER_URL)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_ALWAYS_EAGER = env.bool('CELERY_TASK_ALWAYS_EAGER', default=not bool(_REDIS_URL))
+
+# Integración entre equipos y API de terceros
+ALLY_SERVICE_URL = env('ALLY_SERVICE_URL', default='')
+ALLY_SERVICE_PUBLIC_PATH = env(
+    'ALLY_SERVICE_PUBLIC_PATH',
+    default='api/integration/skillforge/public/',
+)
+ALLY_SERVICE_TIMEOUT = env.int('ALLY_SERVICE_TIMEOUT', default=8)
+FRANKFURTER_API_URL = env('FRANKFURTER_API_URL', default='https://api.frankfurter.app')
 
 # Logging
 LOGGING = {

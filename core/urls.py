@@ -1,5 +1,6 @@
 from django.urls import path
 from users.views import LoginView, RegisterView, LogoutView
+from core.integration.views import IntegrationHubView
 from . import views
 
 app_name = 'core'
@@ -15,4 +16,5 @@ urlpatterns = [
     path('notifications/', views.NotificationsView.as_view(), name='notifications'),
     path('notifications/read-all/', views.MarkAllNotificationsReadView.as_view(), name='notifications_read_all'),
     path('notifications/<int:pk>/read/', views.MarkNotificationReadView.as_view(), name='notification_read'),
+    path('integration/hub/', IntegrationHubView.as_view(), name='integration_hub'),
 ]
