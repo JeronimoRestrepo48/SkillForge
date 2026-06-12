@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+/* Glassmorphism optimizado con aceleración de hardware */
+.glass-effect {
+  background-color: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  will-change: transform;
+}
+
+.glass-effect-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-effect-hover:hover {
+  background-color: rgba(26, 26, 26, 0.6);
+  border-color: rgba(57, 255, 20, 0.27);
+  transform: translateY(-2px);
+}

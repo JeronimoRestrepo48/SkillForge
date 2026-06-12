@@ -138,3 +138,12 @@ django.core.exceptions.PermissionDenied
 WARNING 2026-04-09 20:46:05,432 log Not Found: /cart/order/SF-99999999999999-0000/
 WARNING 2026-04-09 20:46:06,537 log Not Found: /cart/order/SF-INV-99999999999999/invoice/
 WARNING 2026-04-09 20:46:07,082 log Unauthorized: /api/me/
+INFO 2026-05-27 20:24:10,603 tasks Async order notification created for user=5 order=SF-20260528012409-2591
+INFO 2026-05-27 20:24:10,635 tasks Activity report generated for user=5
+INFO 2026-05-27 20:24:22,674 course_service User estudiante completing lesson Instalación y configuración (pk=37)
+INFO 2026-05-27 20:24:26,148 course_service User estudiante completing lesson Commit, log, diff (pk=38)
+INFO 2026-05-27 20:24:40,929 course_service User estudiante completing lesson Ramas y merge (pk=39)
+INFO 2026-05-27 20:24:43,396 course_service User estudiante completing lesson Remotes y push/pull (pk=40)
+INFO 2026-05-27 20:24:45,995 course_service User estudiante completing lesson Conflictos y buenas prácticas (pk=41)
+INFO 2026-05-27 20:24:48,275 course_service User estudiante completing lesson Práctica: flujo completo (pk=42)
+INFO 2026-05-27 20:24:48,301 certificate_service Certificate SF-CERT-2026-HZ62HU issued to user estudiante for course "Git y control de versiones"

@@ -1,9 +1,0 @@
-{% load i18n %}
-<a href="{% url 'catalog:course_list' %}?categoria={{ categoria.id }}" class="text-decoration-none card-categoria-link" aria-label="{% blocktrans with nombre=categoria.nombre %}View courses in {{ nombre }}{% endblocktrans %}">
-    <div class="card card-categoria h-100 text-center p-3">
-        <i class="bi {{ categoria.icono|default:'bi-folder2-open' }} fs-2 text-primary" aria-hidden="true"></i>
-        <div class="card-body p-0 mt-2">
-            <span class="card-title small">{{ categoria.nombre }}</span>
-        </div>
-    </div>
-</a>
