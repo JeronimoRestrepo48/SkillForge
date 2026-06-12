@@ -109,6 +109,19 @@ Esto levantará:
 Una vez todo esté corriendo, abre tu navegador en:  
 👉 **[http://localhost](http://localhost)**
 
+### Inicialización de Bases de Datos (Seeds)
+
+El repositorio incluye copias (dumps SQL) de las bases de datos en la carpeta `db_seeds/`. 
+Si es la **primera vez** que clonas el proyecto o necesitas sincronizar tu base de datos con la versión del repositorio, asegúrate de destruir los volúmenes antiguos y volver a construir el entorno:
+
+```bash
+# 1. Detener servicios y eliminar bases de datos actuales en blanco/desactualizadas
+docker-compose down -v
+
+# 2. Volver a construir el entorno. Docker inyectará los archivos SQL automáticamente
+docker-compose up -d --build
+```
+
 ---
 
 ## Comandos Útiles
