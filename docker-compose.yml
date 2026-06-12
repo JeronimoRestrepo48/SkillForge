@@ -78,6 +78,7 @@ services:
       POSTGRES_DB: authdb
     volumes:
       - auth_db_data:/var/lib/postgresql/data
+      - ./db_seeds/01_auth_init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U auth -d authdb"]
       interval: 5s
@@ -92,6 +93,7 @@ services:
       POSTGRES_DB: catalogdb
     volumes:
       - catalog_db_data:/var/lib/postgresql/data
+      - ./db_seeds/02_catalog_init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U catalog -d catalogdb"]
       interval: 5s
@@ -106,6 +108,7 @@ services:
       POSTGRES_DB: transactionsdb
     volumes:
       - transactions_db_data:/var/lib/postgresql/data
+      - ./db_seeds/03_transactions_init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U transactions -d transactionsdb"]
       interval: 5s
@@ -173,6 +176,7 @@ services:
       POSTGRES_DB: certificatedb
     volumes:
       - certificate_db_data:/var/lib/postgresql/data
+      - ./db_seeds/04_certificate_init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U certificate -d certificatedb"]
       interval: 5s
