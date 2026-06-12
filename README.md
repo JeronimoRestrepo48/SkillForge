@@ -1,322 +1,148 @@
-# SkillForge — Desarrollo
+# SkillForge
 
 **Forja tu Futuro Profesional** — Marketplace de cursos en línea con roles Estudiante, Instructor y Administrador.
+
+Esta plataforma ha sido refactorizada recientemente para migrar desde un monolito en Django hacia una **Arquitectura de Microservicios orientada a eventos** con un **Frontend moderno en React (Vite)**.
 
 ---
 
 ## Índice
 
-- [Requisitos](#requisitos)
-- [Instalación rápida](#instalación-rápida)
-- [Variables de entorno y configuración](#variables-de-entorno-y-configuración)
-- [Credenciales por defecto](#credenciales-por-defecto)
-- [Ejecución](#ejecución)
-- [Rutas principales (URLs)](#rutas-principales-urls)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Comandos de gestión](#comandos-de-gestión)
-- [Tests](#tests)
-- [Documentación adicional](#documentación-adicional)
-- [Producción](#producción)
+- [Arquitectura Actual](#arquitectura-actual)
+- [Tecnologías Principales](#tecnologías-principales)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Requisitos Previos](#requisitos-previos)
+- [Ejecución Rápida con Docker Compose](#ejecución-rápida-con-docker-compose)
+- [Comandos Útiles](#comandos-útiles)
+- [Documentación Adicional](#documentación-adicional)
 
 ---
 
-## Requisitos
+## Arquitectura Actual
 
-- **Python** 3.10 o superior
-- **pip** (gestor de paquetes)
-- Opcional: **venv** o **virtualenv** para entorno virtual
+El sistema opera bajo un entorno completamente contenerizado orquestado por `docker-compose`. Cuenta con un **API Gateway (Nginx)** que enruta el tráfico entre el cliente web y los microservicios backend.
+
+La comunicación asíncrona entre microservicios se maneja mediante un **Event Bus basado en Redis Streams**.
+
+### Microservicios:
+1. **Auth Service**: Autenticación, autorización (JWT), gestión de usuarios y roles.
+2. **Catalog Service**: Gestión de cursos, módulos, lecciones, categorías y valoraciones.
+3. **Transactions Service**: Carrito de compras, procesamiento de pagos (Wompi simulado), inscripciones de estudiantes.
+4. **Certificate Service**: Generación asíncrona de diplomas en PDF usando **Celery**, reaccionando a eventos del bus.
 
 ---
 
-## Instalación rápida
+## Tecnologías Principales
+
+**Frontend:**
+- React 18 + TypeScript
+- Vite
+- Tailwind CSS
+- React Query & Axios
+- React Router DOM
+- React Hook Form
+
+**Backend:**
+- Python 3.12 (imágenes slim)
+- FastAPI
+- SQLAlchemy + Alembic (PostgreSQL)
+- Celery (Workers asíncronos)
+- PyJWT
+
+**Infraestructura:**
+- Docker & Docker Compose
+- Nginx (API Gateway)
+- Redis (Caché, Event Bus y Broker para Celery)
+- PostgreSQL (Una base de datos por microservicio)
+
+---
+
+## Estructura del Proyecto
+
+```text
+SkillForge/
+├── frontend/                               # Aplicación React web
+│   ├── src/
+│   │   ├── api/                            # Clientes HTTP (Axios) para microservicios
+│   │   ├── components/                     # Componentes reusables de UI
+│   │   ├── pages/                          # Páginas y vistas principales
+│   │   └── ...
+├── microservices/
+│   └── services/
+│       ├── auth-service/                   # Servicio de autenticación
+│       ├── catalog-service/                # Servicio de cursos y contenido
+│       ├── transactions-service/           # Servicio de pagos y enrollments
+│       └── certificate-service/            # Servicio generador de certificados
+├── shared/                                 # Librerías compartidas (Event Bus, tareas)
+├── nginx.conf                              # Reglas de enrutamiento del API Gateway
+├── docker-compose.yml                      # Orquestación de infraestructura local
+└── README.md                               # Este archivo
+```
+
+---
+
+## Requisitos Previos
+
+- **Docker** y **Docker Compose** instalados en tu sistema.
+- Puertos `80` (HTTP), `5432` (PostgreSQL), y `6379` (Redis) disponibles en tu máquina local.
+
+---
+
+## Ejecución Rápida con Docker Compose
+
+La forma más sencilla de levantar todo el ecosistema es mediante Docker Compose.
 
 ```bash
-# 1. Clonar o entrar en la carpeta del proyecto
-cd desarrollo
-
-# 2. Crear y activar entorno virtual (recomendado)
-python -m venv venv
-source venv/bin/activate   # Linux/macOS
-# venv\Scripts\activate    # Windows
-
-# 3. Instalar dependencias
-pip install -r requirements.txt
-
-# 4. Copiar variables de entorno y ajustar si hace falta
-cp .env.example .env
-# Editar .env: al menos SECRET_KEY en producción (en desarrollo puede quedarse el de ejemplo)
-
-# 5. Aplicar migraciones
-python manage.py migrate
-
-# 6. Crear datos iniciales (categorías, cursos, usuarios de prueba)
-python manage.py crear_datos_iniciales
-
-# 7. Arrancar el servidor
-python manage.py runserver
+# Construir y levantar todos los contenedores en segundo plano
+docker-compose up -d --build
 ```
 
-Abre **http://127.0.0.1:8000**. La ruta raíz (`/`) es la pantalla de **login**; necesitas autenticarte para acceder al resto de la aplicación.
+Esto levantará:
+- Bases de datos PostgreSQL individuales para cada servicio.
+- El servidor Redis.
+- Los microservicios (`auth-service`, `catalog-service`, `transactions-service`, `certificate-service`).
+- Los workers asíncronos de Celery (`worker-documents`, `worker-notifications`).
+- El frontend web.
+- El API Gateway Nginx exponiendo el puerto `80`.
+
+**Acceso a la plataforma:**
+Una vez todo esté corriendo, abre tu navegador en:  
+👉 **[http://localhost](http://localhost)**
 
 ---
 
-## Variables de entorno y configuración
+## Comandos Útiles
 
-Todas las variables se definen en el archivo **`.env`** en la raíz de `desarrollo/`. Puedes copiar **`.env.example`** como plantilla:
-
+**Ver logs de los servicios:**
 ```bash
-cp .env.example .env
+# Todos los logs
+docker-compose logs -f
+
+# Logs de un servicio específico
+docker-compose logs -f catalog-service
+docker-compose logs -f worker-documents
 ```
 
-| Variable | Descripción | Valor por defecto (si no se usa .env) |
-|----------|-------------|--------------------------------------|
-| `SECRET_KEY` | Clave secreta de Django (sesiones, CSRF, etc.) | `dev-key-change-in-production` |
-| `DEBUG` | Modo debug (no usar `True` en producción) | `False` |
-| `ALLOWED_HOSTS` | Hosts permitidos (separados por coma) | `localhost,127.0.0.1` |
-| `DATABASE_URL` | URL de base de datos | SQLite: `sqlite:///db.sqlite3` |
-| `DEFAULT_FROM_EMAIL` | Remitente por defecto de correos | `noreply@skillforge.local` |
-
-- **Desarrollo**: el módulo de settings por defecto es `config.settings.development` (definido en `manage.py` y `config/wsgi.py`). En desarrollo el correo se envía a consola (`EMAIL_BACKEND = console`).
-- **Generar una SECRET_KEY segura** (producción):
-  ```bash
-  python -c "import secrets; print(secrets.token_hex(50))"
-  ```
-- Detalle de cada variable y ejemplos para PostgreSQL están en **`.env.example`** y en ** [docs/CONFIGURACION.md](docs/CONFIGURACION.md)**.
-
----
-
-## Credenciales por defecto
-
-Después de ejecutar **`python manage.py crear_datos_iniciales`** quedan creados los siguientes usuarios. **No uses estas contraseñas en producción.**
-
-### Usuarios principales (3 roles)
-
-| Usuario      | Contraseña     | Rol            | Uso |
-|--------------|----------------|----------------|-----|
-| **estudiante** | `estudiante123` | Estudiante     | Home, Cursos, Mis cursos, Certificaciones, Carrito, Checkout, Mis pedidos |
-| **instructor** | `instructor123` | Instructor     | Home, Gestionar cursos, Crear/editar curso, Módulos y lecciones |
-| **admin**      | `admin123`      | Administrador  | Home, Panel de administración en `/panel/` |
-
-### Instructores de ejemplo (con cursos asignados)
-
-| Usuario      | Contraseña      |
-|--------------|-----------------|
-| **instructor1** | `instructor1123` |
-| **instructor2** | `instructor2123` |
-| **instructor3** | `instructor3123` |
-
-El comando `crear_datos_iniciales` también crea categorías, cursos publicados y al menos un módulo con lecciones por curso. El **admin** puede acceder al panel Django en **http://127.0.0.1:8000/admin/** (mismo usuario/contraseña: `admin` / `admin123`).
-
----
-
-## Ejecución
-
+**Reiniciar un servicio luego de aplicar cambios:**
 ```bash
-python manage.py runserver
+docker-compose up -d --build frontend
+docker-compose restart catalog-service
 ```
 
-- URL local: **http://127.0.0.1:8000**
-- La raíz **`/`** muestra el **login**. Tras iniciar sesión se redirige a **`/home/`**.
-- Archivos estáticos y media se sirven en modo DEBUG; en producción hay que usar un servidor de archivos estáticos y configurar `STATIC_ROOT` / `MEDIA_ROOT`.
-
----
-
-## Rutas principales (URLs)
-
-Prefijo base: `http://127.0.0.1:8000`.
-
-### Core (login, home, panel)
-
-| Ruta | Nombre | Descripción |
-|------|--------|-------------|
-| `/` | Login | Inicio de sesión |
-| `/register/` | Registro | Alta Estudiante/Instructor |
-| `/logout/` | Cierre de sesión | |
-| `/home/` | Landing | Página principal tras login |
-| `/panel/` | Panel admin | Solo administradores |
-| `/health/` | Liveness | Proceso arriba (sin comprobar BD) |
-| `/health/ready/` | Readiness | BD y caché accesibles (orquestación / balanceadores) |
-
-### Catálogo (`/courses/`)
-
-| Ruta | Descripción |
-|------|-------------|
-| `/courses/` | Listado de cursos |
-| `/courses/<id>/` | Detalle del curso |
-| `/courses/my-courses/` | Mis inscripciones |
-| `/courses/my-certificates/` | Mis certificados |
-| `/courses/<id>/learn/` | Aprender (módulos/lecciones) |
-| `/courses/<id>/learn/lesson/<id_leccion>/` | Detalle de lección, marcar completada |
-| `/courses/create/` | Crear curso (instructor) |
-| `/courses/manage/` | Gestionar mis cursos (instructor) |
-| `/courses/<id>/modules/` | Módulos del curso |
-| `/courses/certificaciones-industria/` | Certificaciones de industria |
-| `/courses/certificaciones-industria/<slug>/` | Detalle certificación, comprar acceso, examen, diploma |
-
-### Carrito y transacciones (`/cart/`)
-
-| Ruta | Descripción |
-|------|-------------|
-| `/cart/` | Ver carrito |
-| `/cart/add/<curso_id>/` | Añadir curso al carrito |
-| `/cart/remove/<curso_id>/` | Quitar curso del carrito |
-| `/cart/add-certificacion/<slug>/` | Añadir certificación al carrito |
-| `/cart/remove-certificacion/<slug>/` | Quitar certificación del carrito |
-| `/cart/checkout/` | Resumen y datos de pago |
-| `/cart/checkout/confirm/` | Crear orden pendiente y redirigir a pasarela |
-| `/cart/checkout/gateway/` | Pasarela de pago simulada (Pagar / Fallar / Cancelar) |
-| `/cart/checkout/return/` | Retorno desde pasarela (éxito/fallo/cancelado) |
-| `/cart/checkout/continue/<numero>/` | Completar pago de una orden pendiente (“Complete payment”) |
-| `/cart/orders/` | Mis pedidos |
-| `/cart/order/<numero>/` | Detalle de orden confirmada |
-| `/cart/order/<numero>/invoice/` | Factura PDF |
-| `/cart/order/<numero>/cancel/` | Cancelar orden |
-
-### Usuario (`/my-account/`)
-
-| Ruta | Descripción |
-|------|-------------|
-| `/my-account/` | Mi cuenta / perfil |
-| `/my-account/edit/` | Editar perfil |
-
-### API (JWT)
-
-| Ruta | Método | Descripción |
-|------|--------|-------------|
-| `/api/schema/` | GET | Esquema OpenAPI 3 (JSON) |
-| `/api/docs/` | GET | Swagger UI (documentación interactiva; en **Authorize** usar `Bearer <access>`) |
-| `/api/token/` | POST | Obtener access + refresh (body: `username`, `password`) |
-| `/api/token/refresh/` | POST | Refrescar access (body: `refresh`) |
-| `/api/me/` | GET | Perfil del usuario autenticado (cabecera: `Authorization: Bearer <access>`) |
-
-Los listados `/api/courses/`, `/api/categories/` y `/api/courses/<id>/modules/` devuelven paginación estándar DRF (`count`, `next`, `previous`, `results`). Parámetros: `page`, `page_size` (máx. 100).
-
-### Django Admin
-
-| Ruta | Descripción |
-|------|-------------|
-| `/admin/` | Panel de administración Django |
-
----
-
-## Estructura del proyecto
-
-```
-desarrollo/
-├── config/                 # Configuración Django
-│   ├── settings/
-│   │   ├── base.py         # Configuración común
-│   │   └── development.py  # Desarrollo (DEBUG, email consola)
-│   ├── urls.py             # URLs raíz
-│   └── wsgi.py
-├── core/                   # App compartida
-│   ├── templates/          # Plantillas base, landing
-│   ├── management/commands/
-│   │   ├── crear_datos_iniciales.py
-│   │   ├── crear_certificaciones_industria.py
-│   │   ├── expandir_contenido_cursos.py
-│   │   └── asignar_imagen_cursos_marketing.py
-│   └── context_processors  # Carrito en navbar, etc.
-├── users/                  # Usuarios, auth, perfiles, API JWT
-│   ├── services/
-│   ├── api.py              # /api/me/
-│   └── templates/
-├── catalog/                # Catálogo: cursos, módulos, lecciones, certificados, certificaciones industria
-│   ├── services/
-│   ├── templates/
-│   └── tests/
-├── transactions/           # Carrito, checkout, órdenes, pasarela simulada, factura
-│   ├── services/
-│   ├── payment_token.py   # Token firmado para retorno pasarela
-│   └── templates/
-├── static/                 # CSS, imágenes (favicon, curso-default)
-├── media/                  # Subidas (imágenes de cursos, etc.)
-├── docs/                   # Documentación (flujos, sprints, configuración)
-├── .env.example            # Plantilla de variables de entorno
-├── .env                    # No versionado; copiar desde .env.example
-├── requirements.txt
-├── manage.py
-└── README.md               # Este archivo
-```
-
----
-
-## Comandos de gestión
-
-| Comando | Descripción |
-|---------|-------------|
-| `python manage.py migrate` | Aplicar migraciones |
-| `python manage.py crear_datos_iniciales` | Categorías, instructores, cursos de ejemplo y usuarios por defecto (estudiante, instructor, admin, instructor1–3) |
-| `python manage.py crear_certificaciones_industria` | Crear certificaciones de industria y preguntas de examen (si aplica) |
-| `python manage.py expandir_contenido_cursos` | Añadir más módulos/lecciones a cursos existentes |
-| `python manage.py asignar_imagen_cursos_marketing` | Asignar imágenes a cursos (media) |
-| `python manage.py makemessages -l es` | Generar ficheros de traducción (i18n) |
-| `python manage.py compilemessages` | Compilar mensajes de traducción |
-| `python manage.py createsuperuser` | Crear otro superusuario (admin) |
-| `python manage.py runserver` | Servidor de desarrollo |
-
----
-
-## Tests
-
+**Apagar el entorno:**
 ```bash
-# Todos los tests
-python manage.py test
+# Detiene los contenedores sin borrar las bases de datos (volúmenes)
+docker-compose down
 
-# Por app
-python manage.py test catalog
-python manage.py test transactions
-python manage.py test users
-```
-
-Si usas **pytest** y **pytest-django** (no incluidos por defecto en `requirements.txt`):
-
-```bash
-pip install pytest pytest-django
-pytest
+# Detiene todo y ELIMINA los datos (reset completo)
+docker-compose down -v
 ```
 
 ---
 
-## Documentación adicional
+## Documentación Adicional
 
-- **[docs/FLUJOS.md](docs/FLUJOS.md)** — Flujos principales: inscripción, aprendizaje, certificados, carrito, checkout, pasarela simulada, API.
-- **[docs/CONFIGURACION.md](docs/CONFIGURACION.md)** — Detalle de variables de entorno, base de datos, email y despliegue.
-- **[docs/I18N_AND_CONTENT.md](docs/I18N_AND_CONTENT.md)** — Estrategia de idioma en UI (Django i18n) frente al contenido del catálogo en base de datos.
-- **[docs/WIKI_MIGRACION_A_MICROSERVICIOS_STRANGLER.md](docs/WIKI_MIGRACION_A_MICROSERVICIOS_STRANGLER.md)** — Contenido de Wiki para Taller 02 (matriz de decisión, ruteo Nginx y diagrama).
-- **[microservices/README.md](microservices/README.md)** — Implementación Flask de microservicios (gateway + auth + catalog + transactions + PostgreSQL por servicio).
-- **[microservices/docs/MIGRATION_PLAN.md](microservices/docs/MIGRATION_PLAN.md)** — Estado de migración y mejoras pendientes.
-- **[docs/WIKI_ENTREGABLE_2.md](docs/WIKI_ENTREGABLE_2.md)** — Arquitectura híbrida, integración, Celery, diagrama AWS (Entregable 2).
-- **[docs/DESPLIEGUE_AWS.md](docs/DESPLIEGUE_AWS.md)** — Guía paso a paso para AWS Academy (EC2 + Docker Compose + Elastic IP).
-- **Sprints**: [SPRINT1.md](docs/SPRINT1.md), [SPRINT2.md](docs/SPRINT2.md), [SPRINT3.md](docs/SPRINT3.md), [SPRINT4.md](docs/SPRINT4.md) — Alcance y entregables por iteración.
-
----
-
-## Docker Compose (Entregable 2 — ecosistema completo)
-
-Incluye Django, microservicios Flask, Nginx (API Gateway), Redis, Celery, PostgreSQL y el microservicio strangler de checkout:
-
-```bash
-docker compose up -d --build
-```
-
-Acceso: **http://127.0.0.1/** (puerto 80). Ver [docs/DESPLIEGUE_AWS.md](docs/DESPLIEGUE_AWS.md) para AWS Academy.
-
-| URL | Descripción |
-|-----|-------------|
-| `/integration/hub/` | Consumo equipo aliado + tipo de cambio (Adapter) |
-| `/api/integration/skillforge/public/` | JSON público (servicio a proveer) |
-| `POST /api/v2/checkout/quote` | Cotización Flask (Strangler) |
-| `/api/token`, `/api/courses`, … | API microservicios vía gateway |
-
-## Producción
-
-- Usar **`DEBUG=False`** y una **`SECRET_KEY`** generada de forma segura.
-- Configurar **`ALLOWED_HOSTS`** con el dominio real.
-- Servir estáticos con **WhiteNoise** o un servidor web (Nginx/Apache); recoger `STATIC_ROOT` con `collectstatic`.
-- Base de datos: usar **PostgreSQL** (o MySQL) y `DATABASE_URL` en `.env`.
-- Tras un proxy TLS (Nginx, etc.), definir **`SECURE_PROXY_SSL_HEADER`** si la app debe detectar HTTPS por cabeceras `X-Forwarded-Proto` (ver [docs/CONFIGURACION.md](docs/CONFIGURACION.md)).
-- Configurar un **EMAIL_BACKEND** real (SMTP) y `DEFAULT_FROM_EMAIL`.
-- Crear un módulo `config.settings.production` y definir `DJANGO_SETTINGS_MODULE=config.settings.production` en el entorno de producción.
-
-Más detalles en [docs/CONFIGURACION.md](docs/CONFIGURACION.md).
+- Las rutas de la API están prefijadas según el servicio. Puedes explorar la documentación interactiva (Swagger) de cada servicio en:
+  - Auth: `http://localhost/api/auth/docs`
+  - Catalog: `http://localhost/api/catalog/docs`
+  - Transactions: `http://localhost/api/transactions/docs`
