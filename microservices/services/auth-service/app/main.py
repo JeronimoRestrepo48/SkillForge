@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import engine, Base, SessionLocal
-from app.routers import auth
+from app.routers import auth, instructor_profile
 from app.models.user import User
 from app.services.auth_service import get_password_hash
 
@@ -29,10 +29,13 @@ seed_users()
 
 app = FastAPI(title="SkillForge Auth Service")
 
+app.include_router(auth.router)
+
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "auth-service"}
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(instructor_profile.router, prefix="/api/auth")
 # Add backwards compatibility endpoints for gateway/existing structure
 app.include_router(auth.router, prefix="/api", tags=["legacy"])

@@ -46,10 +46,25 @@ def add_to_cart(
 ):
     course = db.query(CoursePrice).filter(CoursePrice.course_id == item_in.course_id).first()
     if not course:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Course not found."
-        )
+        import requests
+        try:
+            resp = requests.get(f"http://catalog-service:8000/api/catalog/courses/{item_in.course_id}", timeout=5)
+            if resp.status_code == 200:
+                data = resp.json()
+                course = CoursePrice(course_id=data["id"], title=data["title"], price=data["price"])
+                db.add(course)
+                db.commit()
+                db.refresh(course)
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Course not found."
+                )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Course not found or unavailable."
+            )
     existing = db.query(CartItem).filter(
         CartItem.user_id == current_user.id,
         CartItem.course_id == item_in.course_id

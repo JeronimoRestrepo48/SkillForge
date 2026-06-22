@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional, List
 from app.database import get_db
 from app.models.course import Course
 from app.models.module import Module
@@ -81,12 +81,19 @@ def create_course(
         status=course_in.status,
         nivel_dificultad=course_in.nivel_dificultad,
         duracion_horas=course_in.duracion_horas,
-        instructor_id=current_user.id
+        instructor_id=current_user.id,
+        es_certificacion=course_in.es_certificacion
     )
     db.add(new_course)
     db.commit()
     db.refresh(new_course)
     return new_course
+
+@router.get("/my-courses", response_model=List[CourseOut])
+def get_my_courses(current_user: UserPayload = Depends(get_current_user), db: Session = Depends(get_db)):
+    if current_user.role not in ["instructor", "admin", "INSTRUCTOR", "ADMINISTRADOR"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return db.query(Course).filter(Course.instructor_id == current_user.id).all()
 
 @router.get("/courses/{course_id}", response_model=CourseDetailOut)
 def get_course_detail(course_id: int, db: Session = Depends(get_db)):
@@ -185,7 +192,9 @@ def create_module(
     new_module = Module(
         course_id=course_id,
         title=module_in.title,
-        sort_order=module_in.sort_order
+        sort_order=module_in.sort_order,
+        es_examen_modulo=module_in.es_examen_modulo,
+        es_examen_final=module_in.es_examen_final
     )
     db.add(new_module)
     db.commit()

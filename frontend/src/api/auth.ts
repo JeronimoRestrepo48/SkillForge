@@ -19,4 +19,13 @@ export const authApi = {
     const response = await api.get<UserResponse>('/auth/me');
     return response.data;
   },
+  // Instructor Profiles
+  getInstructorProfile: async (userId: number): Promise<any> => {
+    const response = await api.get(`/auth/instructors/${userId}/profile`);
+    return response.data;
+  },
+  updateInstructorProfile: async (userId: number, data: any): Promise<any> => {
+    const response = await api.put(`/auth/instructors/${userId}/profile`, data);
+    return response.data;
+  },
 };

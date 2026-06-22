@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { useCoursesQuery } from '../hooks/useCourses';
+import { catalogApi } from '../api/catalog';
+import { FadeInSection } from '../components/FadeInSection';
+import { HeroSlider } from '../components/HeroSlider';
 
 // ── Utilidad compartida de imagen por categoría ──────────────────────────────
 export const getCategoryImage = (categoryName?: string): string => {
@@ -21,6 +25,7 @@ export const getCategoryImage = (categoryName?: string): string => {
 
 // ── Sección "Por qué SkillForge" ─────────────────────────────────────────────
 const WhySkillForge: React.FC = () => {
+  const { t } = useTranslation();
   const features = [
     {
       icon: (
@@ -33,8 +38,8 @@ const WhySkillForge: React.FC = () => {
           <path d="M6 9l12 0"/><path d="M6 12l3 0"/>
         </svg>
       ),
-      title: 'Certificados reconocidos',
-      desc: 'Obtén certificados verificables que puedes compartir en LinkedIn y tu CV',
+      title: t('home.why_cert_title'),
+      desc: t('home.why_cert_desc'),
     },
     {
       icon: (
@@ -47,8 +52,8 @@ const WhySkillForge: React.FC = () => {
           <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/>
         </svg>
       ),
-      title: 'Instructores expertos',
-      desc: 'Aprende de profesionales activos en la industria con experiencia real',
+      title: t('home.why_inst_title'),
+      desc: t('home.why_inst_desc'),
     },
     {
       icon: (
@@ -58,15 +63,15 @@ const WhySkillForge: React.FC = () => {
           <path d="M3 17l6 -6l4 4l8 -9"/><path d="M14 15l7 -7"/>
         </svg>
       ),
-      title: 'Aprende a tu ritmo',
-      desc: 'Acceso de por vida al contenido y actualizaciones futuras del curso',
+      title: t('home.why_pace_title'),
+      desc: t('home.why_pace_desc'),
     },
   ];
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-16">
       <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-10 tracking-tight">
-        Por qué <span style={{ color: '#39FF14' }}>SkillForge</span>
+        {t('home.why_prefix')}<span style={{ color: '#39FF14' }}>SkillForge</span>
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {features.map((f) => (
@@ -87,109 +92,52 @@ const WhySkillForge: React.FC = () => {
 
 // ── Componente principal Home ─────────────────────────────────────────────────
 export const Home: React.FC = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { t } = useTranslation();
   const { data: featuredData } = useCoursesQuery({ page_size: 3 });
   const featured = Array.isArray(featuredData?.results) ? featuredData!.results.slice(0, 3) : [];
 
-  return (
-    <div className="flex flex-col w-full">
+  // Data for the hero slider
+  const { data: sliderFeatured = [] } = useQuery({
+    queryKey: ['sliderFeatured'],
+    queryFn: () => catalogApi.getFeaturedCourses(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const { data: sliderRecent = [] } = useQuery({
+    queryKey: ['sliderRecent'],
+    queryFn: async () => {
+      const res = await catalogApi.getCourses({ page_size: 4 });
+      return [...(res.results || [])].sort((a, b) => b.id - a.id).slice(0, 4);
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+  const { data: announcements = [] } = useQuery({
+    queryKey: ['announcements'],
+    queryFn: () => catalogApi.getAnnouncements(),
+    staleTime: 5 * 60 * 1000,
+  });
 
-      {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <div style={{ position: 'relative', height: '480px', overflow: 'hidden', width: '100%' }}>
-        {/* Imagen de fondo */}
-        <div
-          style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: "url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        {/* Overlay oscuro */}
-        <div
-          style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to bottom, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.94) 100%)',
-          }}
-        />
-        {/* Contenido */}
-        <div
-          style={{ position: 'relative', zIndex: 1 }}
-          className="flex flex-col items-center justify-center h-full text-center px-6"
-        >
-          {isAuthenticated && user ? (
-            <>
-              <span
-                className="text-xs font-mono font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 border"
-                style={{ color: '#39FF14', background: 'rgba(57,255,20,0.08)', borderColor: 'rgba(57,255,20,0.27)' }}
-              >
-                Plataforma colombiana de aprendizaje
-              </span>
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-4">
-                Bienvenido de nuevo,{' '}
-                <span style={{ color: '#39FF14' }}>{user.username}</span>
-              </h1>
-              <p className="text-lg text-gray-300 max-w-xl mb-8">
-                Continúa donde lo dejaste o explora nuevos cursos.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Link
-                  to="/dashboard"
-                  style={{ background: '#39FF14', color: '#0a0a0a' }}
-                  className="px-7 py-3 font-bold rounded-xl shadow-lg transition hover:opacity-90"
-                >
-                  Mis cursos
-                </Link>
-                <Link
-                  to="/courses"
-                  className="px-7 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-xl transition"
-                >
-                  Explorar catálogo
-                </Link>
-              </div>
-            </>
-          ) : (
-            <>
-              <span
-                className="text-xs font-mono font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 border"
-                style={{ color: '#39FF14', background: 'rgba(57,255,20,0.08)', borderColor: 'rgba(57,255,20,0.27)' }}
-              >
-                Plataforma colombiana de aprendizaje
-              </span>
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-4 leading-tight">
-                Aprende habilidades que el{' '}
-                <br className="hidden md:block" />
-                mercado{' '}
-                <span style={{ color: '#39FF14' }}>demanda hoy</span>
-              </h1>
-              <p className="text-lg text-gray-300 max-w-2xl mb-8">
-                Miles de cursos en tecnología, diseño y negocios. Certificados reconocidos por empresas líderes.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Link
-                  to="/courses"
-                  style={{ background: '#39FF14', color: '#0a0a0a' }}
-                  className="px-7 py-3 font-bold rounded-xl shadow-lg transition hover:opacity-90"
-                >
-                  Explorar cursos
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-7 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 transition backdrop-blur-sm"
-                >
-                  Ver planes
-                </Link>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+  return (
+    <div className="flex flex-col w-full gap-12">
+
+      {/* ── Hero Slider ──────────────────────────────────── */}
+      <FadeInSection delay={0}>
+        {(sliderFeatured.length > 0 || sliderRecent.length > 0 || announcements.length > 0) ? (
+          <HeroSlider
+            featuredCourses={sliderFeatured}
+            recentCourses={sliderRecent}
+            announcements={announcements}
+          />
+        ) : (
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900 animate-pulse" style={{ minHeight: '520px' }} />
+        )}
+      </FadeInSection>
 
       {/* ── Cursos destacados ─────────────────────────────────────────── */}
       {featured.length > 0 && (
+        <FadeInSection delay={0.1}>
         <section className="w-full max-w-6xl mx-auto px-4 py-14">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-8 tracking-tight">
-            Cursos destacados
+            {t('home.featured')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featured.map((course) => {
@@ -241,10 +189,10 @@ export const Home: React.FC = () => {
                     </p>
                     <div className="mt-auto pt-3 flex justify-between items-center border-t" style={{ borderColor: '#1e1e1e' }}>
                       <span className="text-xs" style={{ color: '#9CA3AF' }}>
-                        🕒 {course.duracion_horas || 0} horas
+                        🕒 {course.duracion_horas || 0} {t('catalog.hours')}
                       </span>
                       <span className="font-mono font-bold text-xs" style={{ color: '#39FF14' }}>
-                        {course.price === 0 ? 'Gratis' : `$${Number(course.price).toLocaleString('es-CO')} COP`}
+                        {course.price === 0 ? t('catalog.free') : `$${Number(course.price).toLocaleString('es-CO')} COP`}
                       </span>
                     </div>
                   </div>
@@ -253,10 +201,13 @@ export const Home: React.FC = () => {
             })}
           </div>
         </section>
+        </FadeInSection>
       )}
 
       {/* ── Por qué SkillForge ────────────────────────────────────────── */}
-      <WhySkillForge />
+      <FadeInSection delay={0.2}>
+        <WhySkillForge />
+      </FadeInSection>
     </div>
   );
 };

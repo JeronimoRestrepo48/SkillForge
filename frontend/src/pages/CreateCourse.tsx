@@ -11,6 +11,7 @@ interface CourseFormInputs {
   price: number;
   nivel_dificultad: string;
   duracion_horas: number;
+  es_certificacion: boolean;
 }
 
 const CreateCourse: React.FC = () => {
@@ -40,7 +41,8 @@ const CreateCourse: React.FC = () => {
         ...data,
         category_id: Number(data.category_id),
         price: Number(data.price),
-        duracion_horas: Number(data.duracion_horas)
+        duracion_horas: Number(data.duracion_horas),
+        es_certificacion: Boolean(data.es_certificacion)
       };
       
       const newCourse = await catalogApi.createCourse(payload);
@@ -141,6 +143,19 @@ const CreateCourse: React.FC = () => {
                 placeholder="10"
               />
               {errors.duracion_horas && <p className="text-red-400 text-sm mt-1">{errors.duracion_horas.message}</p>}
+            </div>
+
+            <div className="md:col-span-2 flex items-center gap-3 bg-zinc-900/50 p-4 rounded-xl border border-zinc-800">
+              <input
+                type="checkbox"
+                id="es_certificacion"
+                {...register('es_certificacion')}
+                className="w-5 h-5 accent-primary bg-background-dark border-zinc-700 rounded focus:ring-primary/50 transition-all cursor-pointer"
+              />
+              <label htmlFor="es_certificacion" className="text-sm font-medium text-white cursor-pointer select-none">
+                Este es un curso de certificación
+                <span className="block text-xs text-text-secondary mt-1 font-normal">Al marcar esta opción podrás crear exámenes por módulo y un examen final.</span>
+              </label>
             </div>
           </div>
 

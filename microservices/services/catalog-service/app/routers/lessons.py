@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from app.database import get_db
 from app.models.lesson import Lesson
 from app.models.progress import LessonProgress
+from app.models.course import Course
+from app.models.module import Module
 from app.dependencies.auth import get_current_user, UserPayload
 from app.schemas.catalog import LessonProgressOut
 
@@ -22,6 +24,17 @@ def complete_lesson(
             detail="Lesson not found."
         )
         
+    course = db.query(Course).join(Module).filter(Module.id == lesson.module_id).first()
+    if course and course.es_certificacion:
+        from app.services.certification_progress import get_module_status
+        module_status = get_module_status(db, current_user.id, course)
+        modulo_actual = next((m for m in module_status if m["module_id"] == lesson.module_id), None)
+        if modulo_actual and modulo_actual.get("bloqueado"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Debes aprobar el examen del módulo anterior para acceder a esta lección."
+            )
+            
     progress = db.query(LessonProgress).filter(
         LessonProgress.user_id == current_user.id,
         LessonProgress.lesson_id == lesson_id

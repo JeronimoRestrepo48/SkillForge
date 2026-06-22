@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 
 export const Login: React.FC = () => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
@@ -35,9 +37,9 @@ export const Login: React.FC = () => {
     <div className="flex items-center justify-center min-h-[80vh] p-4">
       <div className="w-full max-w-md p-8 rounded-2xl glass-effect border border-zinc-800 shadow-2xl">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold tracking-tight">Iniciar Sesión</h2>
+          <h2 className="text-3xl font-extrabold tracking-tight">{t('login.title')}</h2>
           <p className="text-sm text-text-secondary mt-2">
-            Ingresa a tu cuenta de SkillForge para continuar aprendiendo
+            {t('login.subtitle')}
           </p>
         </div>
 
@@ -51,7 +53,7 @@ export const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-text-secondary mb-2">
-              Nombre de usuario
+              {t('login.username')}
             </label>
             <input
               type="text"
@@ -66,7 +68,7 @@ export const Login: React.FC = () => {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-text-secondary mb-2">
-              Contraseña
+              {t('login.password')}
             </label>
             <input
               type="password"
@@ -87,18 +89,18 @@ export const Login: React.FC = () => {
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                Verificando...
+                {t('login.loading')}
               </>
             ) : (
-              'Ingresar'
+              t('login.submit')
             )}
           </button>
         </form>
 
         <div className="mt-8 text-center text-sm text-text-secondary border-t border-zinc-850 pt-6">
-          ¿No tienes una cuenta?{' '}
+          {t('login.no_account')}{' '}
           <Link to="/register" className="text-primary-light hover:underline font-medium">
-            Regístrate aquí
+            {t('login.register_here')}
           </Link>
         </div>
       </div>

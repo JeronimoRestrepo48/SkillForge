@@ -12,3 +12,8 @@ htmlcov/
 node_modules/
 dist/
 .DS_Store
+
+logs.txt
+logs_utf8.txt
+state_summary.txt
+logs/

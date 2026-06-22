@@ -1,20 +1,29 @@
+import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../pages/Home';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import CourseCatalog from '../pages/CourseCatalog';
-import CourseDetail from '../pages/CourseDetail';
-import VideoPlayer from '../pages/VideoPlayer';
-import Cart from '../pages/Cart';
-import Checkout from '../pages/Checkout';
-import PaymentConfirmation from '../pages/PaymentConfirmation';
-import StudentDashboard from '../pages/StudentDashboard';
-import InstructorDashboard from '../pages/InstructorDashboard';
-import CreateCourse from '../pages/CreateCourse';
-import EditCourse from '../pages/EditCourse';
-import CertificateVerify from '../pages/CertificateVerify';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Layout from '../components/Layout';
+
+// Lazy loaded page components
+const Login = React.lazy(() => import('../pages/Login'));
+const Register = React.lazy(() => import('../pages/Register'));
+const CourseCatalog = React.lazy(() => import('../pages/CourseCatalog'));
+const CourseDetail = React.lazy(() => import('../pages/CourseDetail'));
+const VideoPlayer = React.lazy(() => import('../pages/VideoPlayer'));
+const Cart = React.lazy(() => import('../pages/Cart'));
+const Checkout = React.lazy(() => import('../pages/Checkout'));
+const PaymentConfirmation = React.lazy(() => import('../pages/PaymentConfirmation'));
+const StudentDashboard = React.lazy(() => import('../pages/StudentDashboard'));
+const InstructorDashboard = React.lazy(() => import('../pages/InstructorDashboard'));
+const CreateCourse = React.lazy(() => import('../pages/CreateCourse'));
+const EditCourse = React.lazy(() => import('../pages/EditCourse'));
+const CertificateVerify = React.lazy(() => import('../pages/CertificateVerify'));
+const InstructorProfile = React.lazy(() => import('../pages/InstructorProfile'));
+const EditInstructorProfile = React.lazy(() => import('../pages/EditInstructorProfile'));
+const Trayectorias = React.lazy(() => import('../pages/Trayectorias'));
+const TrayectoriaDetail = React.lazy(() => import('../pages/TrayectoriaDetail'));
+const AdminTrayectorias = React.lazy(() => import('../pages/AdminTrayectorias'));
+const QuizPlayer = React.lazy(() => import('../pages/QuizPlayer'));
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +55,18 @@ export const router = createBrowserRouter([
         path: 'certificates/:uuid/verify',
         element: <CertificateVerify />,
       },
+      {
+        path: 'instructors/:userId',
+        element: <InstructorProfile />,
+      },
+      {
+        path: 'trayectorias',
+        element: <Trayectorias />,
+      },
+      {
+        path: 'trayectorias/:id',
+        element: <TrayectoriaDetail />,
+      },
 
       // Rutas protegidas (Estudiantes / Usuarios logueados)
       {
@@ -61,6 +82,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <VideoPlayer />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'courses/:courseId/lessons/:lessonId/quiz',
+        element: (
+          <ProtectedRoute>
+            <QuizPlayer />
           </ProtectedRoute>
         ),
       },
@@ -111,6 +140,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={['instructor', 'admin']}>
             <EditCourse />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'instructor/profile/edit',
+        element: (
+          <ProtectedRoute allowedRoles={['instructor', 'admin']}>
+            <EditInstructorProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/trayectorias',
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminTrayectorias />
           </ProtectedRoute>
         ),
       },

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { Course } from '../types/catalog';
 import { getCategoryImage } from '../pages/Home';
 
@@ -8,6 +10,7 @@ interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+  const { t } = useTranslation();
   // Extraer nombre de categoría si viene como objeto anidado
   const categoryName = typeof (course as any).categoria === 'object'
     ? ((course as any).categoria?.name || '')
@@ -18,7 +21,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const imgSrc = thumbnail || getCategoryImage(categoryName || course.title);
 
   return (
-    <div
+    <motion.div
+      whileHover={{ y: -6, boxShadow: '0 0 24px rgba(57,255,20,0.15)' }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       style={{ background: '#111111', border: '1px solid #1e1e1e' }}
       className="rounded-2xl overflow-hidden flex flex-col h-full shadow-lg group hover:border-accent/40 transition-colors duration-200"
     >
@@ -48,7 +54,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             whiteSpace: 'nowrap', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis',
           }}
         >
-          {categoryName || course.nivel_dificultad || 'Curso'}
+          {categoryName || (course.nivel_dificultad ? t(`common.difficulty.${course.nivel_dificultad}`, course.nivel_dificultad) : t('catalog.title'))}
         </span>
       </div>
 
@@ -66,9 +72,9 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           className="flex justify-between items-center text-xs mb-4 pt-3 border-t"
           style={{ borderColor: '#1e1e1e', color: '#9CA3AF' }}
         >
-          <span>🕒 {course.duracion_horas || 0} horas</span>
+          <span>🕒 {course.duracion_horas || 0} {t('catalog.hours')}</span>
           <span className="font-mono font-bold" style={{ color: '#39FF14' }}>
-            {course.price === 0 ? 'Gratis' : `$${Number(course.price).toLocaleString('es-CO')} COP`}
+            {course.price === 0 ? t('catalog.free') : `$${Number(course.price).toLocaleString('es-CO')} COP`}
           </span>
         </div>
 
@@ -78,10 +84,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           style={{ background: '#1a1a1a', border: '1px solid #1e1e1e' }}
           className="w-full text-center py-2.5 text-white text-xs font-semibold rounded-xl transition duration-200 hover:bg-accent hover:text-black hover:border-accent"
         >
-          Ver curso
+          {t('catalog.view_course')}
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

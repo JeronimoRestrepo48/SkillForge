@@ -15,6 +15,12 @@ export const catalogApi = {
     return response.data;
   },
 
+  // Obtener los cursos creados por el instructor actual
+  getMyCourses: async (): Promise<Course[]> => {
+    const response = await api.get<Course[]>('/catalog/my-courses');
+    return response.data;
+  },
+
   // Detalle de un curso específico por ID
   getCourseDetail: async (courseId: number): Promise<CourseDetail> => {
     const response = await api.get<CourseDetail>(`/catalog/courses/${courseId}`);
@@ -71,5 +77,80 @@ export const catalogApi = {
   // Eliminar una lección
   deleteLesson: async (moduleId: number, lessonId: number): Promise<void> => {
     await api.delete(`/catalog/modules/${moduleId}/lessons/${lessonId}`);
+  },
+
+  // Trayectorias
+  getTrayectorias: async (): Promise<any> => {
+    const response = await api.get('/catalog/trayectorias');
+    return response.data;
+  },
+  getTrayectoriaDetail: async (id: number): Promise<any> => {
+    const response = await api.get(`/catalog/trayectorias/${id}`);
+    return response.data;
+  },
+  createTrayectoria: async (data: any): Promise<any> => {
+    const response = await api.post('/catalog/trayectorias', data);
+    return response.data;
+  },
+  updateTrayectoria: async (id: number, data: any): Promise<any> => {
+    const response = await api.put(`/catalog/trayectorias/${id}`, data);
+    return response.data;
+  },
+  deleteTrayectoria: async (id: number): Promise<void> => {
+    await api.delete(`/catalog/trayectorias/${id}`);
+  },
+  addCourseToTrayectoria: async (id: number, data: any): Promise<any> => {
+    const response = await api.post(`/catalog/trayectorias/${id}/cursos`, data);
+    return response.data;
+  },
+  removeCourseFromTrayectoria: async (id: number, courseId: number): Promise<void> => {
+    await api.delete(`/catalog/trayectorias/${id}/cursos/${courseId}`);
+  },
+
+  // Certifications and Quizzes
+  getCertificationProgress: async (courseId: number): Promise<import('../types/catalog').CertificationProgressOut> => {
+    const response = await api.get<import('../types/catalog').CertificationProgressOut>(`/catalog/courses/${courseId}/certification-progress`);
+    return response.data;
+  },
+  getQuizDetails: async (lessonId: number): Promise<import('../types/catalog').QuizDetailOut> => {
+    const response = await api.get<import('../types/catalog').QuizDetailOut>(`/catalog/lessons/${lessonId}/quiz`);
+    return response.data;
+  },
+  submitQuizAttempt: async (quizId: number, data: import('../types/catalog').QuizAttemptSubmit): Promise<import('../types/catalog').QuizAttemptResultOut> => {
+    const response = await api.post<import('../types/catalog').QuizAttemptResultOut>(`/catalog/quizzes/${quizId}/attempts`, data);
+    return response.data;
+  },
+  getQuizAttempts: async (quizId: number): Promise<import('../types/catalog').QuizAttemptResultOut[]> => {
+    const response = await api.get<import('../types/catalog').QuizAttemptResultOut[]>(`/catalog/quizzes/${quizId}/attempts/me`);
+    return response.data;
+  },
+  createQuiz: async (lessonId: number, data: any): Promise<any> => {
+    const response = await api.post(`/catalog/lessons/${lessonId}/quiz`, data);
+    return response.data;
+  },
+  updateModule: async (courseId: number, moduleId: number, data: any): Promise<any> => {
+    const response = await api.put(`/catalog/courses/${courseId}/modules/${moduleId}`, data);
+    return response.data;
+  },
+  getReviews: async (courseId: number): Promise<any[]> => {
+    const response = await api.get(`/catalog/courses/${courseId}/reviews`);
+    return response.data.results || [];
+  },
+  submitReview: async (courseId: number, data: { score: number; comment: string }): Promise<any> => {
+    const response = await api.post(`/catalog/courses/${courseId}/review`, data);
+    return response.data;
+  },
+
+  // Cursos destacados aleatorios para el hero slider
+  getFeaturedCourses: async (): Promise<Course[]> => {
+    const response = await api.get<PaginatedResponse<Course>>('/catalog/courses', { params: { page_size: 20 } });
+    const all = response.data.results || [];
+    return [...all].sort(() => Math.random() - 0.5).slice(0, 5);
+  },
+
+  // Anuncios activos para el hero slider
+  getAnnouncements: async (): Promise<any[]> => {
+    const response = await api.get('/catalog/announcements');
+    return Array.isArray(response.data) ? response.data : (response.data.results || []);
   },
 };

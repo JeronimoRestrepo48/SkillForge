@@ -122,6 +122,16 @@ docker-compose down -v
 docker-compose up -d --build
 ```
 
+**Migraciones y Datos Adicionales:**
+Debido a nuevas funcionalidades como el sistema de Quizzes, Certificaciones y Trayectorias, es necesario aplicar las migraciones de base de datos de Alembic y correr los scripts de datos iniciales en los microservicios:
+
+```bash
+# Ejecutar migraciones en el Catalog Service
+docker-compose exec catalog-service alembic upgrade head
+
+# Insertar datos de prueba para Quizzes (si aplica)
+docker-compose exec catalog-service python seed_quizzes.py
+```
 ---
 
 ## Comandos Útiles

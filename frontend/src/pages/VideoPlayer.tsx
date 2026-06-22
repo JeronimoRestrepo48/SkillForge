@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCourseDetailQuery, useCourseProgressQuery } from '../hooks/useCourses';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { catalogApi } from '../api/catalog';
+import { certificatesApi } from '../api/certificates';
+import { useAuth } from '../context/AuthContext';
 import { Lesson } from '../types/catalog';
 
 export const VideoPlayer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const courseId = Number(id);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   // Estados locales
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
@@ -28,6 +32,10 @@ export const VideoPlayer: React.FC = () => {
       // Si con esta completación llegamos al total, mostrar celebración
       if (progress && progress.completed_lessons + 1 === progress.total_lessons) {
         setShowCelebration(true);
+        if (user?.id) {
+          certificatesApi.checkAndIssue({ user_id: user.id, course_id: courseId })
+            .catch(err => console.error('Error generating certificate:', err));
+        }
       }
     },
     onError: (err: any) => {
@@ -40,15 +48,24 @@ export const VideoPlayer: React.FC = () => {
     if (course && (Array.isArray(course.modules) ? course.modules : []).length > 0 && !activeLesson) {
       for (const mod of (Array.isArray(course.modules) ? course.modules : [])) {
         if ((Array.isArray(mod.lessons) ? mod.lessons : []).length > 0) {
-          setActiveLesson((Array.isArray(mod.lessons) ? mod.lessons : [])[0]);
+          const firstLesson = (Array.isArray(mod.lessons) ? mod.lessons : [])[0];
+          if (firstLesson.content_type === 'QUIZ') {
+            navigate(`/courses/${courseId}/lessons/${firstLesson.id}/quiz`);
+          } else {
+            setActiveLesson(firstLesson);
+          }
           break;
         }
       }
     }
-  }, [course, activeLesson]);
+  }, [course, activeLesson, navigate, courseId]);
 
   const handleLessonSelect = (lesson: Lesson) => {
-    setActiveLesson(lesson);
+    if (lesson.content_type === 'QUIZ') {
+      navigate(`/courses/${courseId}/lessons/${lesson.id}/quiz`);
+    } else {
+      setActiveLesson(lesson);
+    }
   };
 
   const handleCompleteClick = () => {
@@ -140,7 +157,10 @@ export const VideoPlayer: React.FC = () => {
                             : 'hover:bg-zinc-850 text-text-secondary'
                         }`}
                       >
-                        <span className="truncate">{lesson.title}</span>
+                        <span className="truncate">
+                          {lesson.content_type === 'QUIZ' && '📝 '}
+                          {lesson.title}
+                        </span>
                         {isLessonDone && (
                           <span className="text-primary-light font-bold text-sm" title="Completada">
                             ✓

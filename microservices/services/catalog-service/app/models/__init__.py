@@ -6,5 +6,9 @@ from app.models.lesson import Lesson
 from app.models.progress import LessonProgress
 from app.models.rating import Rating
 from app.models.wishlist import WishlistItem
+from app.models.trayectoria import Trayectoria, TrayectoriaCurso
+from app.models.announcement import Announcement
 
-__all__ = ["Base", "Category", "Course", "Module", "Lesson", "LessonProgress", "Rating", "WishlistItem"]
+__all__ = ["Base", "Category", "Course", "Module", "Lesson", "LessonProgress", "Rating", "WishlistItem", "Trayectoria", "TrayectoriaCurso", "Announcement"]
+
+from app.models.quiz import Quiz, QuizQuestion, QuizOption, QuizAttempt, QuizAttemptAnswer

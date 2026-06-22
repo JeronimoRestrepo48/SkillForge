@@ -4,7 +4,7 @@ from app.models.category import Category
 from app.models.course import Course
 from app.models.module import Module
 from app.models.lesson import Lesson
-from app.routers import courses, categories, modules, lessons, progress, wishlist, reviews
+from app.routers import courses, categories, modules, lessons, progress, wishlist, reviews, trayectorias, quizzes, certification, announcements
 
 # Generate database tables
 Base.metadata.create_all(bind=engine)
@@ -98,6 +98,10 @@ app.include_router(lessons.router, prefix="/api/catalog", tags=["lessons"])
 app.include_router(progress.router, prefix="/api/catalog", tags=["progress"])
 app.include_router(wishlist.router, prefix="/api/catalog", tags=["wishlist"])
 app.include_router(reviews.router, prefix="/api/catalog", tags=["reviews"])
+app.include_router(trayectorias.router, prefix="/api/catalog", tags=["trayectorias"])
+app.include_router(quizzes.router, prefix="/api/catalog", tags=["quizzes"])
+app.include_router(certification.router, prefix="/api/catalog", tags=["certification"])
+app.include_router(announcements.router, prefix="/api/catalog", tags=["announcements"])
 
 # Legacy API catalog endpoints (for backwards compatibility/tests)
 app.include_router(courses.router, prefix="/api", tags=["legacy-courses"])
@@ -107,3 +111,6 @@ app.include_router(lessons.router, prefix="/api", tags=["legacy-lessons"])
 app.include_router(progress.router, prefix="/api", tags=["legacy-progress"])
 app.include_router(wishlist.router, prefix="/api", tags=["legacy-wishlist"])
 app.include_router(reviews.router, prefix="/api", tags=["legacy-reviews"])
+app.include_router(trayectorias.router, prefix="/api", tags=["legacy-trayectorias"])
+app.include_router(certification.router, prefix="/api", tags=["legacy-certification"])
+app.include_router(announcements.router, prefix="/api", tags=["legacy-announcements"])

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCartQuery } from '../hooks/useCart';
 import { useConfirmCheckoutMutation } from '../hooks/useOrders';
 import { transactionsApi } from '../api/transactions';
@@ -7,6 +7,7 @@ import { transactionsApi } from '../api/transactions';
 export const Checkout: React.FC = () => {
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Consulta del carrito
   const { data: cart, isLoading, error } = useCartQuery();
@@ -34,23 +35,17 @@ export const Checkout: React.FC = () => {
       // 1. Confirmar checkout en el backend para generar la orden en PENDING
       const order = await confirmCheckoutMutation.mutateAsync();
 
-      // 2. Obtener los parámetros firmados para Wompi
-      const wompiParams = await transactionsApi.getWompiParams(order.number);
+      // 2. MOCK: Simular pago exitoso automáticamente y notificar al backend
+      await transactionsApi.returnCheckout({
+        order_number: order.number,
+        result: 'success'
+      });
 
       // 3. Limpiar datos de cupones locales
       sessionStorage.removeItem('applied_coupon');
 
-      // 4. Construir URL de redirección a Wompi Sandbox
-      const wompiUrl = `https://checkout.wompi.co/p/?` +
-        `public-key=${wompiParams.public_key}&` +
-        `currency=${wompiParams.currency}&` +
-        `amount-in-cents=${wompiParams.amount_in_cents}&` +
-        `reference=${wompiParams.reference}&` +
-        `signature:integrity=${wompiParams.signature}&` +
-        `redirect-url=${encodeURIComponent(wompiParams.redirect_url)}`;
-
-      // 5. Redirigir al usuario al portal de pagos
-      window.location.href = wompiUrl;
+      // 4. Redirigir al usuario al dashboard
+      navigate('/dashboard');
     } catch (err: any) {
       console.error('Error al iniciar el checkout con Wompi', err);
       setPaymentError(

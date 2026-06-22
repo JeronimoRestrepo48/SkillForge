@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { useCoursesQuery, useCategoriesQuery } from '../hooks/useCourses';
 import CourseCard from '../components/CourseCard';
+import { SkeletonCard } from '../components/SkeletonCard';
 
 export const CourseCatalog: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Estados de los filtros desde la URL
@@ -59,11 +63,29 @@ export const CourseCatalog: React.FC = () => {
     setSearchParams(params);
   };
 
+  // Framer Motion stagger variants for the courses grid
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.07 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' as const } }
+  };
+
   return (
     <div className="space-y-8 mt-4">
       {/* Encabezado */}
       <div>
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">Catálogo de Cursos</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{t('catalog.title')}</h1>
+        {i18n.language !== 'es' && t('catalog.content_language_notice') && (
+          <p className="text-xs text-zinc-500 italic mt-1">
+            {t('catalog.content_language_notice')}
+          </p>
+        )}
         <p className="text-text-secondary mt-2">Explora y perfecciona tus habilidades con nuestros cursos premium</p>
       </div>
 
@@ -75,7 +97,7 @@ export const CourseCatalog: React.FC = () => {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔍 Buscar curso por título..."
+            placeholder={`🔍 ${t('catalog.search')}`}
             className="w-full px-4 py-3 bg-background-card border border-zinc-800 rounded-xl focus:outline-none focus:border-primary text-text-primary placeholder-text-muted transition shadow-inner text-sm"
           />
           {searchTerm && (
@@ -98,7 +120,7 @@ export const CourseCatalog: React.FC = () => {
                 : 'bg-zinc-900 border-zinc-800 text-text-secondary hover:text-white hover:border-zinc-700'
             }`}
           >
-            Todos
+            {t('catalog.filter_all')}
           </button>
           {categoriesLoading ? (
             <div className="h-8 w-24 bg-zinc-900 animate-pulse rounded-xl"></div>
@@ -124,12 +146,7 @@ export const CourseCatalog: React.FC = () => {
       {coursesLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-background-card border border-zinc-800/80 rounded-2xl h-80 animate-pulse p-5 flex flex-col justify-between">
-              <div className="h-32 bg-zinc-800/50 rounded-xl mb-4"></div>
-              <div className="h-6 bg-zinc-800/50 rounded-md mb-2"></div>
-              <div className="h-4 bg-zinc-800/30 rounded-md mb-4 w-3/4"></div>
-              <div className="h-8 bg-zinc-800/80 rounded-xl w-full"></div>
-            </div>
+            <SkeletonCard key={i} />
           ))}
         </div>
       ) : coursesError ? (
@@ -144,22 +161,29 @@ export const CourseCatalog: React.FC = () => {
         </div>
       ) : (Array.isArray(coursesData?.results) ? coursesData!.results : []).length === 0 ? (
         <div className="text-center py-20 bg-background-card border border-zinc-800 rounded-2xl">
-          <p className="text-lg font-semibold text-text-secondary">No hay cursos disponibles por el momento.</p>
+          <p className="text-lg font-semibold text-text-secondary">{t('catalog.no_results')}</p>
           <p className="text-sm text-text-muted mt-1">Prueba cambiando tu búsqueda o seleccionando otra categoría.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {(Array.isArray(coursesData?.results) ? coursesData!.results : []).map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <motion.div key={course.id} variants={itemVariants}>
+              <CourseCard course={course} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Paginación */}
       {coursesData && coursesData.count > 0 && (
         <div className="flex justify-between items-center border-t border-zinc-900 pt-6 mt-8">
           <p className="text-xs text-text-muted">
-            Mostrando {coursesData.results.length} de {coursesData.count} cursos
+            {t('catalog.showing', { current: coursesData.results.length, total: coursesData.count })}
           </p>
           <div className="flex gap-2">
             <button
@@ -167,14 +191,14 @@ export const CourseCatalog: React.FC = () => {
               disabled={pageParam <= 1 || coursesLoading}
               className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs font-semibold rounded-xl text-text-secondary hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
-              Anterior
+              {t('catalog.prev')}
             </button>
             <button
               onClick={() => handlePageChange(pageParam + 1)}
               disabled={!coursesData.next || coursesLoading}
               className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs font-semibold rounded-xl text-text-secondary hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
-              Siguiente
+              {t('catalog.next')}
             </button>
           </div>
         </div>

@@ -49,6 +49,13 @@ def get_course_progress(
     percentage = round((completed_progress_count / total_lessons) * 100, 2)
     completed = completed_progress_count == total_lessons
     
+    if course.es_certificacion:
+        from app.services.certification_progress import get_module_status
+        module_status = get_module_status(db, current_user.id, course)
+        modulo_final = next((m for m in module_status if m.get("es_examen_final")), None)
+        if modulo_final:
+            completed = completed and (modulo_final.get("aprobado") is True)
+    
     return CourseProgressOut(
         course_id=course_id,
         total_lessons=total_lessons,

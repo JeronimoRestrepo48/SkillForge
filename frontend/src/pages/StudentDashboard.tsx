@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { transactionsApi } from '../api/transactions';
 import { certificatesApi } from '../api/certificates';
@@ -8,6 +9,7 @@ import { Enrollment } from '../types/transactions';
 
 // Componente secundario para renderizar la tarjeta con su consulta individual de progreso y detalles
 const EnrolledCourseCard: React.FC<{ enrollment: Enrollment }> = ({ enrollment }) => {
+  const { t } = useTranslation();
   const { data: course, isLoading: courseLoading } = useCourseDetailQuery(enrollment.course_id);
   const { data: progress, isLoading: progressLoading } = useCourseProgressQuery(enrollment.course_id);
 
@@ -38,7 +40,7 @@ const EnrolledCourseCard: React.FC<{ enrollment: Enrollment }> = ({ enrollment }
       {/* Barra de progreso */}
       <div className="space-y-1">
         <div className="flex justify-between text-xs text-text-secondary font-mono">
-          <span>Avance</span>
+          <span>{t('dashboard.progress')}</span>
           <span>{percentage}%</span>
         </div>
         <div className="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-zinc-800">
@@ -54,11 +56,11 @@ const EnrolledCourseCard: React.FC<{ enrollment: Enrollment }> = ({ enrollment }
           to={`/courses/${course.id}/learn`}
           className="px-4 py-2 bg-zinc-800 hover:bg-primary text-white text-xs font-semibold rounded-xl transition shadow-md"
         >
-          Ir al Aula
+          {t('dashboard.go_to_class')}
         </Link>
         {percentage === 100 && (
           <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/20 px-2.5 py-1 rounded-full border border-emerald-500/20">
-            🏆 Completado
+            {t('dashboard.completed')}
           </span>
         )}
       </div>
@@ -67,6 +69,7 @@ const EnrolledCourseCard: React.FC<{ enrollment: Enrollment }> = ({ enrollment }
 };
 
 export const StudentDashboard: React.FC = () => {
+  const { t } = useTranslation();
   // Consulta de inscripciones
   const { data: enrollmentsData, isLoading, error } = useQuery({
     queryKey: ['enrollments'],
@@ -118,22 +121,22 @@ export const StudentDashboard: React.FC = () => {
     <div className="space-y-10 mt-4">
       {/* Saludo */}
       <div>
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">Mi Panel Académico</h1>
-        <p className="text-text-secondary mt-2">Gestiona tu aprendizaje, certificados y logros ganados</p>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{t('dashboard.title')}</h1>
+        <p className="text-text-secondary mt-2">{t('dashboard.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Lista de cursos inscritos (Columna Principal Izquierda) */}
         <div className="lg:col-span-2 space-y-6">
-          <h2 className="text-2xl font-bold tracking-tight text-white">Mis Cursos Activos</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-white">{t('dashboard.my_courses')}</h2>
           {enrollments.length === 0 ? (
             <div className="text-center py-16 bg-background-card border border-zinc-800 rounded-2xl space-y-4">
-              <p className="text-text-secondary">Aún no estás inscrito en ningún curso.</p>
+              <p className="text-text-secondary">{t('dashboard.no_courses')}</p>
               <Link
                 to="/courses"
                 className="inline-block px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-semibold rounded-xl transition"
               >
-                Buscar Cursos Disponibles
+                {t('dashboard.find_courses')}
               </Link>
             </div>
           ) : (
@@ -149,7 +152,7 @@ export const StudentDashboard: React.FC = () => {
         <div className="space-y-8">
           {/* Certificados */}
           <div className="p-6 rounded-2xl border border-zinc-800 bg-background-card space-y-4">
-            <h3 className="text-lg font-bold text-white">Certificados Logrados</h3>
+            <h3 className="text-lg font-bold text-white">{t('dashboard.certificates')}</h3>
             {certsLoading ? (
               <div className="flex justify-center py-4">
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
@@ -157,7 +160,7 @@ export const StudentDashboard: React.FC = () => {
             ) : certsError ? (
               <p className="text-xs text-red-400">No pudimos cargar los certificados. Intenta de nuevo.</p>
             ) : (Array.isArray(certificates) ? certificates : []).length === 0 ? (
-              <p className="text-xs text-text-muted italic">Completa el 100% de un curso para emitir un certificado.</p>
+              <p className="text-xs text-text-muted italic">{t('dashboard.cert_notice')}</p>
             ) : (
               <div className="space-y-3">
                 {(Array.isArray(certificates) ? certificates : []).map((cert) => {
@@ -177,7 +180,7 @@ export const StudentDashboard: React.FC = () => {
                           to={`/certificates/${cert.codigo_verificacion}/verify`}
                           className="text-[10px] text-primary-light hover:underline font-mono"
                         >
-                          Verificar firma ({cert.codigo_verificacion})
+                          {t('dashboard.verify')} ({cert.codigo_verificacion})
                         </Link>
                         <a
                           href={cert.pdf_url?.startsWith('http') ? cert.pdf_url : `/api/certificates/${cert.id}/pdf`}
@@ -185,7 +188,7 @@ export const StudentDashboard: React.FC = () => {
                           rel="noopener noreferrer"
                           className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-[10px] font-semibold rounded-lg text-white text-center transition"
                         >
-                          Descargar
+                          {t('dashboard.download')}
                         </a>
                       </div>
                     </div>
@@ -197,7 +200,7 @@ export const StudentDashboard: React.FC = () => {
 
           {/* Gamificación (Badges) */}
           <div className="p-6 rounded-2xl border border-zinc-800 bg-background-card space-y-4">
-            <h3 className="text-lg font-bold text-white">Insignias Obtenidas</h3>
+            <h3 className="text-lg font-bold text-white">{t('dashboard.badges')}</h3>
             <div className="grid grid-cols-1 gap-3">
               {badges.map((badge) => (
                 <div key={badge.id} className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-850 rounded-xl">

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -13,6 +13,8 @@ class Course(Base):
     nivel_dificultad = Column(String(20), nullable=False, default="PRINCIPIANTE")
     duracion_horas = Column(Integer, default=0)
     instructor_id = Column(Integer, nullable=False)
+    es_certificacion = Column(Boolean, nullable=False, default=False)
+    imagen_url = Column(String(500), nullable=True)
 
     category = relationship("Category", back_populates="courses")
     modules = relationship("Module", back_populates="course", cascade="all, delete-orphan")

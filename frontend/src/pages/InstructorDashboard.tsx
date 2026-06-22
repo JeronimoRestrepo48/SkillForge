@@ -1,16 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCoursesQuery } from '../hooks/useCourses';
-import { Course } from '../types/catalog';
+import { useTranslation } from 'react-i18next';
+import { useMyCoursesQuery } from '../hooks/useCourses';
+
 
 export const InstructorDashboard: React.FC = () => {
-  // Cargar cursos del catálogo (en un escenario real, cargaríamos solo los del instructor logueado)
-  const { data: coursesData, isLoading, isError } = useCoursesQuery();
-  const myCourses: Course[] = Array.isArray(coursesData?.results)
-    ? coursesData!.results
-    : Array.isArray(coursesData)
-    ? (coursesData as unknown as Course[])
-    : [];
+  const { t } = useTranslation();
+  // Cargar cursos creados por el instructor logueado
+  const { data: myCourses = [], isLoading, isError } = useMyCoursesQuery();
 
   // Estadísticas del instructor (simuladas estéticamente basadas en datos reales)
   const stats = {
@@ -50,33 +47,33 @@ export const InstructorDashboard: React.FC = () => {
       {/* Encabezado */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">Panel de Instructor</h1>
-          <p className="text-text-secondary mt-2">Monitorea tus cursos y el rendimiento de tus estudiantes</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{t('instructor.title')}</h1>
+          <p className="text-text-secondary mt-2">{t('instructor.subtitle')}</p>
         </div>
         <Link
           to="/instructor/courses/new"
           className="px-5 py-3 bg-primary hover:bg-primary-dark text-white font-semibold rounded-xl transition shadow-lg text-xs"
         >
-          ➕ Crear Nuevo Curso
+          {t('instructor.create_course')}
         </Link>
       </div>
 
       {/* Grid de Estadísticas (Con Glassmorphism y will-change) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="glass-effect border border-zinc-800 p-6 rounded-2xl shadow-md space-y-2">
-          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">Estudiantes Inscritos</p>
+          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">{t('instructor.students')}</p>
           <p className="text-3xl font-extrabold text-white">{stats.totalStudents.toLocaleString('es-CO')}</p>
           <span className="text-[10px] text-emerald-400 block">📈 +12% este mes</span>
         </div>
 
         <div className="glass-effect border border-zinc-800 p-6 rounded-2xl shadow-md space-y-2">
-          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">Cursos Activos</p>
+          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">{t('instructor.active_courses')}</p>
           <p className="text-3xl font-extrabold text-white">{stats.activeCourses}</p>
           <span className="text-[10px] text-text-muted block">🟢 Todos en estado PUBLISHED</span>
         </div>
 
         <div className="glass-effect border border-zinc-800 p-6 rounded-2xl shadow-md space-y-2">
-          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">Ingresos Totales</p>
+          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">{t('instructor.earnings')}</p>
           <p className="text-3xl font-extrabold text-primary-light">
             ${stats.totalEarnings.toLocaleString('es-CO')} COP
           </p>
@@ -86,11 +83,11 @@ export const InstructorDashboard: React.FC = () => {
 
       {/* Listado de cursos creados */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold tracking-tight text-white">Administración de Mis Cursos</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-white">{t('instructor.my_courses')}</h2>
         
         {myCourses.length === 0 ? (
           <div className="text-center py-16 bg-background-card border border-zinc-800 rounded-2xl space-y-4">
-            <p className="text-text-secondary">No hay cursos disponibles por el momento.</p>
+            <p className="text-text-secondary">{t('catalog.no_results')}</p>
             <p className="text-sm text-text-muted">Crea tu primer curso para que aparezca aquí.</p>
           </div>
         ) : (
@@ -112,13 +109,13 @@ export const InstructorDashboard: React.FC = () => {
                     to={`/instructor/courses/${course.id}/edit`}
                     className="px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold rounded-lg text-white transition text-center flex-1 sm:flex-initial"
                   >
-                    Editar
+                    {t('instructor.edit')}
                   </Link>
                   <Link
                     to={`/courses/${course.id}`}
                     className="px-3 py-2 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-xs font-semibold rounded-lg text-text-secondary hover:text-white transition text-center flex-1 sm:flex-initial"
                   >
-                    Ver Ficha
+                    {t('instructor.view')}
                   </Link>
                 </div>
               </div>

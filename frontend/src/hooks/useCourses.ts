@@ -9,6 +9,13 @@ export const useCoursesQuery = (params?: { q?: string; categoria?: number; page?
   });
 };
 
+export const useMyCoursesQuery = () => {
+  return useQuery({
+    queryKey: ['my-courses'],
+    queryFn: () => catalogApi.getMyCourses(),
+  });
+};
+
 export const useCourseDetailQuery = (courseId: number) => {
   return useQuery({
     queryKey: ['courseDetail', courseId],

@@ -34,6 +34,8 @@ class LessonOut(LessonBase):
 class ModuleBase(BaseModel):
     title: str
     sort_order: int = 1
+    es_examen_modulo: bool = False
+    es_examen_final: bool = False
 
 class ModuleCreate(ModuleBase):
     pass
@@ -53,6 +55,8 @@ class CourseBase(BaseModel):
     status: str = "PUBLISHED"
     nivel_dificultad: str = "PRINCIPIANTE"
     duracion_horas: int = 0
+    es_certificacion: bool = False
+    imagen_url: Optional[str] = None
 
 class CourseCreate(CourseBase):
     pass
@@ -124,3 +128,51 @@ class CourseProgressOut(BaseModel):
     percentage: float
     completed: bool
     completed_lesson_ids: List[int] = []
+
+class TrayectoriaBase(BaseModel):
+    nombre: str
+    descripcion: Optional[str] = None
+    categoria_general: Optional[str] = None
+    imagen_url: Optional[str] = None
+
+class TrayectoriaCreate(TrayectoriaBase):
+    pass
+
+class TrayectoriaOut(TrayectoriaBase):
+    id: int
+    class Config:
+        from_attributes = True
+
+class TrayectoriaCursoOut(BaseModel):
+    course_id: int
+    sort_order: int
+    course: Optional[CourseOut] = None
+    class Config:
+        from_attributes = True
+
+class TrayectoriaDetailOut(TrayectoriaOut):
+    cursos: List[TrayectoriaCursoOut] = []
+    class Config:
+        from_attributes = True
+
+class TrayectoriaAddCurso(BaseModel):
+    course_id: int
+    sort_order: int = 1
+
+# ── Announcements ─────────────────────────────────────────────────────────────
+
+class AnnouncementBase(BaseModel):
+    titulo: str
+    descripcion: Optional[str] = None
+    imagen_url: Optional[str] = None
+    activo: bool = True
+
+class AnnouncementCreate(AnnouncementBase):
+    pass
+
+class AnnouncementOut(AnnouncementBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
