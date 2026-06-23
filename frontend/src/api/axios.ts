@@ -1,8 +1,10 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-// Instancia global de Axios apuntando al Gateway Nginx (/api enruta a los microservicios)
+// Base URL dinámica: usa VITE_API_URL en producción (ej. EC2) o '/api' en local (Docker/Nginx)
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -83,7 +85,7 @@ api.interceptors.response.use(
 
     try {
       // Intentamos refrescar el access token usando el refresh token
-      const response = await axios.post<{ access: string }>('/api/auth/token/refresh', {
+      const response = await axios.post<{ access: string }>(`${API_BASE}/auth/token/refresh`, {
         refresh: refreshToken,
       });
 
