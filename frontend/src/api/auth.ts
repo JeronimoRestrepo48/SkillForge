@@ -1,7 +1,7 @@
 import api from './axios';
 import { UserResponse, UserLoginPayload, UserRegisterPayload, TokenResponse } from '../types/auth';
 
-export const authApi = {
+const _realAuthApi = {
   // Registro de usuario (por defecto rol 'student' en backend)
   register: async (payload: UserRegisterPayload): Promise<UserResponse> => {
     const response = await api.post<UserResponse>('/auth/register', payload);
@@ -29,3 +29,8 @@ export const authApi = {
     return response.data;
   },
 };
+
+// ── Demo mode switch ──────────────────────────────────────────────────────────
+import { mockAuthApi } from './mock/mockAuth';
+const isDemo = import.meta.env.VITE_DEMO_MODE === 'true';
+export const authApi = isDemo ? mockAuthApi : _realAuthApi;

@@ -1,7 +1,7 @@
 import api from './axios';
 import { Certificate, CertificateVerifyResult } from '../types/certificates';
 
-export const certificatesApi = {
+const _realCertificatesApi = {
   // Obtener los certificados del estudiante logueado
   getMyCertificates: async (): Promise<Certificate[]> => {
     const response = await api.get<Certificate[]>('/certificates/my-certificates');
@@ -20,3 +20,8 @@ export const certificatesApi = {
     return response.data;
   }
 };
+
+// ── Demo mode switch ──────────────────────────────────────────────────────────
+import { mockCertificatesApi } from './mock/mockCertificates';
+const isDemo = import.meta.env.VITE_DEMO_MODE === 'true';
+export const certificatesApi = isDemo ? mockCertificatesApi : _realCertificatesApi;

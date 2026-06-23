@@ -2,6 +2,9 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import { authApi } from '../api/auth';
 import { UserResponse, UserLoginPayload, UserRegisterPayload } from '../types/auth';
 
+// Demo mode: import demo user data
+const isDemo = import.meta.env.VITE_DEMO_MODE === 'true';
+
 interface AuthContextType {
   user: UserResponse | null;
   loading: boolean;
@@ -20,6 +23,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [error, setError] = useState<string | null>(null);
 
   const loadCurrentUser = async () => {
+    // Demo mode: auto-login immediately
+    if (isDemo) {
+      const { DEMO_USER } = await import('../data/mockData');
+      setUser(DEMO_USER);
+      localStorage.setItem('access_token', 'demo_access_token_skillforge');
+      localStorage.setItem('refresh_token', 'demo_refresh_token_skillforge');
+      setLoading(false);
+      return;
+    }
+
     const token = localStorage.getItem('access_token');
     if (!token) {
       setLoading(false);

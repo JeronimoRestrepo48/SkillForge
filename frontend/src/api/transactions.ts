@@ -10,7 +10,7 @@ import {
 } from '../types/transactions';
 import { PaginatedResponse } from '../types/catalog';
 
-export const transactionsApi = {
+const _realTransactionsApi = {
   // Obtener el estado actual del carrito
   getCart: async (): Promise<Cart> => {
     const response = await api.get<Cart>('/transactions/cart');
@@ -78,3 +78,8 @@ export const transactionsApi = {
     return response.data;
   },
 };
+
+// ── Demo mode switch ──────────────────────────────────────────────────────────
+import { mockTransactionsApi } from './mock/mockTransactions';
+const isDemo = import.meta.env.VITE_DEMO_MODE === 'true';
+export const transactionsApi = isDemo ? mockTransactionsApi : _realTransactionsApi;

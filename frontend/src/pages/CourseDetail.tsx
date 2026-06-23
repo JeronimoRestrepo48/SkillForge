@@ -221,7 +221,7 @@ export const CourseDetail: React.FC = () => {
             <div className="space-y-3">
               {(Array.isArray(course.modules) ? course.modules : []).map((mod, index) => {
                 const isOpen = openModuleId === mod.id;
-                const modStatus = certProgress?.modules?.find(m => m.module_id === mod.id);
+                const modStatus = certProgress?.modules?.find((m: any) => m.module_id === mod.id);
                 const isLocked = course.es_certificacion && modStatus?.bloqueado;
 
                 return (

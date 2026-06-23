@@ -8,7 +8,7 @@ import {
   CourseProgress 
 } from '../types/catalog';
 
-export const catalogApi = {
+const _realCatalogApi = {
   // Listar cursos con búsqueda opcional, filtrado y paginación
   getCourses: async (params?: { q?: string; categoria?: number; page?: number; page_size?: number }): Promise<PaginatedResponse<Course>> => {
     const response = await api.get<PaginatedResponse<Course>>('/catalog/courses', { params });
@@ -154,3 +154,8 @@ export const catalogApi = {
     return Array.isArray(response.data) ? response.data : (response.data.results || []);
   },
 };
+
+// ── Demo mode switch ──────────────────────────────────────────────────────────
+import { mockCatalogApi } from './mock/mockCatalog';
+const isDemo = import.meta.env.VITE_DEMO_MODE === 'true';
+export const catalogApi = isDemo ? mockCatalogApi : _realCatalogApi;
